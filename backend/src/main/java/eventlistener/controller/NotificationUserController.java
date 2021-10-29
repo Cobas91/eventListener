@@ -16,7 +16,7 @@ public class NotificationUserController {
         this.notificationUserService = notificationUserService;
     }
 
-    @GetMapping()
+    @GetMapping
     public List<NotificationUser> getAllUser(){
         return notificationUserService.getAllUser();
     }
@@ -24,6 +24,11 @@ public class NotificationUserController {
     @PostMapping
     public NotificationUser addUser(@RequestBody NotificationUser userToAdd){
         return notificationUserService.addUser(userToAdd);
+    }
+
+    @GetMapping("/{id}")
+    public NotificationUser getSingleUser(@PathVariable String id){
+        return notificationUserService.getSingleUser(id);
     }
 
 }

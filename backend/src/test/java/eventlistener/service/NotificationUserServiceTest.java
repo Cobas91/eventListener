@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -86,5 +87,39 @@ class NotificationUserServiceTest {
         Exception exception = assertThrows(IllegalArgumentException.class, ()-> notificationUserService.addUser(userToAdd));
         assertThat(exception.getMessage(), is("Test Exception where thrown"));
         verify(notificationUserRepo).save(userToAdd);
+    }
+
+    @Test
+    @DisplayName("Should return a single user by id.")
+    void testGetSingleUser() {
+        //GIVEN
+        NotificationUser userToFind = NotificationUser.builder()
+                .email("test@test.de")
+                .name("Herr.Test")
+                .build();
+        when(notificationUserRepo.findById("test@test.de")).thenReturn(Optional.of(userToFind));
+        //WHEN
+        NotificationUser actual = notificationUserService.getSingleUser("test@test.de");
+        //THEN
+
+        assertThat(actual, is(userToFind));
+        verify(notificationUserRepo).findById("test@test.de");
+    }
+
+    @Test
+    @DisplayName("Should return a NoSuchElementException")
+    void testGetSingleUserNotFound() {
+        //GIVEN
+        NotificationUser userToFind = NotificationUser.builder()
+                .email("test@test.de")
+                .name("Herr.Test")
+                .build();
+        when(notificationUserRepo.findById("test@test.de")).thenReturn(Optional.empty());
+        //WHEN
+        Exception exception = assertThrows(NoSuchElementException.class, ()-> notificationUserService.getSingleUser("test@test.de"));
+        //THEN
+
+        assertThat(exception.getMessage(), is("Cant find User with id "+userToFind.getEmail()));
+        verify(notificationUserRepo).findById("test@test.de");
     }
 }
