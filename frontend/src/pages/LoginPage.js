@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Button, TextField, Typography } from '@mui/material'
+import { Button, TextField } from '@mui/material'
+import logo from '../components/assets/logo.svg'
 
 export default function LoginPage() {
   const handleSubmit = e => {
@@ -10,7 +11,9 @@ export default function LoginPage() {
 
   return (
     <LoginContainer>
-      <Typography>Login</Typography>
+      <LogoBackground>
+        <StyledImg src={logo} alt="logo" />
+      </LogoBackground>
       <StyledForm onSubmit={handleSubmit}>
         <StyledTextField
           required
@@ -33,6 +36,22 @@ export default function LoginPage() {
     </LoginContainer>
   )
 }
+
+const StyledImg = styled.img`
+  width: 50vh;
+  height: 50vh;
+`
+
+const LogoBackground = styled.div`
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  width: 100vw;
+  height: 20vw;
+  background-color: black;
+  border: black solid;
+  margin-bottom: 100px;
+`
 
 const LoginContainer = styled.section``
 
