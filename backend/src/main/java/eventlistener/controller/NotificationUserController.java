@@ -2,23 +2,21 @@ package eventlistener.controller;
 
 import eventlistener.model.NotificationUser;
 import eventlistener.service.NotificationUserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/user")
+@RestController
+@RequestMapping("/api/user")
 public class NotificationUserController {
 
-    private NotificationUserService notificationUserService;
+    private final NotificationUserService notificationUserService;
 
     public NotificationUserController(NotificationUserService notificationUserService) {
         this.notificationUserService = notificationUserService;
     }
 
-    @GetMapping
+    @GetMapping()
     public List<NotificationUser> getAllUser(){
         return notificationUserService.getAllUser();
     }

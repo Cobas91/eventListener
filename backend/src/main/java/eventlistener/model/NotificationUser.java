@@ -12,7 +12,7 @@ import org.springframework.data.annotation.Id;
 @Builder
 public class NotificationUser {
     @Id
-    private String id;
-    private String name;
     private String email;
+    private String name;
+
 }

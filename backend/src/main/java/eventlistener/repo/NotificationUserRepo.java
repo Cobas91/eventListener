@@ -1,8 +1,9 @@
 package eventlistener.repo;
 
-import com.mongodb.client.MongoDatabase;
+import eventlistener.model.NotificationUser;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NotificationUserRepo extends MongoDatabase {
+public interface NotificationUserRepo extends MongoRepository<NotificationUser, String> {
 }
