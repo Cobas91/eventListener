@@ -6,7 +6,7 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   build:
-    name: Build
+    name: Sonar Backend Cleancode Check
     runs-on: ubuntu-latest
     steps:
 
