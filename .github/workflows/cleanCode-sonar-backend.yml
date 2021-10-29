@@ -1,4 +1,4 @@
-name: Build
+name: Sonar Backend Cleancode Check
 on:
   push:
 
@@ -6,7 +6,7 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   build:
-    name: Sonar Backend Cleancode Check
+    name: SonarCloud
     runs-on: ubuntu-latest
     steps:
 
