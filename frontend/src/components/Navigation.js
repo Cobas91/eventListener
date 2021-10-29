@@ -12,6 +12,9 @@ export default function Navigation() {
       </Typography>
 
       <Toolbar>
+        <StyledLink to="/">Home</StyledLink>
+        <StyledLink to="/administration">Administration</StyledLink>
+        <StyledLink to="/add-user">Add User</StyledLink>
         <StyledLink to="/login">Login</StyledLink>
       </Toolbar>
     </StyledAppBar>
@@ -24,4 +27,6 @@ const StyledAppBar = styled(AppBar)`
   align-items: center;
 `
 
-const StyledLink = styled(Link)``
+const StyledLink = styled(Link)`
+  margin-right: 15px;
+`
