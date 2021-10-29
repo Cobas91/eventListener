@@ -29,4 +29,8 @@ const StyledAppBar = styled(AppBar)`
 
 const StyledLink = styled(Link)`
   margin-right: 15px;
+  text-decoration: none;
+  :visited {
+    color: black;
+  }
 `
