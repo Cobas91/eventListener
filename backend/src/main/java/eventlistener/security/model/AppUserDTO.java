@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Builder
 @Document("appusers")
-public class AppUser {
+public class AppUserDTO {
     @Id
     private String username;
     private String password;

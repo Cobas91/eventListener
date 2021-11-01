@@ -1,6 +1,6 @@
 package eventlistener.service;
 
-import eventlistener.security.model.AppUser;
+import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,8 @@ public class AppUserService {
         this.appUserRepo = appUserRepo;
     }
 
-    public AppUser addUser(AppUser userToAdd) {
-        return appUserRepo.save(AppUser.builder()
+    public AppUserDTO addUser(AppUserDTO userToAdd) {
+        return appUserRepo.save(AppUserDTO.builder()
                 .username(userToAdd.getUsername())
                 .password(passwordEncrypter.encode(userToAdd.getPassword()))
                 .build());

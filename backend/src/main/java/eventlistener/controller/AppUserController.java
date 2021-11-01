@@ -1,6 +1,6 @@
 package eventlistener.controller;
 
-import eventlistener.security.model.AppUser;
+import eventlistener.security.model.AppUserDTO;
 import eventlistener.service.AppUserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +18,7 @@ public class AppUserController {
 
 
     @PostMapping()
-    public AppUser addUserToDB(@RequestBody AppUser userToAdd){
+    public AppUserDTO addUserToDB(@RequestBody AppUserDTO userToAdd){
         return appUserService.addUser(userToAdd);
     }
 }

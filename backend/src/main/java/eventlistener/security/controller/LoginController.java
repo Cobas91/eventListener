@@ -1,6 +1,6 @@
 package eventlistener.security.controller;
 
-import eventlistener.security.model.AppUser;
+import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.service.JWTUtilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +26,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public String login(@RequestBody AppUser appUser){
+    public String login(@RequestBody AppUserDTO appUser){
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(appUser.getUsername(), appUser.getPassword()));
 
