@@ -2,19 +2,25 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Button, TextField } from '@mui/material'
 import logo from '../components/assets/logo.svg'
-import { useContext, useState } from 'react'
-import { AuthContext } from '../security/AuthProvider'
-import { API_login } from '../service/loginService'
+import { useState } from 'react'
 
-export default function LoginPage() {
+import { API_login } from '../service/loginService'
+import { useHistory } from 'react-router-dom'
+
+export default function LoginPage({ login }) {
   const [credentials, setCredentials] = useState()
+  const history = useHistory()
   const handleOnChange = e => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value })
   }
-  const { setJWT } = useContext(AuthContext)
+
   const handleSubmit = e => {
     e.preventDefault()
-    API_login(credentials).then(setJWT)
+    API_login(credentials)
+      .then(login)
+      .then(() => {
+        history.push('/')
+      })
   }
 
   return (

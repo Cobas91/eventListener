@@ -1,9 +1,7 @@
 import { Redirect, Route } from 'react-router-dom'
+import { isExpired } from 'react-jwt'
 
 export default function PrivateRoute(props) {
-  return localStorage.getItem('JWT') ? (
-    <Route {...props} />
-  ) : (
-    <Redirect to={'/login'} />
-  )
+  const tokenIsValid = !isExpired(localStorage.getItem('JWT'))
+  return tokenIsValid ? <Route {...props} /> : <Redirect to={'/login'} />
 }
