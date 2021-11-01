@@ -19,10 +19,10 @@ function App() {
         <PrivateRoute exact path="/">
           <Homepage />
         </PrivateRoute>
-        <PrivateRoute exact path="/administration">
+        <PrivateRoute path="/administration">
           <Administration />
         </PrivateRoute>
-        <PrivateRoute exact path="/add-user">
+        <PrivateRoute path="/add-user">
           <NewUser />
         </PrivateRoute>
       </Switch>
