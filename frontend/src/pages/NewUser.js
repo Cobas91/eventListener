@@ -2,12 +2,17 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Button, Card, TextField, Typography } from '@mui/material'
 import styled from 'styled-components'
+import useNotificationUsers from '../components/hooks/useNotificationUsers'
 
 export default function NewUser() {
+  const { addNotificationUser } = useNotificationUsers()
   const [newUser, setNewUser] = useState({})
   const handleSubmit = e => {
     e.preventDefault()
-    console.log('CREATE NEW USER!')
+    addNotificationUser(newUser)
+  }
+  const handleOnChange = e => {
+    setNewUser({ ...newUser, [e.target.id]: e.target.value })
   }
   return (
     <NewUserContainer>
@@ -27,10 +32,11 @@ export default function NewUser() {
       <StyledForm onSubmit={handleSubmit}>
         <StyledTextField
           required
-          id="username"
+          id="name"
           label="Username"
           variant="outlined"
           helperText="Required"
+          onChange={handleOnChange}
         />
         <StyledTextField
           required
@@ -38,6 +44,7 @@ export default function NewUser() {
           label="E-Mail"
           variant="outlined"
           helperText="Required"
+          onChange={handleOnChange}
         />
         <StyledButton type="submit" variant="contained">
           Speichern

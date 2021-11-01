@@ -2,6 +2,8 @@ package eventlistener.controller;
 
 import eventlistener.model.NotificationUser;
 import eventlistener.repo.NotificationUserRepo;
+import eventlistener.security.model.AppUserDTO;
+import eventlistener.security.repo.AppUserRepo;
 import eventlistener.service.NotificationUserService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -13,16 +15,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import org.springframework.http.*;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class NotificationUserControllerTest {
@@ -34,11 +34,29 @@ class NotificationUserControllerTest {
     NotificationUserRepo notificationUserRepo;
 
     @Autowired
+    AppUserRepo appUserRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     TestRestTemplate restTemplate;
 
     @BeforeEach
     public void clearDB(){
         notificationUserRepo.deleteAll();
+    }
+
+    public HttpHeaders getLoginHeader(){
+        appUserRepo.save(AppUserDTO.builder()
+                .username("test")
+                .password(passwordEncoder.encode("some-password"))
+                .build());
+        AppUserDTO loginData = new AppUserDTO("test", "some-password");
+        ResponseEntity<String> response = restTemplate.postForEntity("/auth/login", loginData, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(response.getBody());
+        return headers;
     }
 
     @Test
@@ -59,7 +77,7 @@ class NotificationUserControllerTest {
         );
         notificationUserRepo.saveAll(users);
         //WHEN
-        ResponseEntity<NotificationUser[]> responseEntity = restTemplate.exchange("/api/user", HttpMethod.GET , new HttpEntity<>(new HttpHeaders()), NotificationUser[].class);
+        ResponseEntity<NotificationUser[]> responseEntity = restTemplate.exchange("/api/user", HttpMethod.GET , new HttpEntity<>(getLoginHeader()), NotificationUser[].class);
 
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
@@ -86,7 +104,7 @@ class NotificationUserControllerTest {
                 .email("test@test.de")
                 .build();
         //WHEN
-        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userToAdd, new HttpHeaders()), NotificationUser.class);
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userToAdd, getLoginHeader()), NotificationUser.class);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), is(userToAdd));
@@ -103,7 +121,7 @@ class NotificationUserControllerTest {
                 .build();
         notificationUserRepo.save(userToFind);
         //WHEN
-        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+userToFind.getId(), HttpMethod.GET , new HttpEntity<>(new HttpHeaders()), NotificationUser.class);
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+userToFind.getId(), HttpMethod.GET , new HttpEntity<>(getLoginHeader()), NotificationUser.class);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), is(userToFind));
