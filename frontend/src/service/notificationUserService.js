@@ -1,10 +1,14 @@
 import axios from 'axios'
 
-const getAllNotificationUser = () => {
+const API_getAllNotificationUser = () => {
   return axios
     .get('/api/user')
     .then(res => res.data)
-    .catch(err => console.log(err))
+    .catch(err => console.err(err))
 }
 
-export { getAllNotificationUser }
+const API_addNotificationUser = userToAdd => {
+  return axios.post('/api/user', userToAdd).catch(err => console.error(err))
+}
+
+export { API_getAllNotificationUser, API_addNotificationUser }
