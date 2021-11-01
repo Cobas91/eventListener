@@ -39,7 +39,6 @@ export default function LoginPage() {
 
 const StyledImg = styled.img`
   width: 50vh;
-  height: 50vh;
 `
 
 const LogoBackground = styled.div`
