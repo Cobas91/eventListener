@@ -5,6 +5,7 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { createTheme, ThemeProvider } from '@mui/material'
 import { BrowserRouter as Router } from 'react-router-dom'
+import AuthProvider from './security/AuthProvider'
 const themeOptions = {
   palette: {
     type: 'dark',
@@ -36,7 +37,9 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <Router>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </Router>
     </ThemeProvider>
   </React.StrictMode>,

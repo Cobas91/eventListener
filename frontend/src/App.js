@@ -5,24 +5,27 @@ import Homepage from './pages/Homepage'
 import Administration from './pages/Administration'
 import NewUser from './pages/NewUser'
 import PrivateRoute from './components/PrivateRoute'
+import { useContext } from 'react'
+import { AuthContext } from './security/AuthProvider'
 
 function App() {
+  const { setJWT, logout } = useContext(AuthContext)
   return (
     <div className="App">
-      <header className="App-header">
-        <Navigation />
-      </header>
       <Switch>
-        <Route path="/login">
-          <LoginPage />
+        <Route exact path="/login">
+          <LoginPage login={setJWT} />
         </Route>
         <PrivateRoute exact path="/">
+          <Navigation logout={logout} />
           <Homepage />
         </PrivateRoute>
         <PrivateRoute path="/administration">
+          <Navigation logout={logout} />
           <Administration />
         </PrivateRoute>
         <PrivateRoute path="/add-user">
+          <Navigation logout={logout} />
           <NewUser />
         </PrivateRoute>
       </Switch>
