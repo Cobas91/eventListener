@@ -15,9 +15,10 @@ export default function EditUser() {
     name: '',
     email: '',
   })
-  console.log(userToEdit)
+
   useEffect(() => {
     getSingleUserInformation(userId).then(setUserToEdit)
+    // eslint-disable-next-line
   }, [userId])
 
   const handleOnChange = e => {
