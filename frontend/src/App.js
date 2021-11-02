@@ -8,11 +8,13 @@ import PrivateRoute from './components/PrivateRoute'
 import { useContext } from 'react'
 import { AuthContext } from './security/AuthProvider'
 import EditUser from './pages/EditUser'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
   const { setJWT, logout } = useContext(AuthContext)
   return (
-    <div className="App">
+    <>
       <Switch>
         <Route exact path="/login">
           <LoginPage login={setJWT} />
@@ -34,7 +36,17 @@ function App() {
           <EditUser />
         </PrivateRoute>
       </Switch>
-    </div>
+      <ToastContainer
+        position="top-center"
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   )
 }
 
