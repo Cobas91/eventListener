@@ -54,7 +54,7 @@ class LoginControllerTest {
 
 
     @Test
-    @DisplayName("Should return Error")
+    @DisplayName("Should return Error with BadCredentials")
     void loginWithInvalidCredentials() {
         //GIVEN
         appUserRepo.save(AppUserDTO.builder()
@@ -65,7 +65,7 @@ class LoginControllerTest {
         AppUserDTO loginCredentials = AppUserDTO.builder().username("unitTestUser").password("WRONG_PASSWORD").build();
         ResponseEntity<String> response = restTemplate.postForEntity("/auth/login", loginCredentials, String.class);
         //THEN
-        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+        assertThat(response.getStatusCode(), is(HttpStatus.UNAUTHORIZED));
 
     }
 }
