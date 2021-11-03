@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import {
   API_getAllNotificationUser,
   API_addNotificationUser,
+  API_editNotificationUser,
+  API_getSingleUserInformation,
 } from '../../service/notificationUserService'
 
 export default function useNotificationUsers() {
@@ -23,8 +25,18 @@ export default function useNotificationUsers() {
     API_addNotificationUser(userToAdd).then(getAllNotificationUser)
   }
 
+  const editNotificationUser = userToEdit => {
+    API_editNotificationUser(userToEdit).then(getAllNotificationUser)
+  }
+
+  const getSingleUserInformation = userId => {
+    return API_getSingleUserInformation(userId)
+  }
+
   return {
     notificationUser,
     addNotificationUser,
+    editNotificationUser,
+    getSingleUserInformation,
   }
 }
