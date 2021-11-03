@@ -1,7 +1,6 @@
 package eventlistener.model.event;
 
 import eventlistener.model.Action;
-import eventlistener.model.NotificationUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +16,7 @@ import java.util.List;
 public class Event {
     @Id
     private String id;
+    private String eventName;
     private List<Action> actions;
-    private List<NotificationUser> notificationUser;
+    private List<String> notificationUser;
 }

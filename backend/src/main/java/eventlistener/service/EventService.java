@@ -29,16 +29,25 @@ public class EventService {
         return eventRepo.save(validateEventDataSet(eventToAdd));
     }
 
-    private Event validateEventDataSet(Event eventToValidate){
-        List<NotificationUser> uncheckedUser = eventToValidate.getNotificationUser();
-        eventToValidate.setNotificationUser(filterExisting(uncheckedUser));
-        return eventToValidate;
+
+    public boolean eventsExist(List<String> listenEvents) {
+        List<Event> listOfEvents = (List<Event>) eventRepo.findAllById(listenEvents);
+        return listOfEvents.size() >= listenEvents.size();
     }
 
-    private List<NotificationUser> filterExisting(List<NotificationUser> listToFilter){
-        return listToFilter.stream().
-                filter(user -> notificationUserRepo.existsById(user.getId()))
-                .map(user -> notificationUserRepo.findById(user.getId()).get())
-                .collect(Collectors.toList());
+    public void addUserToEvents(List<String> listenEvents, NotificationUser userWithID) {
+        for (String eventId : listenEvents) {
+            Event eventToEdit = getEventById(eventId);
+            List<String> userList = eventToEdit.getNotificationUser();
+            userList.add(userWithID.getId());
+            eventRepo.save(eventToEdit);
+
+        }
+    }
+
+    public Event getEventById(String eventId){
+        Optional<Event> optEvent = eventRepo.findById(eventId);
+        if(optEvent.isPresent()) return optEvent.get();
+        throw new NoSuchElementException("No event found with ID: "+eventId);
     }
 }

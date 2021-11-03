@@ -22,7 +22,7 @@ public class NotificationUserController {
     }
 
     @PostMapping
-    public NotificationUser addUser(@RequestBody NotificationUser userToAdd){
+    public NotificationUser addUser(@RequestBody NotificationUserDTO userToAdd){
         return notificationUserService.addUser(userToAdd);
     }
 

@@ -1,6 +1,6 @@
 package eventlistener.repo;
 
-import eventlistener.model.NotificationUser;
+import eventlistener.model.notificationUser.NotificationUser;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
