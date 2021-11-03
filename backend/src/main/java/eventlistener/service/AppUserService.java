@@ -16,9 +16,8 @@ public class AppUserService {
     }
 
     public AppUserDTO addUser(AppUserDTO userToAdd) {
-        return appUserRepo.save(AppUserDTO.builder()
-                .username(userToAdd.getUsername())
-                .password(passwordEncrypter.encode(userToAdd.getPassword()))
-                .build());
+        userToAdd.setPassword(passwordEncrypter.encode(userToAdd.getPassword()));
+        return appUserRepo.save(userToAdd);
     }
+
 }
