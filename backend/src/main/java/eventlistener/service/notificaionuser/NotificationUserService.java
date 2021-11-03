@@ -1,11 +1,11 @@
-package eventlistener.service.notificationUser;
+package eventlistener.service.notificaionuser;
 
 import eventlistener.exception.EventNotFoundException;
 import eventlistener.model.notificationUser.NotificationUser;
 import eventlistener.model.notificationUser.NotificationUserDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
-import eventlistener.service.EventService;
+import eventlistener.service.event.EventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

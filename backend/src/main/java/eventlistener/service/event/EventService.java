@@ -1,5 +1,6 @@
-package eventlistener.service;
+package eventlistener.service.event;
 
+import eventlistener.model.event.ResponseEvent;
 import eventlistener.model.notificationUser.NotificationUser;
 import eventlistener.model.event.Event;
 import eventlistener.repo.EventRepo;
@@ -14,14 +15,16 @@ public class EventService {
 
     private final EventRepo eventRepo;
 
+    private final EventResponseMapper mapper;
 
-    public EventService(EventRepo eventRepo) {
+    public EventService(EventRepo eventRepo, EventResponseMapper mapper) {
         this.eventRepo = eventRepo;
+        this.mapper = mapper;
 
     }
 
-    public List<Event> getAllEvents() {
-        return eventRepo.findAll();
+    public List<ResponseEvent> getAllEvents() {
+        return mapper.mapResponseEvents(eventRepo.findAll());
     }
 
     public Event addEvent(Event eventToAdd) {
