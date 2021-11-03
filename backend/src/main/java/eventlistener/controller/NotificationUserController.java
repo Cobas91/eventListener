@@ -1,7 +1,10 @@
 package eventlistener.controller;
 
-import eventlistener.model.NotificationUser;
-import eventlistener.service.NotificationUserService;
+import eventlistener.model.notificationUser.NotificationUser;
+import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.model.event.Event;
+import eventlistener.service.EventService;
+import eventlistener.service.notificationUser.NotificationUserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,8 +15,11 @@ public class NotificationUserController {
 
     private final NotificationUserService notificationUserService;
 
-    public NotificationUserController(NotificationUserService notificationUserService) {
+    private final EventService eventService;
+
+    public NotificationUserController(NotificationUserService notificationUserService, EventService eventService) {
         this.notificationUserService = notificationUserService;
+        this.eventService = eventService;
     }
 
     @GetMapping
@@ -29,6 +35,11 @@ public class NotificationUserController {
     @GetMapping("/{id}")
     public NotificationUser getSingleUser(@PathVariable String id){
         return notificationUserService.getSingleUser(id);
+    }
+
+    @GetMapping("/event/{userId}")
+    public List<Event> getAllEventsFromUser(@PathVariable String userId){
+        return eventService.getAllEventsFromUser(userId);
     }
 
 }

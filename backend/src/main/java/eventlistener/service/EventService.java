@@ -1,24 +1,23 @@
 package eventlistener.service;
 
-import eventlistener.model.NotificationUser;
+import eventlistener.model.notificationUser.NotificationUser;
 import eventlistener.model.event.Event;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+
 
 @Service
 public class EventService {
 
     private final EventRepo eventRepo;
 
-    private final NotificationUserRepo notificationUserRepo;
 
-    public EventService(EventRepo eventRepo, NotificationUserRepo notificationUserRepo) {
+    public EventService(EventRepo eventRepo) {
         this.eventRepo = eventRepo;
-        this.notificationUserRepo = notificationUserRepo;
+
     }
 
     public List<Event> getAllEvents() {
@@ -26,7 +25,21 @@ public class EventService {
     }
 
     public Event addEvent(Event eventToAdd) {
-        return eventRepo.save(validateEventDataSet(eventToAdd));
+        return eventRepo.save(eventToAdd);
+    }
+
+    public List<Event> getAllEventsFromUser(String userId) {
+        List<Event> userEvents = new ArrayList<>();
+        List<Event> allEvents = eventRepo.findAll();
+        for (Event event : allEvents) {
+            List<String> users = event.getNotificationUser();
+            for (String user : users) {
+                if(Objects.equals(user, userId)){
+                    userEvents.add(event);
+                }
+            }
+        }
+        return userEvents;
     }
 
 
