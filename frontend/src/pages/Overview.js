@@ -5,12 +5,16 @@ import { Button, Card, Typography } from '@mui/material'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-export default function Administration() {
-  const { notificationUser } = useNotificationUsers()
+export default function Overview() {
+  const { notificationUser, events } = useNotificationUsers()
   const userTableColumns = [
     { field: 'id', headerName: 'ID', width: 70, hide: true },
     { field: 'name', headerName: 'Name', width: 130 },
     { field: 'email', headerName: 'E-Mail', width: 300 },
+  ]
+  const eventTableColumns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'name', headerName: 'Name', width: 130 },
   ]
   const [selectedUser, setSelectedUser] = useState()
   const history = useHistory()
@@ -46,13 +50,12 @@ export default function Administration() {
       </StyledCard>
       <StyledCard>
         <TableContainer>
-          <Typography variant="h5">Authentication Keys</Typography>
+          <Typography variant="h5">Verfügbare Events</Typography>
           <StyledDataGrid
-            rows={notificationUser}
-            columns={userTableColumns}
+            rows={events}
+            columns={eventTableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}
-            checkboxSelection
           />
         </TableContainer>
       </StyledCard>
@@ -73,6 +76,6 @@ const StyledCard = styled(Card)`
   margin: 10px;
 `
 const TableContainer = styled.section`
-  height: 360px;
+  height: 500px;
   width: 100%;
 `

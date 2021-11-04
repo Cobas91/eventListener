@@ -3,9 +3,10 @@ import { useState } from 'react'
 import { Button, Card, TextField, Typography } from '@mui/material'
 import styled from 'styled-components'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
+import { DataGrid } from '@mui/x-data-grid'
 
 export default function NewUser() {
-  const { addNotificationUser } = useNotificationUsers()
+  const { addNotificationUser, events } = useNotificationUsers()
   const [newUser, setNewUser] = useState({})
   const handleSubmit = e => {
     e.preventDefault()
@@ -14,20 +15,19 @@ export default function NewUser() {
   const handleOnChange = e => {
     setNewUser({ ...newUser, [e.target.id]: e.target.value })
   }
+  const eventTableColumns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'name', headerName: 'Name', width: 130 },
+    { field: 'description', headerName: 'Beschreibung', width: 850 },
+  ]
   return (
     <NewUserContainer>
       <StyledInfoBox>
-        <Typography>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-          sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-          et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.
-        </Typography>
+        <Typography variant="h5">Neuen User anlegen</Typography>
+        <StyledTypography>
+          Hier kann ein neuer User zur Benachrichtigung angelegt werden. Ein
+          User kann bei mehreren Events benachrichtigt werden.
+        </StyledTypography>
       </StyledInfoBox>
       <StyledForm onSubmit={handleSubmit}>
         <StyledTextField
@@ -46,6 +46,16 @@ export default function NewUser() {
           helperText="Required"
           onChange={handleOnChange}
         />
+        <TableContainer>
+          <Typography variant="h5">Verfügbare Events</Typography>
+          <StyledDataGrid
+            rows={events}
+            columns={eventTableColumns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            checkboxSelection
+          />
+        </TableContainer>
         <StyledButton type="submit" variant="contained">
           Speichern
         </StyledButton>
@@ -54,7 +64,16 @@ export default function NewUser() {
   )
 }
 
+const StyledTypography = styled(Typography)``
+const StyledDataGrid = styled(DataGrid)`
+  background-color: var(--background-paper);
+`
+const TableContainer = styled.section`
+  height: 300px;
+  width: 100%;
+`
 const StyledInfoBox = styled(Card)`
+  margin: 1%;
   padding: 15px;
 `
 
@@ -63,6 +82,7 @@ const StyledForm = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 60%;
 `
 const NewUserContainer = styled.section`
   display: flex;
@@ -71,7 +91,9 @@ const NewUserContainer = styled.section`
   align-items: center;
 `
 
-const StyledButton = styled(Button)``
+const StyledButton = styled(Button)`
+  margin-top: 5%;
+`
 
 const StyledTextField = styled(TextField)`
   margin: 10px;

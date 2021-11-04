@@ -16,8 +16,8 @@ export default function Navigation({ logout }) {
 
       <Toolbar>
         <StyledLink to="/">Home</StyledLink>
-        <StyledLink to="/administration">Administration</StyledLink>
-        <StyledLink to="/add-user">Add User</StyledLink>
+        <StyledLink to="/administration">Übersicht</StyledLink>
+        <StyledLink to="/add-user">User hinzufügen</StyledLink>
         <StyledLink to="/login" onClick={handleLogout}>
           Logout
         </StyledLink>

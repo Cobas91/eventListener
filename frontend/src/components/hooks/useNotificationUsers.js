@@ -5,18 +5,29 @@ import {
   API_editNotificationUser,
   API_getSingleUserInformation,
 } from '../../service/notificationUserService'
+import { API_getAllEvents } from '../../service/eventService'
 
 export default function useNotificationUsers() {
   const [notificationUser, setNotificationUser] = useState([])
+  const [events, setEvents] = useState([])
 
   useEffect(() => {
     getAllNotificationUser()
+    getAllEvents()
   }, [])
 
   const getAllNotificationUser = () => {
     API_getAllNotificationUser().then(res => {
       if (res) {
         setNotificationUser(res)
+      }
+    })
+  }
+
+  const getAllEvents = () => {
+    API_getAllEvents().then(res => {
+      if (res) {
+        setEvents(res)
       }
     })
   }
@@ -38,5 +49,6 @@ export default function useNotificationUsers() {
     addNotificationUser,
     editNotificationUser,
     getSingleUserInformation,
+    events,
   }
 }

@@ -2,7 +2,7 @@ import Navigation from './components/Navigation'
 import { Route, Switch } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import Homepage from './pages/Homepage'
-import Administration from './pages/Administration'
+import Overview from './pages/Overview'
 import NewUser from './pages/NewUser'
 import PrivateRoute from './components/PrivateRoute'
 import { useContext } from 'react'
@@ -25,7 +25,7 @@ function App() {
         </PrivateRoute>
         <PrivateRoute path="/administration">
           <Navigation logout={logout} />
-          <Administration />
+          <Overview />
         </PrivateRoute>
         <PrivateRoute path="/add-user">
           <Navigation logout={logout} />
