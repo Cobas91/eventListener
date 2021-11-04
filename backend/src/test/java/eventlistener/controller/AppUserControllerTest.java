@@ -23,16 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppUserControllerTest {
 
     @Autowired
-    AppUserService appUserService;
+    private AppUserService appUserService;
 
     @Autowired
-    TestRestTemplate restTemplate;
+    private TestRestTemplate restTemplate;
 
     @Autowired
-    AppUserRepo appUserRepo;
+    private AppUserRepo appUserRepo;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @AfterEach
     public void clearDB(){

@@ -1,11 +1,15 @@
 package eventlistener.service;
 
-import eventlistener.model.NotificationUser;
+import eventlistener.exception.EventNotFoundException;
+import eventlistener.model.notificationUser.NotificationUser;
+import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
+import eventlistener.service.notificationUser.NotificationUserMapper;
+import eventlistener.service.notificationUser.NotificationUserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,7 +23,13 @@ class NotificationUserServiceTest {
 
     NotificationUserRepo notificationUserRepo = mock(NotificationUserRepo.class);
 
-    NotificationUserService notificationUserService = new NotificationUserService(notificationUserRepo);
+    EventRepo eventRepo = mock(EventRepo.class);
+
+    NotificationUserMapper notificationUserMapper = new NotificationUserMapper();
+
+    EventService eventService = mock(EventService.class);
+
+    NotificationUserService notificationUserService = new NotificationUserService(notificationUserRepo, eventRepo, notificationUserMapper, eventService);
 
     @Test
     @DisplayName("Should a return a List of Notification Users")
@@ -60,34 +70,42 @@ class NotificationUserServiceTest {
     @DisplayName("Should Return added User.")
     void testAddUser() {
         //GIVEN
+        NotificationUserDTO userToAddDTO = NotificationUserDTO.builder()
+                .email("test@test.de")
+                .name("Herr.Test")
+                .build();
+
         NotificationUser userToAdd = NotificationUser.builder()
                 .email("test@test.de")
                 .name("Herr.Test")
                 .build();
+        when(eventService.eventsExist(userToAddDTO.getListenEvents())).thenReturn(true);
         when(notificationUserRepo.save(userToAdd)).thenReturn(userToAdd);
 
         //WHEN
-        NotificationUser actual = notificationUserService.addUser(userToAdd);
+        NotificationUser actual = notificationUserService.addUser(userToAddDTO);
         //THEN
         assertThat(actual, is(userToAdd));
         verify(notificationUserRepo).save(userToAdd);
     }
 
     @Test
-    @DisplayName("Should Return added User.")
-    void testAddUserIllegalArgumentException() {
+    @DisplayName("Should Return a EventNotFoundException")
+    void testAddUserNoEventsFound() {
         //GIVEN
-        NotificationUser userToAdd = NotificationUser.builder()
+        NotificationUserDTO userToAddDTO = NotificationUserDTO.builder()
                 .email("test@test.de")
                 .name("Herr.Test")
                 .build();
-        when(notificationUserRepo.save(userToAdd)).thenThrow(new IllegalArgumentException("Test Exception where thrown"));
 
-        //THEN //WHEN
-        Exception exception = assertThrows(IllegalArgumentException.class, ()-> notificationUserService.addUser(userToAdd));
-        assertThat(exception.getMessage(), is("Test Exception where thrown"));
-        verify(notificationUserRepo).save(userToAdd);
+        when(eventService.eventsExist(userToAddDTO.getListenEvents())).thenReturn(false);
+
+        //WHEN
+        //THEN
+        assertThrows(EventNotFoundException.class, ()-> notificationUserService.addUser(userToAddDTO));
+        verify(eventService).eventsExist(userToAddDTO.getListenEvents());
     }
+
 
     @Test
     @DisplayName("Should return a single user by id.")

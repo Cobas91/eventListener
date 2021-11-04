@@ -12,9 +12,9 @@ import static org.mockito.Mockito.*;
 
 class AppUserServiceTest {
 
-    AppUserRepo appUserRepo = mock(AppUserRepo.class);
+    private final AppUserRepo appUserRepo = mock(AppUserRepo.class);
 
-    AppUserService appUserService = new AppUserService(appUserRepo);
+    private final AppUserService appUserService = new AppUserService(appUserRepo);
 
     @Test
     @DisplayName("Should add a AppUser to the DB")

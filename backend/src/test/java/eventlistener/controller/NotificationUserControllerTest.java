@@ -1,10 +1,13 @@
 package eventlistener.controller;
 
-import eventlistener.model.NotificationUser;
+import eventlistener.model.event.Event;
+import eventlistener.model.notificationUser.NotificationUser;
+import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
-import eventlistener.service.NotificationUserService;
+import eventlistener.service.notificationUser.NotificationUserService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,11 +21,11 @@ import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mock;
+
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class NotificationUserControllerTest {
@@ -41,6 +44,9 @@ class NotificationUserControllerTest {
 
     @Autowired
     TestRestTemplate restTemplate;
+
+    @Autowired
+    EventRepo eventRepo;
 
     @BeforeEach
     public void clearDB(){
@@ -96,19 +102,52 @@ class NotificationUserControllerTest {
     }
 
     @Test
+    @DisplayName("Should add a new User and set the User ID to the given event.")
     void addUser() {
+        String eventId = "31";
         //GIVEN
-        NotificationUser userToAdd = NotificationUser.builder()
-                .id("1")
+        NotificationUserDTO userDTO = NotificationUserDTO.builder()
                 .name("TestUser")
                 .email("test@test.de")
+                .listenEvents(List.of(eventId))
                 .build();
+        Event eventToAdd = Event.builder()
+                .eventName("IntegrationTest Event")
+                .id(eventId)
+                .notificationUser(List.of())
+                .build();
+        eventRepo.save(eventToAdd);
         //WHEN
-        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userToAdd, getLoginHeader()), NotificationUser.class);
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userDTO, getLoginHeader()), NotificationUser.class);
         //THEN
+        NotificationUser newAddedUser = responseEntity.getBody();
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), is(userToAdd));
-        assertThat(notificationUserRepo.findById(userToAdd.getId()), is(Optional.of(userToAdd)));
+        assertThat(notificationUserRepo.findById(newAddedUser.getId()).get(), is(newAddedUser));
+        assertThat(eventRepo.findById(eventId).get().getNotificationUser(), contains(newAddedUser.getId()));
+    }
+
+    @Test
+    @DisplayName("Should Throw a EventNotFoundException, and Statuscode 400")
+    void addUserGetNoEvent() {
+        String eventId = "31";
+        //GIVEN
+        NotificationUserDTO userDTO = NotificationUserDTO.builder()
+                .name("TestUser")
+                .email("test@test.de")
+                .listenEvents(List.of("WrongEventID"))
+                .build();
+        Event eventToAdd = Event.builder()
+                .eventName("IntegrationTest Event")
+                .id(eventId)
+                .notificationUser(List.of())
+                .build();
+        eventRepo.save(eventToAdd);
+        //WHEN
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userDTO, getLoginHeader()), NotificationUser.class);
+        //THEN
+
+        assertThat(responseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+
     }
 
     @Test
