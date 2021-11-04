@@ -1,24 +1,45 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { Button, Card, TextField, Typography } from '@mui/material'
-import styled from 'styled-components'
+import { Button, TextField, Typography } from '@mui/material'
+import styled from 'styled-components/macro'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
 import { DataGrid } from '@mui/x-data-grid'
+import TableToolbar from '../components/TableToolbar'
 
 export default function NewUser() {
   const { addNotificationUser, events } = useNotificationUsers()
   const [newUser, setNewUser] = useState({})
+  const [selectedEvents, setSelectedEvents] = useState()
+  const usedFilters = {
+    columnFilter: true,
+    filter: true,
+    csvExport: true,
+  }
   const handleSubmit = e => {
     e.preventDefault()
+    newUser.listenEvents = selectedEvents
+    console.log(newUser)
     addNotificationUser(newUser)
   }
   const handleOnChange = e => {
     setNewUser({ ...newUser, [e.target.id]: e.target.value })
   }
   const eventTableColumns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'description', headerName: 'Beschreibung', width: 850 },
+    {
+      field: 'id',
+      headerName: 'ID',
+      flex: 0.1,
+      description: 'Entspricht der Indikatoren Nummer',
+    },
+    {
+      field: 'actions',
+      headerName: 'Aktionen',
+      flex: 0.2,
+      description:
+        'Verfügbare Aktionen die ausgeführt werden können für das spezifische Event',
+    },
+    { field: 'name', headerName: 'Event Name', flex: 0.3 },
+    { field: 'description', headerName: 'Beschreibung', flex: 1 },
   ]
   return (
     <NewUserContainer>
@@ -46,43 +67,51 @@ export default function NewUser() {
           helperText="Required"
           onChange={handleOnChange}
         />
-        <TableContainer>
-          <Typography variant="h5">Verfügbare Events</Typography>
-          <StyledDataGrid
-            rows={events}
-            columns={eventTableColumns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            checkboxSelection
-          />
-        </TableContainer>
-        <StyledButton type="submit" variant="contained">
-          Speichern
-        </StyledButton>
       </StyledForm>
+      <TableContainer>
+        <Typography variant="h5">Verfügbare Events</Typography>
+        <DataGrid
+          autoHeight={true}
+          rows={events}
+          columns={eventTableColumns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          density="compact"
+          checkboxSelection
+          onSelectionModelChange={event => {
+            setSelectedEvents(event)
+          }}
+          components={{
+            Toolbar: () => TableToolbar(usedFilters),
+          }}
+        />
+      </TableContainer>
+      <StyledButton type="button" variant="contained" onClick={handleSubmit}>
+        Speichern
+      </StyledButton>
     </NewUserContainer>
   )
 }
 
 const StyledTypography = styled(Typography)``
-const StyledDataGrid = styled(DataGrid)`
-  background-color: var(--background-paper);
-`
+
 const TableContainer = styled.section`
-  height: 300px;
-  width: 100%;
+  margin-top: 20px;
+  width: 80%;
 `
-const StyledInfoBox = styled(Card)`
-  margin: 1%;
-  padding: 15px;
+const StyledInfoBox = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: 20px;
 `
 
 const StyledForm = styled.form`
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60%;
+  width: 80%;
 `
 const NewUserContainer = styled.section`
   display: flex;
@@ -92,9 +121,9 @@ const NewUserContainer = styled.section`
 `
 
 const StyledButton = styled(Button)`
-  margin-top: 5%;
+  margin-top: 20px;
 `
 
 const StyledTextField = styled(TextField)`
-  margin: 10px;
+  margin-right: 20px;
 `

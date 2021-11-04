@@ -1,81 +1,113 @@
 import * as React from 'react'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import styled from 'styled-components'
-import { Button, Card, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 export default function Overview() {
   const { notificationUser, events } = useNotificationUsers()
   const userTableColumns = [
-    { field: 'id', headerName: 'ID', width: 70, hide: true },
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'email', headerName: 'E-Mail', width: 300 },
+    {
+      field: 'id',
+      headerName: 'ID',
+      flex: 0.2,
+      hide: true,
+    },
+    { field: 'name', headerName: 'Name', flex: 0.3 },
+    { field: 'email', headerName: 'E-Mail', flex: 1 },
   ]
   const eventTableColumns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 130 },
+    {
+      field: 'id',
+      headerName: 'ID',
+      flex: 0.1,
+      description: 'Entspricht der Indikatoren Nummer',
+    },
+    {
+      field: 'actions',
+      headerName: 'Aktionen',
+      flex: 0.3,
+      description:
+        'Verfügbare Aktionen die ausgeführt werden können für das spezifische Event',
+    },
+    { field: 'name', headerName: 'Event Name', flex: 0.3 },
+    { field: 'description', headerName: 'Beschreibung', flex: 1 },
   ]
   const [selectedUser, setSelectedUser] = useState()
+  const [selectedEvent, setSelectedEvent] = useState()
   const history = useHistory()
-  const handleClick = () => {
+  const handleClickUser = () => {
     history.push('/edit-user/?id=' + selectedUser)
+  }
+  const handleClickEvent = () => {
+    history.push('/edit-event/?id=' + selectedEvent)
   }
   return (
     <AdministrationContainer>
-      <StyledCard>
-        <TableContainer>
-          <Typography variant="h5">Notification User</Typography>
-          <StyledButton
-            variant="contained"
-            disabled={!selectedUser}
-            onClick={handleClick}
-          >
-            Edit
-          </StyledButton>
-          <StyledDataGrid
-            rows={notificationUser}
-            columns={userTableColumns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            components={{
-              Toolbar: GridToolbar,
-            }}
-            onSelectionModelChange={user => {
-              setSelectedUser(user)
-            }}
-            selectionModel={selectedUser}
-          />
-        </TableContainer>
-      </StyledCard>
-      <StyledCard>
-        <TableContainer>
-          <Typography variant="h5">Verfügbare Events</Typography>
-          <StyledDataGrid
-            rows={events}
-            columns={eventTableColumns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-          />
-        </TableContainer>
-      </StyledCard>
+      <TableContainer>
+        <Typography variant="h5">Notification User</Typography>
+        <StyledButton
+          variant="contained"
+          disabled={!selectedUser}
+          onClick={handleClickUser}
+        >
+          Edit
+        </StyledButton>
+        <DataGrid
+          autoHeight={true}
+          rows={notificationUser}
+          columns={userTableColumns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          components={{
+            Toolbar: GridToolbar,
+          }}
+          onSelectionModelChange={user => {
+            setSelectedUser(user)
+          }}
+          selectionModel={selectedUser}
+        />
+      </TableContainer>
+
+      <TableContainer>
+        <Typography variant="h5">Notification User</Typography>
+        <StyledButton
+          variant="contained"
+          disabled={!selectedEvent}
+          onClick={handleClickEvent}
+        >
+          Edit
+        </StyledButton>
+        <DataGrid
+          autoHeight={true}
+          rows={events}
+          columns={eventTableColumns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          components={{
+            Toolbar: GridToolbar,
+          }}
+          onSelectionModelChange={event => {
+            setSelectedEvent(event)
+          }}
+          selectionModel={selectedEvent}
+        />
+      </TableContainer>
     </AdministrationContainer>
   )
 }
-const AdministrationContainer = styled.section``
-const StyledButton = styled(Button)`
-  margin-bottom: 10px;
-  margin-top: 10px;
+const AdministrationContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
-const StyledDataGrid = styled(DataGrid)`
-  background-color: var(--background-paper);
+const StyledButton = styled(Button)`
+  margin-top: 10px;
+  margin-bottom: 10px;
 `
 
-const StyledCard = styled(Card)`
-  padding: 20px;
-  margin: 10px;
-`
 const TableContainer = styled.section`
-  height: 500px;
-  width: 100%;
+  margin-top: 20px;
+  width: 80%;
 `

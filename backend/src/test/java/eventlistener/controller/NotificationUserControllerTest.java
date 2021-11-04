@@ -156,7 +156,6 @@ class NotificationUserControllerTest {
         //THEN
 
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
-
     }
 
     @Test

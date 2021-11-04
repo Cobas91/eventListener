@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Card, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 
 export default function Homepage() {
   return (
@@ -22,13 +22,13 @@ export default function Homepage() {
     </HomepageContainer>
   )
 }
-const StyledCard = styled(Card)`
+const StyledCard = styled.section`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
   padding: 25px;
-  margin: 100px;
+  margin: 60px;
 `
 
 const Title = styled(Typography)`
