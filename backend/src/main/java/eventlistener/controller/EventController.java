@@ -1,7 +1,8 @@
 package eventlistener.controller;
 
 import eventlistener.model.event.Event;
-import eventlistener.service.EventService;
+import eventlistener.model.event.ResponseEvent;
+import eventlistener.service.event.EventService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class EventController {
     }
 
     @GetMapping
-    public List<Event> getAllEvents(){
+    public List<ResponseEvent> getAllEvents(){
         return eventService.getAllEvents();
     }
 

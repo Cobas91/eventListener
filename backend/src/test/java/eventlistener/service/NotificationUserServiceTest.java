@@ -5,8 +5,9 @@ import eventlistener.model.notificationUser.NotificationUser;
 import eventlistener.model.notificationUser.NotificationUserDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
-import eventlistener.service.notificationUser.NotificationUserMapper;
-import eventlistener.service.notificationUser.NotificationUserService;
+import eventlistener.service.event.EventService;
+import eventlistener.service.notificaionuser.NotificationUserMapper;
+import eventlistener.service.notificaionuser.NotificationUserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
