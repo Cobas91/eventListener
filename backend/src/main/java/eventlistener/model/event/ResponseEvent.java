@@ -15,5 +15,6 @@ import java.util.List;
 public class ResponseEvent {
     private String id;
     private String name;
+    private String description;
     private List<Action> actions;
 }

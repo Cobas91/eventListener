@@ -16,7 +16,8 @@ import java.util.List;
 public class Event {
     @Id
     private String id;
-    private String eventName;
+    private String name;
     private List<Action> actions;
+    private String description;
     private List<String> notificationUser;
 }

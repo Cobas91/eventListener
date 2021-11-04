@@ -18,9 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import org.springframework.http.*;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.Optional;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,10 +35,10 @@ import static org.hamcrest.Matchers.*;
 class NotificationUserControllerTest {
 
     @Autowired
-    NotificationUserService notificationUserService;
+    private NotificationUserService notificationUserService;
 
     @Autowired
-    NotificationUserRepo notificationUserRepo;
+    private NotificationUserRepo notificationUserRepo;
 
     @Autowired
     AppUserRepo appUserRepo;
@@ -61,6 +65,7 @@ class NotificationUserControllerTest {
         AppUserDTO loginData = new AppUserDTO("test", "some-password");
         ResponseEntity<String> response = restTemplate.postForEntity("/auth/login", loginData, String.class);
         HttpHeaders headers = new HttpHeaders();
+        if(response.getBody() == null) throw new BadCredentialsException("Cant get LoginHeader, Bad Credentials");
         headers.setBearerAuth(response.getBody());
         return headers;
     }
@@ -112,7 +117,7 @@ class NotificationUserControllerTest {
                 .listenEvents(List.of(eventId))
                 .build();
         Event eventToAdd = Event.builder()
-                .eventName("IntegrationTest Event")
+                .name("IntegrationTest Event")
                 .id(eventId)
                 .notificationUser(List.of())
                 .build();
@@ -121,9 +126,13 @@ class NotificationUserControllerTest {
         ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userDTO, getLoginHeader()), NotificationUser.class);
         //THEN
         NotificationUser newAddedUser = responseEntity.getBody();
+        assert newAddedUser != null;
+        Optional<NotificationUser> repoUser = notificationUserRepo.findById(newAddedUser.getId());
+        Optional<Event> repoEvent = eventRepo.findById(eventId);
+        assert repoEvent.isPresent();
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
-        assertThat(notificationUserRepo.findById(newAddedUser.getId()).get(), is(newAddedUser));
-        assertThat(eventRepo.findById(eventId).get().getNotificationUser(), contains(newAddedUser.getId()));
+        assertThat(repoUser, is(Optional.of(newAddedUser)));
+        assertThat(repoEvent.get().getNotificationUser(), contains(newAddedUser.getId()));
     }
 
     @Test
@@ -137,7 +146,7 @@ class NotificationUserControllerTest {
                 .listenEvents(List.of("WrongEventID"))
                 .build();
         Event eventToAdd = Event.builder()
-                .eventName("IntegrationTest Event")
+                .name("IntegrationTest Event")
                 .id(eventId)
                 .notificationUser(List.of())
                 .build();

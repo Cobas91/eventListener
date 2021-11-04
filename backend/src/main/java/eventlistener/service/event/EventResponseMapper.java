@@ -13,7 +13,7 @@ public class EventResponseMapper {
     public List<ResponseEvent> mapResponseEvents(List<Event> events){
         List<ResponseEvent> mappedEvents = new ArrayList<>();
         for (Event event : events) {
-            mappedEvents.add(ResponseEvent.builder().name(event.getEventName()).id(event.getId()).actions(event.getActions()).build());
+            mappedEvents.add(ResponseEvent.builder().name(event.getName()).id(event.getId()).actions(event.getActions()).description(event.getDescription()).build());
         }
         return mappedEvents;
     }
