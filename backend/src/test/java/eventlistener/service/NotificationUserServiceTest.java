@@ -116,14 +116,14 @@ class NotificationUserServiceTest {
                 .email("test@test.de")
                 .name("Herr.Test")
                 .build();
-        NotificationUserDTO userToFindDTO = NotificationUserDTO.builder()
+        NotificationUserEditDTO userToFindDTO = NotificationUserEditDTO.builder()
                 .email("test@test.de")
                 .name("Herr.Test")
                 .listenEvents(List.of())
                 .build();
         when(notificationUserRepo.findById("test@test.de")).thenReturn(Optional.of(userToFind));
         //WHEN
-        NotificationUserDTO actual = notificationUserService.getSingleUser("test@test.de");
+        NotificationUserEditDTO actual = notificationUserService.getSingleUser("test@test.de");
         //THEN
 
         assertThat(actual, is(userToFindDTO));
