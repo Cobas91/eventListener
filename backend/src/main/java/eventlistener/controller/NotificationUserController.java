@@ -34,8 +34,13 @@ public class NotificationUserController {
     }
 
     @GetMapping("/{id}")
-    public NotificationUserDTO getSingleUser(@PathVariable String id){
+    public NotificationUserEditDTO getSingleUser(@PathVariable String id){
         return notificationUserService.getSingleUser(id);
+    }
+
+    @PutMapping("/{id}")
+    public NotificationUser editUser(@PathVariable String id, @RequestBody NotificationUserDTO userToEdit){
+        return notificationUserService.editUser(id,userToEdit);
     }
 
     @GetMapping("/event/{userId}")
