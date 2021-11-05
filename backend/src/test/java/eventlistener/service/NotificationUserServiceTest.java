@@ -26,9 +26,8 @@ class NotificationUserServiceTest {
 
     EventRepo eventRepo = mock(EventRepo.class);
 
-    NotificationUserMapper notificationUserMapper = new NotificationUserMapper();
-
     EventService eventService = mock(EventService.class);
+    NotificationUserMapper notificationUserMapper = new NotificationUserMapper(eventService);
 
     NotificationUserService notificationUserService = new NotificationUserService(notificationUserRepo, eventRepo, notificationUserMapper, eventService);
 
@@ -116,12 +115,17 @@ class NotificationUserServiceTest {
                 .email("test@test.de")
                 .name("Herr.Test")
                 .build();
+        NotificationUserDTO userToFindDTO = NotificationUserDTO.builder()
+                .email("test@test.de")
+                .name("Herr.Test")
+                .listenEvents(List.of())
+                .build();
         when(notificationUserRepo.findById("test@test.de")).thenReturn(Optional.of(userToFind));
         //WHEN
-        NotificationUser actual = notificationUserService.getSingleUser("test@test.de");
+        NotificationUserDTO actual = notificationUserService.getSingleUser("test@test.de");
         //THEN
 
-        assertThat(actual, is(userToFind));
+        assertThat(actual, is(userToFindDTO));
         verify(notificationUserRepo).findById("test@test.de");
     }
 

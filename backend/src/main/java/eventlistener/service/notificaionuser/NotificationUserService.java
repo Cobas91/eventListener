@@ -46,10 +46,10 @@ public class NotificationUserService {
     }
 
 
-    public NotificationUser getSingleUser(String id) {
+    public NotificationUserDTO getSingleUser(String id) {
         Optional<NotificationUser> optionalUser = notificationUserRepo.findById(id);
         if(optionalUser.isPresent()){
-            return optionalUser.get();
+            return notificationUserMapper.mapUser(optionalUser.get());
         }
         throw new NoSuchElementException("Cant find User with id " +id);
     }

@@ -33,7 +33,7 @@ public class NotificationUserController {
     }
 
     @GetMapping("/{id}")
-    public NotificationUser getSingleUser(@PathVariable String id){
+    public NotificationUserDTO getSingleUser(@PathVariable String id){
         return notificationUserService.getSingleUser(id);
     }
 
