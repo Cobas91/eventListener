@@ -3,10 +3,10 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import styled from 'styled-components'
 import { Button, Typography } from '@mui/material'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 export default function Overview() {
-  const { notificationUser, events } = useNotificationUsers()
+  const { notificationUser, getAllEvents } = useNotificationUsers()
   const userTableColumns = [
     {
       field: 'id',
@@ -35,6 +35,7 @@ export default function Overview() {
     { field: 'description', headerName: 'Beschreibung', flex: 1 },
   ]
   const [selectedUser, setSelectedUser] = useState()
+  const [events, setEvents] = useState([])
   const [selectedEvent, setSelectedEvent] = useState()
   const history = useHistory()
   const handleClickUser = () => {
@@ -43,6 +44,12 @@ export default function Overview() {
   const handleClickEvent = () => {
     history.push('/edit-event/?id=' + selectedEvent)
   }
+  useEffect(() => {
+    getAllEvents().then(allEvents => {
+      setEvents(allEvents)
+    })
+    // eslint-disable-next-line
+  }, [])
   return (
     <AdministrationContainer>
       <TableContainer>
@@ -71,7 +78,7 @@ export default function Overview() {
       </TableContainer>
 
       <TableContainer>
-        <Typography variant="h5">Notification User</Typography>
+        <Typography variant="h5">Verfügbare Events</Typography>
         <StyledButton
           variant="contained"
           disabled={!selectedEvent}

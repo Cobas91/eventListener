@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, TextField, Typography } from '@mui/material'
 import styled from 'styled-components/macro'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
@@ -7,9 +7,16 @@ import { DataGrid } from '@mui/x-data-grid'
 import TableToolbar from '../components/TableToolbar'
 
 export default function NewUser() {
-  const { addNotificationUser, events } = useNotificationUsers()
+  const { addNotificationUser, getAllEvents } = useNotificationUsers()
   const [newUser, setNewUser] = useState({})
-  const [selectedEvents, setSelectedEvents] = useState()
+  const [selectedEvents, setSelectedEvents] = useState([])
+  const [allAvailableEvents, setAllAvailableEvents] = useState([])
+  useEffect(() => {
+    getAllEvents().then(events => {
+      setAllAvailableEvents(events)
+    })
+    // eslint-disable-next-line
+  }, [])
   const usedFilters = {
     columnFilter: true,
     filter: true,
@@ -18,7 +25,6 @@ export default function NewUser() {
   const handleSubmit = e => {
     e.preventDefault()
     newUser.listenEvents = selectedEvents
-    console.log(newUser)
     addNotificationUser(newUser)
   }
   const handleOnChange = e => {
@@ -72,7 +78,7 @@ export default function NewUser() {
         <Typography variant="h5">Verfügbare Events</Typography>
         <DataGrid
           autoHeight={true}
-          rows={events}
+          rows={allAvailableEvents}
           columns={eventTableColumns}
           pageSize={5}
           rowsPerPageOptions={[5]}

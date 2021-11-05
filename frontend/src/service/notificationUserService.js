@@ -18,7 +18,7 @@ const API_addNotificationUser = userToAdd => {
 
 const API_editNotificationUser = userToEdit => {
   return axios
-    .post(
+    .put(
       '/api/user/' + userToEdit.id,
       userToEdit,
       createHeader(localStorage.getItem('JWT'))
