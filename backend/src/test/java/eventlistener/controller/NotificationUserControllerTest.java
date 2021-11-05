@@ -1,8 +1,8 @@
 package eventlistener.controller;
 
 import eventlistener.model.event.Event;
-import eventlistener.model.notificationUser.NotificationUser;
-import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUser;
+import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
 import eventlistener.security.model.AppUserDTO;
@@ -18,9 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import org.springframework.http.*;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;

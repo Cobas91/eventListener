@@ -1,8 +1,9 @@
 package eventlistener.service;
 
 import eventlistener.exception.EventNotFoundException;
-import eventlistener.model.notificationUser.NotificationUser;
-import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUser;
+import eventlistener.model.notificationuser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
 import eventlistener.service.event.EventService;

@@ -1,8 +1,9 @@
 package eventlistener.controller;
 
-import eventlistener.model.notificationUser.NotificationUser;
-import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUser;
+import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.event.Event;
+import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.service.event.EventService;
 import eventlistener.service.notificaionuser.NotificationUserService;
 import org.springframework.web.bind.annotation.*;

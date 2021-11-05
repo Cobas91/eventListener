@@ -1,8 +1,8 @@
 package eventlistener.service.notificaionuser;
 
-import eventlistener.model.event.Event;
-import eventlistener.model.notificationUser.NotificationUser;
-import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUser;
+import eventlistener.model.notificationuser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.service.event.EventService;
 import org.springframework.stereotype.Service;
 

@@ -6,7 +6,7 @@ const API_getAllEvents = () => {
   return axios
     .get('/api/event', createHeader(localStorage.getItem('JWT')))
     .then(response => response.data)
-    .catch(err => showError(err.message, 'Cant fetch Notification User Data.'))
+    .catch(err => showError(err.message, 'Can´t fetch Notification User Data.'))
 }
 
 export { API_getAllEvents }

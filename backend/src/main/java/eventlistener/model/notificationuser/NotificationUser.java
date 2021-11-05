@@ -1,19 +1,18 @@
-package eventlistener.model.notificationUser;
+package eventlistener.model.notificationuser;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import org.springframework.data.annotation.Id;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NotificationUserDTO {
+public class NotificationUser {
+    @Id
     private String id;
     private String email;
     private String name;
-    private List<String> listenEvents;
 }
