@@ -15,11 +15,8 @@ public class EventService {
     private final EventRepo eventRepo;
 
 
-
     public EventService(EventRepo eventRepo) {
         this.eventRepo = eventRepo;
-
-
     }
 
     public List<Event> getAllEvents() {
