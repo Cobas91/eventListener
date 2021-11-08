@@ -39,7 +39,6 @@ export default function useNotificationUsers() {
   const editNotificationUser = userToEdit => {
     API_editNotificationUser(userToEdit).then(user => {
       getAllNotificationUser()
-      console.log(user)
       showSuccess('User editiert: ' + user.name)
     })
   }

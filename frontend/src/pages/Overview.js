@@ -3,10 +3,12 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 import styled from 'styled-components'
 import { Button, Typography } from '@mui/material'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import useEvents from '../components/hooks/useEvents'
 export default function Overview() {
-  const { notificationUser, getAllEvents } = useNotificationUsers()
+  const { notificationUser } = useNotificationUsers()
+  const { events } = useEvents()
   const userTableColumns = [
     {
       field: 'id',
@@ -35,7 +37,6 @@ export default function Overview() {
     { field: 'description', headerName: 'Beschreibung', flex: 1 },
   ]
   const [selectedUser, setSelectedUser] = useState()
-  const [events, setEvents] = useState([])
   const [selectedEvent, setSelectedEvent] = useState()
   const history = useHistory()
   const handleClickUser = () => {
@@ -44,12 +45,7 @@ export default function Overview() {
   const handleClickEvent = () => {
     history.push('/edit-event/?id=' + selectedEvent)
   }
-  useEffect(() => {
-    getAllEvents().then(allEvents => {
-      setEvents(allEvents)
-    })
-    // eslint-disable-next-line
-  }, [])
+
   return (
     <AdministrationContainer>
       <TableContainer>

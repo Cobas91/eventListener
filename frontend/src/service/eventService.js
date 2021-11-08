@@ -9,4 +9,16 @@ const API_getAllEvents = () => {
     .catch(err => showError(err.message, 'Can´t fetch Notification User Data.'))
 }
 
-export { API_getAllEvents }
+const API_getEvents = exludedUserId => {
+  return axios
+    .get(
+      '/api/event/' + exludedUserId,
+      createHeader(localStorage.getItem('JWT'))
+    )
+    .then(response => response.data)
+    .catch(err =>
+      showError(err.message, 'Can´t fetch Notificationuser Event Data.')
+    )
+}
+
+export { API_getAllEvents, API_getEvents }

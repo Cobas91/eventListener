@@ -5,19 +5,32 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
 
+import TransferList from '../components/TransferList'
+import useEvents from '../components/hooks/useEvents'
+
 export default function EditUser() {
   const urlQuery = useLocation().search
   const userId = new URLSearchParams(urlQuery).get('id')
   const { editNotificationUser, getSingleUserInformation } =
     useNotificationUsers()
+  const { getEventsExcludedUser } = useEvents()
 
   const [userToEdit, setUserToEdit] = useState({
     name: '',
     email: '',
+    listenEvents: [],
   })
+  const [allAvailableEvents, setAllAvailableEvents] = useState([])
+  const [listenEvents, setListenEvents] = useState([])
 
   useEffect(() => {
-    getSingleUserInformation(userId).then(setUserToEdit)
+    getSingleUserInformation(userId).then(user => {
+      setUserToEdit(user)
+      setListenEvents(user.listenEvents)
+      getEventsExcludedUser(userId).then(events =>
+        setAllAvailableEvents(events)
+      )
+    })
     // eslint-disable-next-line
   }, [userId])
 
@@ -26,6 +39,7 @@ export default function EditUser() {
   }
 
   const handleClick = () => {
+    userToEdit.listenEvents = listenEvents.map(event => event.id)
     editNotificationUser(userToEdit)
   }
   return (
@@ -44,6 +58,13 @@ export default function EditUser() {
         value={userToEdit.email}
         onChange={handleOnChange}
       />
+      <TransferList
+        left={allAvailableEvents}
+        right={listenEvents}
+        setLeft={setAllAvailableEvents}
+        setRight={setListenEvents}
+      />
+
       <StyledButton variant="contained" onClick={handleClick}>
         Save
       </StyledButton>
@@ -53,8 +74,6 @@ export default function EditUser() {
 
 const EditUserContainer = styled.section`
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
 `
 

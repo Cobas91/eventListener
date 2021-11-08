@@ -7,7 +7,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 function not(a, b) {
   return a.filter(value => b.indexOf(value) === -1)
@@ -17,16 +17,7 @@ function intersection(a, b) {
   return a.filter(value => b.indexOf(value) !== -1)
 }
 
-function filterExisting(left, right) {
-  console.log('Filter')
-  return left.filter(leftItem => right.indexOf(leftItem) !== -1)
-}
-
 export default function TransferList({ left, setLeft, right, setRight }) {
-  useEffect(() => {
-    setLeft(filterExisting(left, right))
-    // eslint-disable-next-line
-  }, [])
   const [checked, setChecked] = useState([])
 
   const leftChecked = intersection(checked, left)
