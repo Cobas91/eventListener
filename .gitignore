@@ -12,3 +12,4 @@ buildNumber.properties
 /backend/src/main/resources/static
 /backend/*.iml
 .idea
+/logs
