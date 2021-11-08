@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Button, TextField } from '@mui/material'
-import logo from '../components/assets/logo.svg'
+import logo from '../components/assets/logo_name.svg'
 import { useState } from 'react'
 
 import { API_login } from '../service/loginService'
@@ -48,7 +48,7 @@ export default function LoginPage({ login }) {
           onChange={handleOnChange}
         />
         <StyledButton type="submit" variant="contained">
-          Contained
+          Login
         </StyledButton>
       </StyledForm>
     </LoginContainer>

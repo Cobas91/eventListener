@@ -16,19 +16,19 @@ export default function Navigation({ logout }) {
 
       <Toolbar>
         <StyledLink to="/">Home</StyledLink>
-        <StyledLink to="/administration">Administration</StyledLink>
-        <StyledLink to="/add-user">Add User</StyledLink>
-        <StyledLink to="/login" onClick={handleLogout}>
-          Logout
-        </StyledLink>
+        <StyledLink to="/administration">Übersicht</StyledLink>
+        <StyledLink to="/add-user">User hinzufügen</StyledLink>
       </Toolbar>
+      <StyledLink to="/login" onClick={handleLogout}>
+        Logout
+      </StyledLink>
     </StyledAppBar>
   )
 }
 
 const StyledAppBar = styled(AppBar)`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
   align-items: center;
 `
 
