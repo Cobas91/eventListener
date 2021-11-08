@@ -19,17 +19,16 @@ import static org.mockito.Mockito.*;
 class EventServiceTest {
 
     EventRepo eventRepo = mock(EventRepo.class);
+    
 
-    EventResponseMapper eventResponseMapper = mock(EventResponseMapper.class);
-
-    EventService eventService = new EventService(eventRepo, eventResponseMapper);
+    EventService eventService = new EventService(eventRepo);
 
 
     @Test
     @DisplayName("Return all available events in a list")
     void testGetAllEvents() {
         //GIVEN
-        List<Event> events = List.of(
+        List<Event> expected = List.of(
                 Event.builder()
                         .id("1")
                         .name("TestEvent")
@@ -39,34 +38,18 @@ class EventServiceTest {
                         .build(),
                 Event.builder()
                         .id("2")
-                        .name("TestEvent2")
+                        .name("TestEvent")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(List.of("UserId123", "UserId456"))
-                        .description("Test Event 2")
-                        .build()
-        );
-        List<ResponseEvent> expected = List.of(
-                ResponseEvent.builder()
-                        .id("1")
-                        .name("TestEvent")
-                        .actions(List.of(Action.MAIL))
-                        .description("Test Event 1")
-                        .build(),
-                ResponseEvent.builder()
-                        .id("2")
-                        .name("TestEvent")
-                        .actions(List.of(Action.MAIL))
                         .description("Test Event 2")
                         .build()
         );
         //WHEN
-        when(eventRepo.findAll()).thenReturn(events);
-        when(eventResponseMapper.mapResponseEvents(events)).thenReturn(expected);
-        List<ResponseEvent> actual = eventService.getAllEvents();
+        when(eventRepo.findAll()).thenReturn(expected);
+        List<Event> actual = eventService.getAllEvents();
         //THEN
         assertThat(actual, is(expected));
         verify(eventRepo).findAll();
-        verify(eventResponseMapper).mapResponseEvents(events);
 
     }
 

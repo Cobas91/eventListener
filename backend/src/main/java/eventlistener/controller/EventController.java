@@ -1,7 +1,6 @@
 package eventlistener.controller;
 
 import eventlistener.model.event.Event;
-import eventlistener.model.event.ResponseEvent;
 import eventlistener.service.event.EventService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +17,13 @@ public class EventController {
     }
 
     @GetMapping
-    public List<ResponseEvent> getAllEvents(){
+    public List<Event> getAllEvents(){
         return eventService.getAllEvents();
+    }
+
+    @GetMapping("/{excludedUserId}")
+    public List<Event> getAllEvents(@PathVariable String excludedUserId){
+        return eventService.getAllEventsExcludeUser(excludedUserId);
     }
 
     @PostMapping
