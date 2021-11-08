@@ -1,20 +1,17 @@
 package eventlistener.service.notificaionuser;
 
+import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.service.event.EventService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class NotificationUserMapper {
-
-    EventService eventService;
-
-    public NotificationUserMapper(EventService eventService) {
-        this.eventService = eventService;
-    }
 
     public NotificationUser mapDTO(NotificationUserDTO dtoToMap){
         return NotificationUser.builder()
@@ -24,12 +21,13 @@ public class NotificationUserMapper {
                 .build();
     }
 
-    public NotificationUserEditDTO mapUserToEditUser(NotificationUser userToMap){
+    public NotificationUserEditDTO mapUserToEditUser(NotificationUser userToMap, List<Event> events){
         return NotificationUserEditDTO.builder()
                 .name(userToMap.getName())
                 .id(userToMap.getId())
                 .email(userToMap.getEmail())
-                .listenEvents(eventService.getAllEventsFromUser(userToMap.getId()))
+                .listenEvents(events)
                 .build();
     }
+
 }

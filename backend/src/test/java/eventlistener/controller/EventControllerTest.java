@@ -2,7 +2,7 @@ package eventlistener.controller;
 
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
-import eventlistener.model.event.ResponseEvent;
+import eventlistener.model.event.ResponseEventDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+
 @Slf4j
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class EventControllerTest {
@@ -81,17 +81,17 @@ class EventControllerTest {
         );
         eventRepo.saveAll(events);
         //WHEN
-        ResponseEntity<ResponseEvent[]> responseEntity = restTemplate.exchange("/api/event", HttpMethod.GET , new HttpEntity<>(getLoginHeader()), ResponseEvent[].class);
+        ResponseEntity<ResponseEventDTO[]> responseEntity = restTemplate.exchange("/api/event", HttpMethod.GET , new HttpEntity<>(getLoginHeader()), ResponseEventDTO[].class);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), arrayContaining(
-                ResponseEvent.builder()
+                ResponseEventDTO.builder()
                         .id("1")
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
                         .description("Test Event 1")
                         .build(),
-                ResponseEvent.builder()
+                ResponseEventDTO.builder()
                         .id("2")
                         .name("TestEvent2")
                         .actions(List.of(Action.MAIL))

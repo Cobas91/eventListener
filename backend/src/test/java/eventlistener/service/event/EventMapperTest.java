@@ -2,7 +2,7 @@ package eventlistener.service.event;
 
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
-import eventlistener.model.event.ResponseEvent;
+import eventlistener.model.event.ResponseEventDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,24 +10,24 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
-class EventResponseMapperTest {
+class EventMapperTest {
 
-    EventResponseMapper eventResponseMapper = new EventResponseMapper();
+    EventMapper eventMapper = new EventMapper();
 
     @Test
     @DisplayName("Return a list of Responseevents. Mapping Events to Response Events")
     void testMapResponseEvents() {
         //GIVEN
-        List<ResponseEvent> responseEvents = List.of(
-                ResponseEvent.builder()
+        List<ResponseEventDTO> responseEventDTOS = List.of(
+                ResponseEventDTO.builder()
                         .id("1")
                         .description("Beschreibung")
                         .actions(List.of(Action.MAIL))
                         .name("Test Event")
                         .build(),
-                ResponseEvent.builder()
+                ResponseEventDTO.builder()
                         .id("2")
                         .description("Beschreibung2")
                         .actions(List.of(Action.MAIL))
@@ -51,8 +51,8 @@ class EventResponseMapperTest {
                         .build()
         );
         //WHEN
-        List<ResponseEvent> actual = eventResponseMapper.mapResponseEvents(events);
+        List<ResponseEventDTO> actual = eventMapper.mapDtoToEvent(events);
         //THEN
-        assertThat(actual, is(responseEvents));
+        assertThat(actual, is(responseEventDTOS));
     }
 }

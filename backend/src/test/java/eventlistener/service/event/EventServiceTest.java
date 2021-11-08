@@ -2,26 +2,27 @@ package eventlistener.service.event;
 
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
-import eventlistener.model.event.ResponseEvent;
 import eventlistener.repo.EventRepo;
-import org.hamcrest.Matchers;
+import eventlistener.service.UserEventService;
+import eventlistener.service.notificaionuser.NotificationUserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class EventServiceTest {
 
     EventRepo eventRepo = mock(EventRepo.class);
 
+    EventMapper eventMapper = mock(EventMapper.class);
 
-    EventService eventService = new EventService(eventRepo);
+    UserEventService userEventService = mock(UserEventService.class);
+
+    EventService eventService = new EventService(eventRepo, eventMapper, userEventService);
 
 
     @Test

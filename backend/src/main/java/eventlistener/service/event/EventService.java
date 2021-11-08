@@ -2,7 +2,12 @@ package eventlistener.service.event;
 
 
 import eventlistener.model.event.Event;
+import eventlistener.model.event.EventToModifyDTO;
+import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.repo.EventRepo;
+import eventlistener.service.UserEventService;
+import eventlistener.service.notificaionuser.NotificationUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -10,13 +15,19 @@ import java.util.*;
 
 
 @Service
+@Slf4j
 public class EventService {
 
     private final EventRepo eventRepo;
 
+    private final EventMapper eventMapper;
 
-    public EventService(EventRepo eventRepo) {
+    private final UserEventService userEventService;
+
+    public EventService(EventRepo eventRepo, EventMapper eventMapper, UserEventService userEventService) {
         this.eventRepo = eventRepo;
+        this.eventMapper = eventMapper;
+        this.userEventService = userEventService;
     }
 
     public List<Event> getAllEvents() {
@@ -81,5 +92,15 @@ public class EventService {
 
     public Event getEventById(String eventId){
         return eventRepo.findById(eventId).orElseThrow(() -> new NoSuchElementException("No event found with ID: " + eventId));
+    }
+
+    public EventToModifyDTO getSingleEvent(String eventId) {
+        Optional<Event> optionalSimpleEvent = eventRepo.findById(eventId);
+        if(optionalSimpleEvent.isPresent()){
+            List<NotificationUser> userList = userEventService.getUsersById(optionalSimpleEvent.get().getNotificationUser());
+            return eventMapper.mapToModify(optionalSimpleEvent.get(), userList);
+        }
+        log.error("Can´t find Event with ID "+eventId);
+        throw new NoSuchElementException("Can´t find Event with ID "+eventId);
     }
 }
