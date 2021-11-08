@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 class EventServiceTest {
 
     EventRepo eventRepo = mock(EventRepo.class);
-    
+
 
     EventService eventService = new EventService(eventRepo);
 
