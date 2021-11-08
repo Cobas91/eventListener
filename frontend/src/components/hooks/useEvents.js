@@ -1,4 +1,8 @@
-import { API_getAllEvents, API_getEvents } from '../../service/eventService'
+import {
+  API_getAllEvents,
+  API_getEvents,
+  API_getEventById,
+} from '../../service/eventService'
 import { useEffect, useState } from 'react'
 
 export default function useEvents() {
@@ -16,5 +20,9 @@ export default function useEvents() {
 
   const getEventsExcludedUser = userId => API_getEvents(userId)
 
-  return { events, setEvents, getEventsExcludedUser }
+  const getEventById = eventId => {
+    return API_getEventById(eventId)
+  }
+
+  return { events, setEvents, getEventsExcludedUser, getEventById }
 }

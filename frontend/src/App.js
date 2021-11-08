@@ -10,6 +10,7 @@ import { AuthContext } from './security/AuthProvider'
 import EditUser from './pages/EditUser'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import EditEvent from './pages/EditEvent'
 
 function App() {
   const { setJWT, logout } = useContext(AuthContext)
@@ -34,6 +35,10 @@ function App() {
         <PrivateRoute path="/edit-user">
           <Navigation logout={logout} />
           <EditUser />
+        </PrivateRoute>
+        <PrivateRoute path="/edit-event">
+          <Navigation logout={logout} />
+          <EditEvent />
         </PrivateRoute>
       </Switch>
       <ToastContainer

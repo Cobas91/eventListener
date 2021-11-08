@@ -12,7 +12,7 @@ const API_getAllEvents = () => {
 const API_getEvents = exludedUserId => {
   return axios
     .get(
-      '/api/event/' + exludedUserId,
+      '/api/event/not/' + exludedUserId,
       createHeader(localStorage.getItem('JWT'))
     )
     .then(response => response.data)
@@ -21,4 +21,11 @@ const API_getEvents = exludedUserId => {
     )
 }
 
-export { API_getAllEvents, API_getEvents }
+const API_getEventById = eventId => {
+  return axios
+    .get('/api/event/' + eventId, createHeader(localStorage.getItem('JWT')))
+    .then(response => response.data)
+    .catch(err => showError(err.message, 'Can´t fetch single Event Data.'))
+}
+
+export { API_getAllEvents, API_getEvents, API_getEventById }
