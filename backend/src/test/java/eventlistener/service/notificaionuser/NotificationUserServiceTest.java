@@ -1,4 +1,4 @@
-package eventlistener.service;
+package eventlistener.service.notificaionuser;
 
 import eventlistener.exception.EventNotFoundException;
 import eventlistener.model.notificationuser.NotificationUser;
@@ -25,12 +25,11 @@ class NotificationUserServiceTest {
 
     NotificationUserRepo notificationUserRepo = mock(NotificationUserRepo.class);
 
-    EventRepo eventRepo = mock(EventRepo.class);
 
-    UserEventService userEventService = mock(UserEventService.class);
+
     NotificationUserMapper notificationUserMapper = new NotificationUserMapper();
 
-    NotificationUserService notificationUserService = new NotificationUserService(notificationUserRepo, eventRepo, notificationUserMapper, userEventService);
+    NotificationUserService notificationUserService = new NotificationUserService(notificationUserRepo, notificationUserMapper);
 
     @Test
     @DisplayName("Should a return a List of Notification Users")
@@ -80,7 +79,7 @@ class NotificationUserServiceTest {
                 .email("test@test.de")
                 .name("Herr.Test")
                 .build();
-        when(userEventService.eventsExist(userToAddDTO.getListenEvents())).thenReturn(true);
+
         when(notificationUserRepo.save(userToAdd)).thenReturn(userToAdd);
 
         //WHEN
@@ -88,23 +87,6 @@ class NotificationUserServiceTest {
         //THEN
         assertThat(actual, is(userToAdd));
         verify(notificationUserRepo).save(userToAdd);
-    }
-
-    @Test
-    @DisplayName("Should Return a EventNotFoundException")
-    void testAddUserNoEventsFound() {
-        //GIVEN
-        NotificationUserDTO userToAddDTO = NotificationUserDTO.builder()
-                .email("test@test.de")
-                .name("Herr.Test")
-                .build();
-
-        when(userEventService.eventsExist(userToAddDTO.getListenEvents())).thenReturn(false);
-
-        //WHEN
-        //THEN
-        assertThrows(EventNotFoundException.class, ()-> notificationUserService.addUser(userToAddDTO));
-        verify(userEventService).eventsExist(userToAddDTO.getListenEvents());
     }
 
 
@@ -116,18 +98,13 @@ class NotificationUserServiceTest {
                 .email("test@test.de")
                 .name("Herr.Test")
                 .build();
-        NotificationUserEditDTO userToFindDTO = NotificationUserEditDTO.builder()
-                .email("test@test.de")
-                .name("Herr.Test")
-                .listenEvents(List.of())
-                .build();
-        when(notificationUserRepo.findById("test@test.de")).thenReturn(Optional.of(userToFind));
+        when(notificationUserRepo.findById("userId")).thenReturn(Optional.of(userToFind));
         //WHEN
-        NotificationUserEditDTO actual = notificationUserService.getSingleUser("test@test.de");
+        NotificationUser actual = notificationUserService.getSingleUser("userId");
         //THEN
 
-        assertThat(actual, is(userToFindDTO));
-        verify(notificationUserRepo).findById("test@test.de");
+        assertThat(actual, is(userToFind));
+        verify(notificationUserRepo).findById("userId");
     }
 
     @Test

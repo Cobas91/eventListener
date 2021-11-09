@@ -3,7 +3,9 @@ package eventlistener.controller;
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
 import eventlistener.model.event.ResponseEventDTO;
+import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.repo.EventRepo;
+import eventlistener.repo.NotificationUserRepo;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import eventlistener.service.event.EventService;
@@ -32,9 +34,6 @@ class EventControllerTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private EventService eventService;
-
-    @Autowired
     private AppUserRepo appUserRepo;
 
     @Autowired
@@ -42,6 +41,9 @@ class EventControllerTest {
 
     @Autowired
     private EventRepo eventRepo;
+
+    @Autowired
+    private NotificationUserRepo notificationUserRepo;
 
     public HttpHeaders getLoginHeader(){
         appUserRepo.save(AppUserDTO.builder()
@@ -63,19 +65,22 @@ class EventControllerTest {
     @DisplayName("Returns a List of ResponseEvents")
     void testGetAllEvents() {
         //GIVEN
+        NotificationUser user1 = notificationUserRepo.save(NotificationUser.builder().name("TestUser1").email("test@test.de").build());
+        NotificationUser user2 = notificationUserRepo.save(NotificationUser.builder().name("TestUser2").email("test@test.de").build());
+        List<NotificationUser> users = List.of(user1, user2);
         List<Event> events = List.of(
                 Event.builder()
                         .id("1")
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId123", "UserId456"))
+                        .notificationUser(users)
                         .description("Test Event 1")
                         .build(),
                 Event.builder()
                         .id("2")
                         .name("TestEvent2")
                         .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId123", "UserId456"))
+                        .notificationUser(users)
                         .description("Test Event 2")
                         .build()
         );
@@ -103,12 +108,15 @@ class EventControllerTest {
     @DisplayName("Return the new Added Event as Event")
     void testAddEvent() {
         //GIVEN
+        NotificationUser user1 = notificationUserRepo.save(NotificationUser.builder().name("TestUser1").email("test@test.de").build());
+        NotificationUser user2 = notificationUserRepo.save(NotificationUser.builder().name("TestUser2").email("test@test.de").build());
+        List<NotificationUser> users = List.of(user1, user2);
         Event eventToAdd = Event.builder()
                 .id("1")
                 .name("TestEvent")
                 .description("Integrationstest")
                 .actions(List.of(Action.MAIL))
-                .notificationUser(List.of("User1", "User2"))
+                .notificationUser(users)
                 .build();
         //WHEN
         ResponseEntity<Event> responseEntity = restTemplate.exchange("/api/event", HttpMethod.POST , new HttpEntity<>(eventToAdd, getLoginHeader()), Event.class);
@@ -116,7 +124,66 @@ class EventControllerTest {
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(actual, is(Optional.of(eventToAdd)));
+        assertThat(Objects.requireNonNull(responseEntity.getBody()).getNotificationUser(), is(users));
+    }
 
+    @Test
+    @DisplayName("Return a Bad Request HTTP Status and throw MappingException")
+    void testAddEventException() {
+        //GIVEN
+        Event eventToAdd = Event.builder()
+                .id("1")
+                .name("TestEvent")
+                .description("Integrationstest")
+                .actions(List.of(Action.MAIL))
+                .notificationUser(List.of(NotificationUser.builder().build()))
+                .build();
+        //WHEN
+        ResponseEntity<Event> responseEntity = restTemplate.exchange("/api/event", HttpMethod.POST , new HttpEntity<>(eventToAdd, getLoginHeader()), Event.class);
+        Optional<Event> actual = eventRepo.findById("1");
+        //THEN
+        assertThat(responseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
 
+    @Test
+    @DisplayName("Get all Events where the given UserId is not included")
+    public void testGetAllEventsExcludeUser(){
+        //GIVEN
+        String userId = "1";
+        List<NotificationUser> includeUsers = List.of(
+                NotificationUser.builder()
+                        .id("1")
+                        .name("Hans")
+                        .email("test@test.de")
+                        .build(),
+                NotificationUser.builder()
+                        .id("2")
+                        .name("Peter")
+                        .email("test@test.de")
+                        .build()
+        );
+        List<NotificationUser> excludeUsers = List.of(
+                NotificationUser.builder()
+                        .id("3")
+                        .name("Hans")
+                        .email("test@test.de")
+                        .build(),
+                NotificationUser.builder()
+                        .id("4")
+                        .name("Peter")
+                        .email("test@test.de")
+                        .build()
+        );
+        Event include = Event.builder().id("1").name("TestEvent").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest").notificationUser(includeUsers).build();
+        Event include2 = Event.builder().id("2").name("TestEvent2").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 2").notificationUser(includeUsers).build();
+        Event exclude = Event.builder().id("3").name("TestEvent3").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 3").notificationUser(excludeUsers).build();
+        eventRepo.save(include);
+        eventRepo.save(include2);
+        eventRepo.save(exclude);
+        //WHEN
+        ResponseEntity<Event[]> responseEntity = restTemplate.exchange("/api/event/not/"+userId, HttpMethod.GET , new HttpEntity<>(getLoginHeader()), Event[].class);
+        //THEN
+        assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(responseEntity.getBody(), arrayContaining(exclude));
     }
 }

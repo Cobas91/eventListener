@@ -1,8 +1,10 @@
 package eventlistener.controller;
 
+import eventlistener.model.Action;
 import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
 import eventlistener.security.model.AppUserDTO;
@@ -130,7 +132,7 @@ class NotificationUserControllerTest {
         assert repoEvent.isPresent();
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(repoUser, is(Optional.of(newAddedUser)));
-        assertThat(repoEvent.get().getNotificationUser(), contains(newAddedUser.getId()));
+        assertThat(repoEvent.get().getNotificationUser(), contains(newAddedUser));
     }
 
     @Test
@@ -170,5 +172,34 @@ class NotificationUserControllerTest {
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), is(userToFind));
+    }
+
+    @Test
+    @DisplayName("Edit an existing User")
+    void testEditUser() {
+        //GIVEN
+        NotificationUser userToEdit = NotificationUser.builder()
+                .id("1")
+                .name("TestUser")
+                .email("test@test.de")
+                .build();
+        notificationUserRepo.save(userToEdit);
+        List<Event> events = List.of(Event.builder().id("1").name("TestEvent").description("Beschreibung").actions(List.of(Action.MAIL)).notificationUser(List.of(userToEdit)).build());
+        NotificationUserEditDTO newUser = NotificationUserEditDTO.builder()
+                .id("1")
+                .name("TestUserNeu")
+                .email("newMail@test.de")
+                .listenEvents(events)
+                .build();
+        NotificationUser expected = NotificationUser.builder()
+                .id("1")
+                .name("TestUserNeu")
+                .email("newMail@test.de")
+                .build();
+        //WHEN
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+userToEdit.getId(), HttpMethod.PUT , new HttpEntity<>(newUser,getLoginHeader()), NotificationUser.class);
+        //THEN
+        assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(responseEntity.getBody(), is(expected));
     }
 }

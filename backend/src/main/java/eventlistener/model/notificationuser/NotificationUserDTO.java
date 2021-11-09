@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import java.util.List;
 
 @Data
@@ -12,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class NotificationUserDTO {
-    private String id;
     private String email;
     private String name;
     private List<String> listenEvents;

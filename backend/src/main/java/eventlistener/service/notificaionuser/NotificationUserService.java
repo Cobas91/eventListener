@@ -23,17 +23,15 @@ public class NotificationUserService {
 
     NotificationUserRepo notificationUserRepo;
 
-    EventRepo eventRepo;
 
     NotificationUserMapper notificationUserMapper;
 
-    UserEventService userEventService;
 
-    public NotificationUserService(NotificationUserRepo notificationUserRepo,EventRepo eventRepo, NotificationUserMapper notificationUserMapper, UserEventService userEventService) {
+
+    public NotificationUserService(NotificationUserRepo notificationUserRepo, NotificationUserMapper notificationUserMapper) {
         this.notificationUserRepo = notificationUserRepo;
-        this.eventRepo = eventRepo;
         this.notificationUserMapper = notificationUserMapper;
-        this.userEventService = userEventService;
+
     }
 
     public List<NotificationUser> getAllUser() {
@@ -41,33 +39,24 @@ public class NotificationUserService {
     }
 
     public NotificationUser addUser(NotificationUserDTO userDTO) {
-        if(userEventService.eventsExist(userDTO.getListenEvents())){
-            NotificationUser newUser = notificationUserMapper.mapDTO(userDTO);
-            NotificationUser userWithID = notificationUserRepo.save(newUser);
-            userEventService.addUserToEvents(userDTO.getListenEvents(), userWithID.getId());
-            return userWithID;
-        }else{
-            throw new EventNotFoundException("Can not add User: "+userDTO.getName()+" events are not existing.");
-        }
+        NotificationUser newUser = notificationUserMapper.mapDTO(userDTO);
+        return notificationUserRepo.save(newUser);
     }
 
-    public NotificationUserEditDTO getSingleUser(String id) {
+    public NotificationUser getSingleUser(String id) {
         Optional<NotificationUser> optionalUser = notificationUserRepo.findById(id);
         if(optionalUser.isPresent()){
-            List<Event> events = userEventService.getAllEventsFromUser(optionalUser.get().getId());
-            return notificationUserMapper.mapUserToEditUser(optionalUser.get(), events);
+            return optionalUser.get();
         }
         throw new NoSuchElementException("Cant find User with id " +id);
     }
 
-    public NotificationUser editUser(String id, NotificationUserDTO userToEdit) {
-        Optional<NotificationUser> optionalUser = notificationUserRepo.findById(id);
-        if(optionalUser.isPresent() && optionalUser.get().getId().equals(id)){
-            List<Event> newUserEvents = userEventService.setNotificationUserToEvents(optionalUser.get().getId(), userToEdit.getListenEvents());
-            log.info("Updating User "+userToEdit+". Setting Events: "+newUserEvents);
-            return notificationUserRepo.save(notificationUserMapper.mapDTO(userToEdit));
+    public NotificationUser editUser(NotificationUserEditDTO userToEdit) {
+        Optional<NotificationUser> optionalUser = notificationUserRepo.findById(userToEdit.getId());
+        if(optionalUser.isPresent()){
+            return notificationUserRepo.save(notificationUserMapper.mapToUser(userToEdit));
         }
-        throw new NoSuchElementException("Can´t edit User with ID "+id);
+        throw new NoSuchElementException("Can´t edit User with ID "+userToEdit.getId());
     }
 
     public List<NotificationUser> getUsersById(List<String> userIds){

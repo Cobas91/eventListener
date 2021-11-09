@@ -1,6 +1,7 @@
 package eventlistener.controller.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mapping.MappingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -49,6 +50,13 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         log.error("No valid Token",ex);
         ApiError apiError = new ApiError("No valid Token", ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MappingException.class)
+    public ResponseEntity<ApiError> handleMappingException(MappingException ex){
+        log.error("Could not handle Resource job. ",ex);
+        ApiError apiError = new ApiError("Could not handle Resource job. ", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Throwable.class)

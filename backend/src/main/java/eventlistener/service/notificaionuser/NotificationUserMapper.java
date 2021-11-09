@@ -15,7 +15,6 @@ public class NotificationUserMapper {
 
     public NotificationUser mapDTO(NotificationUserDTO dtoToMap){
         return NotificationUser.builder()
-                .id(dtoToMap.getId())
                 .name(dtoToMap.getName())
                 .email(dtoToMap.getEmail())
                 .build();
@@ -27,6 +26,14 @@ public class NotificationUserMapper {
                 .id(userToMap.getId())
                 .email(userToMap.getEmail())
                 .listenEvents(events)
+                .build();
+    }
+
+    public NotificationUser mapToUser(NotificationUserEditDTO userToMap){
+        return NotificationUser.builder()
+                .id(userToMap.getId())
+                .email(userToMap.getEmail())
+                .name(userToMap.getName())
                 .build();
     }
 

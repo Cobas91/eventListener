@@ -3,6 +3,7 @@ package eventlistener.service.event;
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
 import eventlistener.model.event.ResponseEventDTO;
+import eventlistener.model.notificationuser.NotificationUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -40,14 +41,14 @@ class EventMapperTest {
                         .description("Beschreibung")
                         .actions(List.of(Action.MAIL))
                         .name("Test Event")
-                        .notificationUser(List.of("1", "2"))
+                        .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .build(),
                 Event.builder()
                         .id("2")
                         .description("Beschreibung2")
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 2")
-                        .notificationUser(List.of("1", "2"))
+                        .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .build()
         );
         //WHEN
