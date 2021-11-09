@@ -39,7 +39,7 @@ export default function EditUser() {
   }
 
   const handleClick = () => {
-    userToEdit.listenEvents = listenEvents.map(event => event.id)
+    userToEdit.listenEvents = listenEvents
     editNotificationUser(userToEdit)
   }
   return (
