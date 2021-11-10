@@ -30,14 +30,14 @@ class EventServiceTest {
         //GIVEN
         List<Event> expected = List.of(
                 Event.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .description("Test Event 1")
                         .build(),
                 Event.builder()
-                        .id("2")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
@@ -64,7 +64,7 @@ class EventServiceTest {
                 .actions(List.of(Action.MAIL))
                 .build();
         Event expected = Event.builder()
-                .id("IdFromDatabase")
+                .id(1)
                 .name("TestEvent")
                 .description("UnitTest")
                 .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
@@ -82,25 +82,25 @@ class EventServiceTest {
     @DisplayName("Return a List of Events where the given User is part of notification users")
     void testGetAllEventsFromUser() {
         //GIVEN
-        String idToFind = "UserId123";
+        long idToFind = 123;
         NotificationUser userToFind = NotificationUser.builder().id(idToFind).build();
         List<Event> events = List.of(
                 Event.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .description("Test Event 1")
                         .build(),
                 Event.builder()
-                        .id("2")
+                        .id(2)
                         .name("TestEvent2")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .description("Test Event 2")
                         .build(),
                 Event.builder()
-                        .id("3")
+                        .id(3)
                         .name("TestEvent3")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
@@ -109,14 +109,14 @@ class EventServiceTest {
         );
         List<Event> expected = List.of(
                 Event.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(List.of(userToFind, NotificationUser.builder().build()))
                         .description("Test Event 1")
                         .build(),
                 Event.builder()
-                        .id("3")
+                        .id(3)
                         .name("TestEvent3")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(List.of(userToFind, NotificationUser.builder().build()))

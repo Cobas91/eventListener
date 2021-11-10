@@ -98,13 +98,13 @@ class NotificationUserServiceTest {
                 .email("test@test.de")
                 .name("Herr.Test")
                 .build();
-        when(notificationUserRepo.findById("userId")).thenReturn(Optional.of(userToFind));
+        when(notificationUserRepo.findById(1L)).thenReturn(Optional.of(userToFind));
         //WHEN
-        NotificationUser actual = notificationUserService.getSingleUser("userId");
+        NotificationUser actual = notificationUserService.getSingleUser(1L);
         //THEN
 
         assertThat(actual, is(userToFind));
-        verify(notificationUserRepo).findById("userId");
+        verify(notificationUserRepo).findById(1L);
     }
 
     @Test
@@ -115,12 +115,12 @@ class NotificationUserServiceTest {
                 .email("test@test.de")
                 .name("Herr.Test")
                 .build();
-        when(notificationUserRepo.findById("test@test.de")).thenReturn(Optional.empty());
+        when(notificationUserRepo.findById(1L)).thenReturn(Optional.empty());
         //WHEN
-        Exception exception = assertThrows(NoSuchElementException.class, ()-> notificationUserService.getSingleUser("test@test.de"));
+        Exception exception = assertThrows(NoSuchElementException.class, ()-> notificationUserService.getSingleUser(1L));
         //THEN
 
         assertThat(exception.getMessage(), is("Cant find User with id "+userToFind.getEmail()));
-        verify(notificationUserRepo).findById("test@test.de");
+        verify(notificationUserRepo).findById(1L);
     }
 }

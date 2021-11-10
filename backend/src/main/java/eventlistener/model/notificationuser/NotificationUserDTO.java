@@ -15,5 +15,5 @@ import java.util.List;
 public class NotificationUserDTO {
     private String email;
     private String name;
-    private List<String> listenEvents;
+    private List<Long> listenEvents;
 }

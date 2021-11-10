@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ResponseEventDTO {
-    private String id;
+    private long id;
     private String name;
     private String description;
     private List<Action> actions;

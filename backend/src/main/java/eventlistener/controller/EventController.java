@@ -24,12 +24,12 @@ public class EventController {
     }
 
     @GetMapping("/not/{excludedUserId}")
-    public List<Event> getAllEventsExcludeUser(@PathVariable String excludedUserId){
+    public List<Event> getAllEventsExcludeUser(@PathVariable Long excludedUserId){
         return userEventService.getAllEventsExcludeUser(excludedUserId);
     }
 
     @GetMapping("/{eventId}")
-    public Event getSingleEvent(@PathVariable String eventId){
+    public Event getSingleEvent(@PathVariable Long eventId){
         return userEventService.getSingleEvent(eventId);
     }
 

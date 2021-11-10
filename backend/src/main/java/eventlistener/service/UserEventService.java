@@ -35,7 +35,7 @@ public class UserEventService {
 
     public NotificationUser addUser(NotificationUserDTO userToAdd) {
         if(eventService.eventsExist(userToAdd.getListenEvents())){
-            NotificationUser user = notificationUserService.addUser(userToAdd);;
+            NotificationUser user = notificationUserService.addUser(userToAdd);
             eventService.addUserToEvents(userToAdd.getListenEvents(), user);
             return user;
         }else{
@@ -44,31 +44,31 @@ public class UserEventService {
 
     }
 
-    public NotificationUserEditDTO getSingleUser(String id) {
+    public NotificationUserEditDTO getSingleUser(Long id) {
         NotificationUser userToMap = notificationUserService.getSingleUser(id);
         List<Event> eventsToMap = eventService.getAllEventsFromUser(userToMap);
         return notificationUserMapper.mapUserToEditUser(userToMap, eventsToMap);
 
     }
 
-    public NotificationUser editUser(String id, NotificationUserEditDTO userToEdit) {
+    public NotificationUser editUser(Long id, NotificationUserEditDTO userToEdit) {
         //TODO erfolg testen -> events wurden aktualisiert?
         NotificationUser user = notificationUserService.getSingleUser(id);
         eventService.setNotificationUserToEvents(user, userToEdit.getListenEvents());
         return notificationUserService.editUser(userToEdit);
     }
 
-    public List<Event> getAllEventsFromUser(String userId) {
+    public List<Event> getAllEventsFromUser(Long userId) {
         NotificationUser user = notificationUserService.getSingleUser(userId);
         return eventService.getAllEventsFromUser(user);
     }
 
-    public List<Event> getAllEventsExcludeUser(String excludedUserId) {
+    public List<Event> getAllEventsExcludeUser(Long excludedUserId) {
         NotificationUser userToExclude = notificationUserService.getSingleUser(excludedUserId);
         return eventService.getAllEventsExcludeUser(userToExclude);
     }
 
-    public Event getSingleEvent(String eventId) {
+    public Event getSingleEvent(Long eventId) {
         return eventService.getSingleEvent(eventId);
     }
 

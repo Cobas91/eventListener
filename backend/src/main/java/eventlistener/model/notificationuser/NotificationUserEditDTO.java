@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class NotificationUserEditDTO {
-    private String id;
+    private long id;
     private String email;
     private String name;
     private List<Event> listenEvents;

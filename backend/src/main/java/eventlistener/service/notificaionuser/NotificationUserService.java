@@ -43,7 +43,7 @@ public class NotificationUserService {
         return notificationUserRepo.save(newUser);
     }
 
-    public NotificationUser getSingleUser(String id) {
+    public NotificationUser getSingleUser(Long id) {
         Optional<NotificationUser> optionalUser = notificationUserRepo.findById(id);
         if(optionalUser.isPresent()){
             return optionalUser.get();
@@ -59,9 +59,9 @@ public class NotificationUserService {
         throw new NoSuchElementException("Can´t edit User with ID "+userToEdit.getId());
     }
 
-    public List<NotificationUser> getUsersById(List<String> userIds){
+    public List<NotificationUser> getUsersById(List<Long> userIds){
         List<NotificationUser> userList = new ArrayList<>();
-        for (String userId : userIds) {
+        for (Long userId : userIds) {
             Optional<NotificationUser> optUser = notificationUserRepo.findById(userId);
             optUser.ifPresent(userList::add);
         }

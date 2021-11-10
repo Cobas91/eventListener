@@ -76,12 +76,12 @@ class NotificationUserControllerTest {
         //GIVEN
         List<NotificationUser> users = List.of(
                 NotificationUser.builder()
-                        .id("ID1")
+                        .id(1)
                         .email("1@1.de")
                         .name("1")
                         .build(),
                 NotificationUser.builder()
-                        .id("ID2")
+                        .id(2)
                         .email("2@2.de")
                         .name("2")
                         .build()
@@ -94,12 +94,12 @@ class NotificationUserControllerTest {
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), arrayContainingInAnyOrder(
                 NotificationUser.builder()
-                        .id("ID1")
+                        .id(1)
                         .email("1@1.de")
                         .name("1")
                         .build(),
                 NotificationUser.builder()
-                        .id("ID2")
+                        .id(2)
                         .email("2@2.de")
                         .name("2")
                         .build()
@@ -109,7 +109,7 @@ class NotificationUserControllerTest {
     @Test
     @DisplayName("Should add a new User and set the User ID to the given event.")
     void addUser() {
-        String eventId = "31";
+        long eventId = 31;
         //GIVEN
         NotificationUserDTO userDTO = NotificationUserDTO.builder()
                 .name("TestUser")
@@ -138,12 +138,12 @@ class NotificationUserControllerTest {
     @Test
     @DisplayName("Should Throw a EventNotFoundException, and Statuscode 400")
     void addUserGetNoEvent() {
-        String eventId = "31";
+        long eventId = 31;
         //GIVEN
         NotificationUserDTO userDTO = NotificationUserDTO.builder()
                 .name("TestUser")
                 .email("test@test.de")
-                .listenEvents(List.of("WrongEventID"))
+                .listenEvents(List.of(22L))
                 .build();
         Event eventToAdd = Event.builder()
                 .name("IntegrationTest Event")
@@ -162,7 +162,7 @@ class NotificationUserControllerTest {
     void getSingleUser() {
         //GIVEN
         NotificationUser userToFind = NotificationUser.builder()
-                .id("1")
+                .id(1)
                 .name("TestUser")
                 .email("test@test.de")
                 .build();
@@ -179,20 +179,20 @@ class NotificationUserControllerTest {
     void testEditUser() {
         //GIVEN
         NotificationUser userToEdit = NotificationUser.builder()
-                .id("1")
+                .id(1)
                 .name("TestUser")
                 .email("test@test.de")
                 .build();
         notificationUserRepo.save(userToEdit);
-        List<Event> events = List.of(Event.builder().id("1").name("TestEvent").description("Beschreibung").actions(List.of(Action.MAIL)).notificationUser(List.of(userToEdit)).build());
+        List<Event> events = List.of(Event.builder().id(1).name("TestEvent").description("Beschreibung").actions(List.of(Action.MAIL)).notificationUser(List.of(userToEdit)).build());
         NotificationUserEditDTO newUser = NotificationUserEditDTO.builder()
-                .id("1")
+                .id(1)
                 .name("TestUserNeu")
                 .email("newMail@test.de")
                 .listenEvents(events)
                 .build();
         NotificationUser expected = NotificationUser.builder()
-                .id("1")
+                .id(1)
                 .name("TestUserNeu")
                 .email("newMail@test.de")
                 .build();

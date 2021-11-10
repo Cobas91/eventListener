@@ -24,7 +24,7 @@ class NotificationUserMapperTest {
         NotificationUserDTO userDTO = NotificationUserDTO.builder()
                 .name("Test1")
                 .email("test@test.de")
-                .listenEvents(List.of("123", "456"))
+                .listenEvents(List.of(123L, 456L))
                 .build();
         NotificationUser expected = NotificationUser.builder()
                 .email("test@test.de")
@@ -40,32 +40,32 @@ class NotificationUserMapperTest {
     void mapUserToEditUser() {
         //GIVEN
         NotificationUser user = NotificationUser.builder()
-                .id("1")
+                .id(1)
                 .name("Test")
                 .email("test@test.de")
                 .build();
         List<NotificationUser> users = List.of(
                 NotificationUser.builder()
-                        .id("User1")
+                        .id(1)
                         .email("test@test.de")
                         .name("User1")
                         .build(),
                 NotificationUser.builder()
-                        .id("User2")
+                        .id(2)
                         .email("test@test.de")
                         .name("User2")
                         .build()
         );
         List<Event> events = List.of(
                 Event.builder()
-                        .id("Event1")
+                        .id(1)
                         .name("Erstes Event")
                         .description("Lala")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(users)
                         .build(),
                 Event.builder()
-                        .id("Event2")
+                        .id(2)
                         .name("Zweites Event")
                         .description("Lala")
                         .actions(List.of(Action.MAIL))
@@ -73,7 +73,7 @@ class NotificationUserMapperTest {
                         .build());
         NotificationUserEditDTO expected = NotificationUserEditDTO.builder()
                 .name("Test")
-                .id("1")
+                .id(1)
                 .listenEvents(events)
                 .email("test@test.de")
                 .build();
@@ -87,32 +87,32 @@ class NotificationUserMapperTest {
     void mapToUser() {
         //GIVEN
         NotificationUser expected = NotificationUser.builder()
-                .id("1")
+                .id(1)
                 .name("Test")
                 .email("test@test.de")
                 .build();
         List<NotificationUser> users = List.of(
                 NotificationUser.builder()
-                        .id("User1")
+                        .id(1)
                         .email("test@test.de")
                         .name("User1")
                         .build(),
                 NotificationUser.builder()
-                        .id("User2")
+                        .id(2)
                         .email("test@test.de")
                         .name("User2")
                         .build()
         );
         List<Event> events = List.of(
                 Event.builder()
-                        .id("Event1")
+                        .id(1)
                         .name("Erstes Event")
                         .description("Lala")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(users)
                         .build(),
                 Event.builder()
-                        .id("Event2")
+                        .id(2)
                         .name("Zweites Event")
                         .description("Lala")
                         .actions(List.of(Action.MAIL))
@@ -120,7 +120,7 @@ class NotificationUserMapperTest {
                         .build());
         NotificationUserEditDTO user = NotificationUserEditDTO.builder()
                 .name("Test")
-                .id("1")
+                .id(1)
                 .listenEvents(events)
                 .email("test@test.de")
                 .build();

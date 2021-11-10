@@ -34,17 +34,17 @@ public class NotificationUserController {
     }
 
     @GetMapping("/{id}")
-    public NotificationUserEditDTO getSingleUser(@PathVariable String id){
+    public NotificationUserEditDTO getSingleUser(@PathVariable Long id){
         return userEventService.getSingleUser(id);
     }
 
     @PutMapping("/{id}")
-    public NotificationUser editUser(@PathVariable String id, @RequestBody NotificationUserEditDTO userToEdit){
+    public NotificationUser editUser(@PathVariable Long id, @RequestBody NotificationUserEditDTO userToEdit){
         return userEventService.editUser(id,userToEdit);
     }
 
     @GetMapping("/event/{userId}")
-    public List<Event> getAllEventsFromUser(@PathVariable String userId){
+    public List<Event> getAllEventsFromUser(@PathVariable Long userId){
         return userEventService.getAllEventsFromUser(userId);
     }
 

@@ -23,13 +23,13 @@ class EventMapperTest {
         //GIVEN
         List<ResponseEventDTO> responseEventDTOS = List.of(
                 ResponseEventDTO.builder()
-                        .id("1")
+                        .id(1)
                         .description("Beschreibung")
                         .actions(List.of(Action.MAIL))
                         .name("Test Event")
                         .build(),
                 ResponseEventDTO.builder()
-                        .id("2")
+                        .id(2)
                         .description("Beschreibung2")
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 2")
@@ -37,14 +37,14 @@ class EventMapperTest {
         );
         List<Event> events = List.of(
                 Event.builder()
-                        .id("1")
+                        .id(1)
                         .description("Beschreibung")
                         .actions(List.of(Action.MAIL))
                         .name("Test Event")
                         .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .build(),
                 Event.builder()
-                        .id("2")
+                        .id(2)
                         .description("Beschreibung2")
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 2")

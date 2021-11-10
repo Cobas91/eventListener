@@ -14,6 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
@@ -61,6 +63,10 @@ class EventControllerTest {
     public void clearDB(){
         eventRepo.deleteAll();
     }
+    @BeforeEach
+    public void clearUserDB(){
+        notificationUserRepo.deleteAll();
+    }
     @Test
     @DisplayName("Returns a List of ResponseEvents")
     void testGetAllEvents() {
@@ -70,14 +76,14 @@ class EventControllerTest {
         List<NotificationUser> users = List.of(user1, user2);
         List<Event> events = List.of(
                 Event.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(users)
                         .description("Test Event 1")
                         .build(),
                 Event.builder()
-                        .id("2")
+                        .id(2)
                         .name("TestEvent2")
                         .actions(List.of(Action.MAIL))
                         .notificationUser(users)
@@ -91,13 +97,13 @@ class EventControllerTest {
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), arrayContaining(
                 ResponseEventDTO.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
                         .description("Test Event 1")
                         .build(),
                 ResponseEventDTO.builder()
-                        .id("2")
+                        .id(2)
                         .name("TestEvent2")
                         .actions(List.of(Action.MAIL))
                         .description("Test Event 2")
@@ -112,7 +118,7 @@ class EventControllerTest {
         NotificationUser user2 = notificationUserRepo.save(NotificationUser.builder().name("TestUser2").email("test@test.de").build());
         List<NotificationUser> users = List.of(user1, user2);
         Event eventToAdd = Event.builder()
-                .id("1")
+                .id(1)
                 .name("TestEvent")
                 .description("Integrationstest")
                 .actions(List.of(Action.MAIL))
@@ -120,7 +126,7 @@ class EventControllerTest {
                 .build();
         //WHEN
         ResponseEntity<Event> responseEntity = restTemplate.exchange("/api/event", HttpMethod.POST , new HttpEntity<>(eventToAdd, getLoginHeader()), Event.class);
-        Optional<Event> actual = eventRepo.findById("1");
+        Optional<Event> actual = eventRepo.findById(1L);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(actual, is(Optional.of(eventToAdd)));
@@ -132,7 +138,7 @@ class EventControllerTest {
     void testAddEventException() {
         //GIVEN
         Event eventToAdd = Event.builder()
-                .id("1")
+                .id(1)
                 .name("TestEvent")
                 .description("Integrationstest")
                 .actions(List.of(Action.MAIL))
@@ -140,43 +146,35 @@ class EventControllerTest {
                 .build();
         //WHEN
         ResponseEntity<Event> responseEntity = restTemplate.exchange("/api/event", HttpMethod.POST , new HttpEntity<>(eventToAdd, getLoginHeader()), Event.class);
-        Optional<Event> actual = eventRepo.findById("1");
+        Optional<Event> actual = eventRepo.findById(1L);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
     @Test
     @DisplayName("Get all Events where the given UserId is not included")
-    public void testGetAllEventsExcludeUser(){
+    void testGetAllEventsExcludeUser(){
         //GIVEN
-        String userId = "1";
-        List<NotificationUser> includeUsers = List.of(
-                NotificationUser.builder()
-                        .id("1")
-                        .name("Hans")
-                        .email("test@test.de")
-                        .build(),
-                NotificationUser.builder()
-                        .id("2")
-                        .name("Peter")
-                        .email("test@test.de")
-                        .build()
-        );
-        List<NotificationUser> excludeUsers = List.of(
-                NotificationUser.builder()
-                        .id("3")
-                        .name("Hans")
-                        .email("test@test.de")
-                        .build(),
-                NotificationUser.builder()
-                        .id("4")
-                        .name("Peter")
-                        .email("test@test.de")
-                        .build()
-        );
-        Event include = Event.builder().id("1").name("TestEvent").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest").notificationUser(includeUsers).build();
-        Event include2 = Event.builder().id("2").name("TestEvent2").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 2").notificationUser(includeUsers).build();
-        Event exclude = Event.builder().id("3").name("TestEvent3").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 3").notificationUser(excludeUsers).build();
+        long userId = 1;
+        NotificationUser user1 = NotificationUser.builder()
+                .id(userId)
+                .name("Hans")
+                .email("test@test.de")
+                .build();
+        NotificationUser user2 = NotificationUser.builder()
+                .id(2)
+                .name("Peter")
+                .email("test@test.de")
+                .build();
+        List<NotificationUser> includeUsers = List.of(user1,user2);
+        List<NotificationUser> excludeUsers = List.of(user2);
+        Event include = Event.builder().id(1).name("TestEvent").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest").notificationUser(includeUsers).build();
+        Event include2 = Event.builder().id(2).name("TestEvent2").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 2").notificationUser(includeUsers).build();
+        Event exclude = Event.builder().id(3).name("TestEvent3").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 3").notificationUser(excludeUsers).build();
+
+        notificationUserRepo.save(user1);
+        notificationUserRepo.save(user2);
+
         eventRepo.save(include);
         eventRepo.save(include2);
         eventRepo.save(exclude);

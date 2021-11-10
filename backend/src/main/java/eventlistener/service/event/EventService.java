@@ -2,14 +2,9 @@ package eventlistener.service.event;
 
 
 import eventlistener.model.event.Event;
-import eventlistener.model.event.EventToModifyDTO;
 import eventlistener.model.notificationuser.NotificationUser;
-import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.repo.EventRepo;
-import eventlistener.service.UserEventService;
-import eventlistener.service.notificaionuser.NotificationUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.mongodb.core.aggregation.BooleanOperators;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -44,17 +39,17 @@ public class EventService {
     }
 
     public List<Event> getAllEventsExcludeUser(NotificationUser users) {
-        return eventRepo.findAllByNotificationUserNotContains(users);
+        return eventRepo.findAllByNotificationUserNotContaining(users);
     }
 
 
-    public boolean eventsExist(List<String> listenEvents) {
+    public boolean eventsExist(List<Long> listenEvents) {
         List<Event> listOfEvents = (List<Event>) eventRepo.findAllById(listenEvents);
         return listOfEvents.size() >= listenEvents.size();
     }
 
-    public void addUserToEvents(List<String> listenEvents, NotificationUser user) {
-        for (String eventId : listenEvents) {
+    public void addUserToEvents(List<Long> listenEvents, NotificationUser user) {
+        for (Long eventId : listenEvents) {
             Event eventToEdit = getEventById(eventId);
             if(!userExistInEvent(user.getId(), eventToEdit)){
                 List<NotificationUser> userList = eventToEdit.getNotificationUser();
@@ -73,7 +68,7 @@ public class EventService {
         return newUserEvents;
     }
 
-    public Event addUserToEvent(String eventId, NotificationUser userId){
+    public Event addUserToEvent(long eventId, NotificationUser userId){
         Event eventToEdit = eventRepo.findById(eventId).orElseThrow(() -> new NoSuchElementException("No event found with ID: "+eventId));
         eventToEdit.getNotificationUser().add(userId);
         return eventRepo.save(eventToEdit);
@@ -87,15 +82,15 @@ public class EventService {
         eventRepo.saveAll(userEvents);
     }
 
-    private boolean userExistInEvent(String id, Event toCheck){
+    private boolean userExistInEvent(long id, Event toCheck){
         return toCheck.getNotificationUser().contains(id);
     }
 
-    public Event getEventById(String eventId){
+    public Event getEventById(Long eventId){
         return eventRepo.findById(eventId).orElseThrow(() -> new NoSuchElementException("No event found with ID: " + eventId));
     }
 
-    public Event getSingleEvent(String eventId) {
+    public Event getSingleEvent(Long eventId) {
         Optional<Event> optionalSimpleEvent = eventRepo.findById(eventId);
         if(optionalSimpleEvent.isPresent()){
             return optionalSimpleEvent.get();

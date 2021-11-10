@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class EventToModifyDTO {
-    private String id;
+    private long id;
     private String name;
     private List<Action> actions;
     private String description;

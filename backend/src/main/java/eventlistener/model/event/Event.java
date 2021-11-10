@@ -3,21 +3,24 @@ package eventlistener.model.event;
 import eventlistener.model.Action;
 import eventlistener.model.notificationuser.NotificationUser;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
+
+import javax.persistence.*;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Entity
 public class Event {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String name;
+    @ElementCollection
     private List<Action> actions;
     private String description;
-    @DBRef
+    @ManyToMany
     private List<NotificationUser> notificationUser;
 }

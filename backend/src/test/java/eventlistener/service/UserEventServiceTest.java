@@ -40,12 +40,12 @@ class UserEventServiceTest {
                 NotificationUser.builder()
                         .name("TestUser1")
                         .email("test1@test.de")
-                        .id("UserId1")
+                        .id(1)
                         .build(),
                 NotificationUser.builder()
                         .name("TestUser2")
                         .email("test2@test.de")
-                        .id("UserId2")
+                        .id(2)
                         .build()
         );
         //WHEN
@@ -59,14 +59,14 @@ class UserEventServiceTest {
     @DisplayName("Return the new User with User ID.")
     void testAddUser() {
         //GIVEN
-        List<String> eventIds = List.of("EventId1", "EventId2");
+        List<Long> eventIds = List.of(1L, 2L);
         NotificationUserDTO userToAdd = NotificationUserDTO.builder()
                 .name("TestUser")
                 .email("tes@test.de")
                 .listenEvents(eventIds)
                 .build();
         NotificationUser addedUser = NotificationUser.builder()
-                .id("UserId1")
+                .id(1)
                 .email("test@test.de")
                 .name("TestUser")
                 .build();
@@ -85,23 +85,23 @@ class UserEventServiceTest {
     @DisplayName("Return a NotificationUserDTO including List of Event Ids")
     void testGetSingleUser() {
         //GIVEN
-        String userIdToSearch = "1";
+        long userIdToSearch = 1;
         List<Event> events = List.of(
                 Event.builder()
-                        .id("Event1")
+                        .id(1)
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 1")
                         .description("Beschreibung 1")
                         .build(),
                 Event.builder()
-                        .id("Event2")
+                        .id(2)
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 2")
                         .description("Beschreibung 2")
                         .build()
                 );
         NotificationUserEditDTO expected = NotificationUserEditDTO.builder()
-                .id("1")
+                .id(1)
                 .listenEvents(events)
                 .email("test@test.de")
                 .name("TestUser")
@@ -128,30 +128,30 @@ class UserEventServiceTest {
         //GIVEN
         List<Event> events = List.of(
                 Event.builder()
-                        .id("Event1")
+                        .id(1)
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 1")
                         .description("Beschreibung 1")
                         .build(),
                 Event.builder()
-                        .id("Event2")
+                        .id(2)
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 2")
                         .description("Beschreibung 2")
                         .build()
         );
         NotificationUserEditDTO userToEdit = NotificationUserEditDTO.builder()
-                .id("1")
+                .id(1)
                 .email("test@test.de")
                 .name("Test")
                 .listenEvents(events)
                 .build();
         NotificationUser expected = NotificationUser.builder()
-                .id("1")
+                .id(1)
                 .email("test@test.de")
                 .name("Test")
                 .build();
-        String idToEdit = "1";
+        long idToEdit = 1;
         //WHEN
         when(notificationUserService.getSingleUser(idToEdit)).thenReturn(expected);
         when(eventService.getAllEventsFromUser(expected)).thenReturn(events);
@@ -166,19 +166,19 @@ class UserEventServiceTest {
     @DisplayName("Return a List of Events from a given userId")
     void testGetAllEventsFromUser() {
         //GIVEN
-        String userId = "1";
+        long userId = 1;
         NotificationUser user = NotificationUser.builder().id(userId).build();
         List<NotificationUser> users = List.of(user);
         List<Event> expected = List.of(
                 Event.builder()
-                        .id("Event1")
+                        .id(1)
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 1")
                         .description("Beschreibung 1")
                         .notificationUser(users)
                         .build(),
                 Event.builder()
-                        .id("Event2")
+                        .id(2)
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 2")
                         .description("Beschreibung 2")
