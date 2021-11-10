@@ -79,17 +79,17 @@
             <version>42.2.5</version>
         </dependency>
 
-        <!-- test db for integration tests -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>1.16.0</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- executes the db scripts automatically -->
         <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.16.0</version>
+            <scope>test</scope>
         </dependency>
 
 
