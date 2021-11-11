@@ -90,6 +90,7 @@ class AppUserControllerTest {
         ResponseEntity<AppUserDTO> addUserResponse = restTemplate.exchange("/api/appuser", HttpMethod.POST, new HttpEntity<>(userToAdd, getLoginHeader()), AppUserDTO.class);
         //THEN
         assertThat(addUserResponse.getStatusCode(), is(HttpStatus.OK));
+        userToAdd.setId(Objects.requireNonNull(addUserResponse.getBody()).getId());
         userToAdd.setPassword(Objects.requireNonNull(addUserResponse.getBody()).getPassword());
         assertThat(addUserResponse.getBody(), is(userToAdd));
 

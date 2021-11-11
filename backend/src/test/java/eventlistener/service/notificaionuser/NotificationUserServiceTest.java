@@ -120,7 +120,7 @@ class NotificationUserServiceTest {
         Exception exception = assertThrows(NoSuchElementException.class, ()-> notificationUserService.getSingleUser(1L));
         //THEN
 
-        assertThat(exception.getMessage(), is("Cant find User with id "+userToFind.getEmail()));
+        assertThat(exception.getMessage(), is("Cant find User with id 1"));
         verify(notificationUserRepo).findById(1L);
     }
 }

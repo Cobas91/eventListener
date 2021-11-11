@@ -21,6 +21,6 @@ public class Event {
     @ElementCollection
     private List<Action> actions;
     private String description;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<NotificationUser> notificationUser;
 }

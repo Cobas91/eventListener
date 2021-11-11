@@ -98,23 +98,18 @@ class NotificationUserControllerTest {
     @DisplayName("Should return a List of Users")
     void testGetAllUser() {
         //GIVEN
-        List<NotificationUser> users = List.of(
+        NotificationUser user =
                 NotificationUser.builder()
                         .email("1@1.de")
                         .name("1")
-                        .build(),
-                NotificationUser.builder()
-                        .email("2@2.de")
-                        .name("2")
-                        .build()
-        );
-        List<NotificationUser> expected = notificationUserRepo.saveAll(users);
+                        .build();
+        NotificationUser expected = notificationUserRepo.save(user);
         //WHEN
         ResponseEntity<NotificationUser[]> responseEntity = restTemplate.exchange("/api/user", HttpMethod.GET , new HttpEntity<>(getLoginHeader()), NotificationUser[].class);
 
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), arrayContainingInAnyOrder(expected));
+        assertThat(responseEntity.getBody(), arrayContaining(expected));
     }
 
     @Test
@@ -170,17 +165,16 @@ class NotificationUserControllerTest {
     @Test
     void getSingleUser() {
         //GIVEN
-        NotificationUser userToFind = NotificationUser.builder()
-                .id(1)
+        NotificationUser userToAdd = NotificationUser.builder()
                 .name("TestUser")
                 .email("test@test.de")
                 .build();
-        notificationUserRepo.save(userToFind);
+        NotificationUser expected = notificationUserRepo.save(userToAdd);
         //WHEN
-        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+userToFind.getId(), HttpMethod.GET , new HttpEntity<>(getLoginHeader()), NotificationUser.class);
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+expected.getId(), HttpMethod.GET , new HttpEntity<>(getLoginHeader()), NotificationUser.class);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), is(userToFind));
+        assertThat(responseEntity.getBody(), is(expected));
     }
 
     @Test

@@ -171,14 +171,12 @@ class UserEventServiceTest {
         List<NotificationUser> users = List.of(user);
         List<Event> expected = List.of(
                 Event.builder()
-                        .id(1)
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 1")
                         .description("Beschreibung 1")
                         .notificationUser(users)
                         .build(),
                 Event.builder()
-                        .id(2)
                         .actions(List.of(Action.MAIL))
                         .name("Test Event 2")
                         .description("Beschreibung 2")
@@ -187,9 +185,11 @@ class UserEventServiceTest {
         );
         //WHEN
         when(eventService.getAllEventsFromUser(user)).thenReturn(expected);
+        when(notificationUserService.getSingleUser(userId)).thenReturn(user);
         List<Event> actual = userEventService.getAllEventsFromUser(userId);
         //THEN
         assertThat(actual, is(expected));
+        verify(notificationUserService).getSingleUser(userId);
         verify(eventService).getAllEventsFromUser(user);
     }
 
