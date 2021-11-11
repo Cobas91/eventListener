@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { useLocation } from 'react-router-dom'
-import { TextField, Typography } from '@mui/material'
+import { Button, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components/macro'
-import DropdownOption from '../components/DropdownOption'
+
 import useEvents from '../components/hooks/useEvents'
 import { DataGrid, GridToolbar } from '@mui/x-data-grid'
 
@@ -11,7 +11,13 @@ export default function EditEvent() {
   const urlQuery = useLocation().search
   const eventId = new URLSearchParams(urlQuery).get('id')
   const { getEventById } = useEvents()
-  const [eventToEdit, setEventToEdit] = useState({ notificationUser: [] })
+  const [eventToEdit, setEventToEdit] = useState({
+    name: '',
+    description: '',
+    notificationUser: [],
+    actions: [],
+  })
+  const [selectedUser, setSelectedUser] = useState(eventToEdit.notificationUser)
   const userTableColumns = [
     {
       field: 'id',
@@ -23,17 +29,8 @@ export default function EditEvent() {
     { field: 'email', headerName: 'E-Mail', flex: 1 },
   ]
   useEffect(() => {
-    getEventById().then(event => {
+    getEventById(eventId).then(event => {
       if (event) setEventToEdit(event)
-      else
-        setEventToEdit({
-          id: '30',
-          name: 'DoppelZahlung',
-          actions: ['MAIL'],
-          description:
-            'Ein Event das ausgelöst werden kann wenn etwas passiert und das ist super!',
-          notificationUser: [{ id: 1 }, { id: 2 }],
-        })
     })
     // eslint-disable-next-line
   }, [eventId])
@@ -42,45 +39,86 @@ export default function EditEvent() {
     const value = e.target.value
     setEventToEdit({ ...eventToEdit, [field]: value })
   }
+  const handleClick = () => {}
   return (
     <EventContainer>
-      <Typography>Event editieren</Typography>
-      <form>
-        <TextField
-          id="name"
-          label="Name"
-          variant="outlined"
-          value={eventToEdit.name}
-          onChange={handleChange}
-        />
-        <TextField
-          id="description"
-          label="Beschreibung"
-          variant="outlined"
-          value={eventToEdit.description}
-          onChange={handleChange}
-        />
-        <DropdownOption
-          onChange={handleChange}
-          selectOptions={eventToEdit.actions}
-        />
-        <DataGrid
-          autoHeight={true}
-          rows={eventToEdit.notificationUser}
-          columns={userTableColumns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          components={{
-            Toolbar: GridToolbar,
-          }}
-          onSelectionModelChange={user => {
-            console.log(user)
-          }}
-          selectionModel={eventToEdit.notificationUser}
-        />
-      </form>
+      <Typography variant="h5">Event editieren</Typography>
+      <StyledForm>
+        <StyledSection>
+          <StyledTextField
+            id="name"
+            label="Name"
+            variant="outlined"
+            value={eventToEdit.name}
+            onChange={handleChange}
+          />
+        </StyledSection>
+        <StyledSection>
+          <Typography variant="h6">Beschreibung</Typography>
+          <StyledTextArea
+            id="description"
+            name="description"
+            value={eventToEdit.description}
+            onChange={handleChange}
+          />
+        </StyledSection>
+        <StyledSection>
+          <Typography variant="h6">Aktionen</Typography>
+          <ul>
+            {eventToEdit.actions.map(action => (
+              <li>{action}</li>
+            ))}
+          </ul>
+        </StyledSection>
+        <StyledSection>
+          <Typography variant="h6">Verlinkte Benutzer</Typography>
+          <DataGrid
+            checkboxSelection
+            disableSelectionOnClick
+            autoHeight={true}
+            rows={eventToEdit.notificationUser}
+            columns={userTableColumns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            components={{
+              Toolbar: GridToolbar,
+            }}
+            onSelectionModelChange={user => {
+              setSelectedUser(user)
+            }}
+            selectionModel={selectedUser}
+          />
+        </StyledSection>
+      </StyledForm>
+      <StyledButton variant="contained" onClick={handleClick}>
+        Save
+      </StyledButton>
     </EventContainer>
   )
 }
+const StyledButton = styled(Button)`
+  margin-bottom: 10px;
+  margin-top: 10px;
+`
 
-const EventContainer = styled.section``
+const StyledSection = styled.section`
+  margin-top: 10px;
+`
+
+const StyledTextArea = styled.textarea`
+  resize: none;
+  overflow: hidden;
+  width: 100%;
+`
+const StyledTextField = styled(TextField)``
+const EventContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+`
+
+const StyledForm = styled.form`
+  width: 80%;
+`
