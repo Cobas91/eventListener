@@ -17,12 +17,10 @@ public class EventService {
 
     private final EventRepo eventRepo;
 
-    private final EventMapper eventMapper;
 
 
-    public EventService(EventRepo eventRepo, EventMapper eventMapper) {
+    public EventService(EventRepo eventRepo) {
         this.eventRepo = eventRepo;
-        this.eventMapper = eventMapper;
 
     }
 
@@ -44,14 +42,14 @@ public class EventService {
 
 
     public boolean eventsExist(List<Long> listenEvents) {
-        List<Event> listOfEvents = (List<Event>) eventRepo.findAllById(listenEvents);
+        List<Event> listOfEvents = eventRepo.findAllById(listenEvents);
         return listOfEvents.size() >= listenEvents.size();
     }
 
     public void addUserToEvents(List<Long> listenEvents, NotificationUser user) {
         for (Long eventId : listenEvents) {
             Event eventToEdit = getEventById(eventId);
-            if(!userExistInEvent(user.getId(), eventToEdit)){
+            if(!userExistInEvent(user, eventToEdit)){
                 List<NotificationUser> userList = eventToEdit.getNotificationUser();
                 userList.add(user);
                 eventRepo.save(eventToEdit);
@@ -82,15 +80,15 @@ public class EventService {
         eventRepo.saveAll(userEvents);
     }
 
-    private boolean userExistInEvent(long id, Event toCheck){
-        return toCheck.getNotificationUser().contains(id);
+    private boolean userExistInEvent(NotificationUser user, Event toCheck){
+        return toCheck.getNotificationUser().contains(user);
     }
 
     public Event getEventById(Long eventId){
         return eventRepo.findById(eventId).orElseThrow(() -> new NoSuchElementException("No event found with ID: " + eventId));
     }
 
-    public Event getSingleEvent(Long eventId) {
+    public Event getSingleEvent(Long eventId) throws NoSuchElementException{
         Optional<Event> optionalSimpleEvent = eventRepo.findById(eventId);
         if(optionalSimpleEvent.isPresent()){
             return optionalSimpleEvent.get();
