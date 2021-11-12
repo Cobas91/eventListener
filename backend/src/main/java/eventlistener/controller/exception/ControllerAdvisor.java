@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mapping.MappingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -57,6 +58,13 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         log.error("Could not handle Resource job. ",ex);
         ApiError apiError = new ApiError("Could not handle Resource job. ", ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MailException.class)
+    public ResponseEntity<ApiError> handleMappingException(MailException ex){
+        log.error("Could not send Mail",ex);
+        ApiError apiError = new ApiError("Could not send Mail", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(Throwable.class)

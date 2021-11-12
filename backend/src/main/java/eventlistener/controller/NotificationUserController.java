@@ -5,8 +5,6 @@ import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.service.UserEventService;
-import eventlistener.service.event.EventService;
-import eventlistener.service.notificaionuser.NotificationUserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +23,7 @@ public class NotificationUserController {
 
     @GetMapping
     public List<NotificationUser> getAllUser(){
-        return userEventService.getAllUser();
+        return userEventService.getAllUsers();
     }
 
     @PostMapping
@@ -43,7 +41,7 @@ public class NotificationUserController {
         return userEventService.editUser(id,userToEdit);
     }
 
-    @GetMapping("/event/{userId}")
+    @GetMapping("/{userId}/event")
     public List<Event> getAllEventsFromUser(@PathVariable Long userId){
         return userEventService.getAllEventsFromUser(userId);
     }

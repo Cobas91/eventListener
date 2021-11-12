@@ -19,9 +19,7 @@ class EventServiceTest {
 
     EventRepo eventRepo = mock(EventRepo.class);
 
-    EventMapper eventMapper = mock(EventMapper.class);
-
-    EventService eventService = new EventService(eventRepo, eventMapper);
+    EventService eventService = new EventService(eventRepo);
 
 
     @Test

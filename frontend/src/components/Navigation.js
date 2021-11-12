@@ -36,6 +36,7 @@ const StyledLink = styled(Link)`
   margin-right: 15px;
   text-decoration: none;
   :visited {
-    color: black;
+    color: white;
   }
+  color: white;
 `

@@ -50,7 +50,7 @@ class UserEventServiceTest {
         );
         //WHEN
         when(notificationUserService.getAllUser()).thenReturn(expected);
-        List<NotificationUser> actual = userEventService.getAllUser();
+        List<NotificationUser> actual = userEventService.getAllUsers();
         //THEN
         assertThat(actual, is(expected));
     }
