@@ -92,4 +92,8 @@ public class UserEventService {
     public String deleteEvent(Long eventId) {
         return eventService.deleteEvent(eventId);
     }
+
+    public String deleteUser(Long userId) {
+        return notificationUserService.deleteUser(userId);
+    }
 }

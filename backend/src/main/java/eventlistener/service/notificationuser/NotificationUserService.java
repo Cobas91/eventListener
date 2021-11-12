@@ -63,4 +63,8 @@ public class NotificationUserService {
         return userList;
     }
 
+    public String deleteUser(Long userId) {
+        notificationUserRepo.deleteById(userId);
+        return "Deleted User with ID:"+userId;
+    }
 }
