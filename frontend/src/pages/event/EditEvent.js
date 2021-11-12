@@ -113,7 +113,7 @@ export default function EditEvent() {
         </StyledSection>
       </StyledForm>
       <StyledButton variant="contained" onClick={handleClick}>
-        Save
+        Speichern
       </StyledButton>
     </EventContainer>
   )
