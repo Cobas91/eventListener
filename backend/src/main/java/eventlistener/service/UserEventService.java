@@ -73,8 +73,9 @@ public class UserEventService {
         return eventService.getSingleEvent(eventId);
     }
 
-    public Event addEvent(Event eventToAdd) {
-        return eventService.addEvent(eventToAdd);
+    public Event addEvent(EventToModifyDTO eventToAdd) {
+        List<NotificationUser> users = notificationUserService.getUsersById(eventToAdd.getNotificationUser());
+        return eventService.addEvent(eventMapper.mapEvent(eventToAdd, users));
     }
 
     public List<Event> getAllEvents() {
