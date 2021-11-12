@@ -7,7 +7,7 @@ import { useContext } from 'react'
 import { AuthContext } from '../security/AuthProvider'
 import icon from '../components/assets/icon.png'
 
-import { FiHome, FiFilePlus, FiMonitor } from 'react-icons/fi'
+import { FiHome, FiFilePlus, FiMonitor, FiLogOut } from 'react-icons/fi'
 
 export default function Navigation() {
   const { logout } = useContext(AuthContext)
@@ -36,7 +36,9 @@ export default function Navigation() {
           Event hinzufügen
         </StyledLink>
       </Toolbar>
+
       <StyledLink to="/login" onClick={handleLogout}>
+        <FiLogOut />
         Logout
       </StyledLink>
     </StyledAppBar>

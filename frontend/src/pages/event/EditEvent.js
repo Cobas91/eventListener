@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components/macro'
 
 import useEvents from '../../components/hooks/useEvents'
-import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+import { DataGrid } from '@mui/x-data-grid'
 import useNotificationUsers from '../../components/hooks/useNotificationUsers'
+import TableToolbar from '../../components/TableToolbar'
 
 export default function EditEvent() {
   const urlQuery = useLocation().search
@@ -30,6 +31,11 @@ export default function EditEvent() {
     { field: 'name', headerName: 'Name', flex: 0.3 },
     { field: 'email', headerName: 'E-Mail', flex: 1 },
   ]
+  const usedFilters = {
+    columnFilter: true,
+    filter: true,
+    csvExport: true,
+  }
   useEffect(() => {
     getEventById(eventId).then(event => {
       if (event) setEventToEdit(event)
@@ -97,7 +103,7 @@ export default function EditEvent() {
             pageSize={5}
             rowsPerPageOptions={[5]}
             components={{
-              Toolbar: GridToolbar,
+              Toolbar: () => TableToolbar(usedFilters),
             }}
             onSelectionModelChange={user => {
               setSelectedUser(user)

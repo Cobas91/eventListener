@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+import { DataGrid } from '@mui/x-data-grid'
 import styled from 'styled-components'
 import { Button, Typography } from '@mui/material'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import useEvents from '../components/hooks/useEvents'
+import TableToolbar from '../components/TableToolbar'
 export default function Overview() {
   const { notificationUser } = useNotificationUsers()
   const { events } = useEvents()
@@ -19,6 +20,11 @@ export default function Overview() {
     { field: 'name', headerName: 'Name', flex: 0.3 },
     { field: 'email', headerName: 'E-Mail', flex: 1 },
   ]
+  const usedFilters = {
+    columnFilter: true,
+    filter: true,
+    csvExport: true,
+  }
   const eventTableColumns = [
     {
       field: 'id',
@@ -64,7 +70,7 @@ export default function Overview() {
           pageSize={5}
           rowsPerPageOptions={[5]}
           components={{
-            Toolbar: GridToolbar,
+            Toolbar: () => TableToolbar(usedFilters),
           }}
           onSelectionModelChange={user => {
             setSelectedUser(user)
@@ -89,7 +95,7 @@ export default function Overview() {
           pageSize={5}
           rowsPerPageOptions={[5]}
           components={{
-            Toolbar: GridToolbar,
+            Toolbar: () => TableToolbar(usedFilters),
           }}
           onSelectionModelChange={event => {
             setSelectedEvent(event)
