@@ -53,4 +53,9 @@ public class EventController {
     public Event editEvent(@PathVariable Long eventId, @RequestBody EventToModifyDTO event){
         return userEventService.editEvent(eventId, event);
     }
+
+    @DeleteMapping("/{eventId}")
+    public String deleteEvent(@PathVariable Long eventId){
+        return userEventService.deleteEvent(eventId);
+    }
 }

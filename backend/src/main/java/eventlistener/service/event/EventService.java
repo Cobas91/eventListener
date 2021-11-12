@@ -96,4 +96,9 @@ public class EventService {
         log.error("Can´t find Event with ID "+eventId);
         throw new NoSuchElementException("Can´t find Event with ID "+eventId);
     }
+
+    public String deleteEvent(Long eventId) {
+        eventRepo.deleteById(eventId);
+        return "Deleted Event with id:"+eventId;
+    }
 }
