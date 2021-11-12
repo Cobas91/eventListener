@@ -2,7 +2,6 @@ package eventlistener.service;
 
 import eventlistener.exception.EventNotFoundException;
 import eventlistener.model.event.Event;
-import eventlistener.model.event.EventToModifyDTO;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
@@ -12,8 +11,6 @@ import eventlistener.service.notificaionuser.NotificationUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserEventService {
@@ -29,7 +26,7 @@ public class UserEventService {
         this.notificationUserMapper = notificationUserMapper;
     }
 
-    public List<NotificationUser> getAllUser() {
+    public List<NotificationUser> getAllUsers() {
         return notificationUserService.getAllUser();
     }
 
@@ -52,7 +49,6 @@ public class UserEventService {
     }
 
     public NotificationUser editUser(Long id, NotificationUserEditDTO userToEdit) {
-        //TODO erfolg testen -> events wurden aktualisiert?
         NotificationUser user = notificationUserService.getSingleUser(id);
         eventService.setNotificationUserToEvents(user, userToEdit.getListenEvents());
         return notificationUserService.editUser(userToEdit);
