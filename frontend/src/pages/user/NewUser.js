@@ -2,9 +2,9 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { Button, TextField, Typography } from '@mui/material'
 import styled from 'styled-components/macro'
-import useNotificationUsers from '../components/hooks/useNotificationUsers'
+import useNotificationUsers from '../../components/hooks/useNotificationUsers'
 import { DataGrid } from '@mui/x-data-grid'
-import TableToolbar from '../components/TableToolbar'
+import TableToolbar from '../../components/TableToolbar'
 
 export default function NewUser() {
   const { addNotificationUser, getAllEvents } = useNotificationUsers()

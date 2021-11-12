@@ -2,12 +2,14 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Button, TextField } from '@mui/material'
 import logo from '../components/assets/logo_name.svg'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 
 import { API_login } from '../service/loginService'
 import { useHistory } from 'react-router-dom'
+import { AuthContext } from '../security/AuthProvider'
 
-export default function LoginPage({ login }) {
+export default function LoginPage() {
+  const { setJWT } = useContext(AuthContext)
   const [credentials, setCredentials] = useState()
   const history = useHistory()
   const handleOnChange = e => {
@@ -17,7 +19,7 @@ export default function LoginPage({ login }) {
   const handleSubmit = e => {
     e.preventDefault()
     API_login(credentials)
-      .then(login)
+      .then(setJWT)
       .then(() => {
         history.push('/')
       })
