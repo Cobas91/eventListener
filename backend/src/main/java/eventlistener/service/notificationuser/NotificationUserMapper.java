@@ -1,4 +1,4 @@
-package eventlistener.service.notificaionuser;
+package eventlistener.service.notificationuser;
 
 import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUser;

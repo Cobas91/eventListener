@@ -229,7 +229,7 @@ class EventControllerTest {
                 .name("Integrationstest Event geändert")
                 .description("Integrationstest sind toll und funktionieren")
                 .actions(List.of(Action.MAIL))
-                .notificationUserIds(List.of(user1WithId.getId(), user2WithId.getId(), newUserWithId.getId()))
+                .notificationUser(List.of(user1WithId.getId(), user2WithId.getId(), newUserWithId.getId()))
                 .build();
         Event expected = Event.builder()
                 .id(eventIdToEdit)

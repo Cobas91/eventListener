@@ -10,8 +10,8 @@ import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
 import eventlistener.service.event.EventMapper;
 import eventlistener.service.event.EventService;
-import eventlistener.service.notificaionuser.NotificationUserMapper;
-import eventlistener.service.notificaionuser.NotificationUserService;
+import eventlistener.service.notificationuser.NotificationUserMapper;
+import eventlistener.service.notificationuser.NotificationUserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -206,7 +206,7 @@ class UserEventServiceTest {
                 .name("Test Event")
                 .description("Unit Test Event")
                 .actions(List.of(Action.MAIL))
-                .notificationUserIds(List.of(1L, 2L))
+                .notificationUser(List.of(1L, 2L))
                 .build();
         List<NotificationUser> users = List.of(
                 NotificationUser.builder()
@@ -228,13 +228,13 @@ class UserEventServiceTest {
                 .notificationUser(users)
                 .build();
         //WHEN
-        when(notificationUserService.getUsersById(eventToEdit.getNotificationUserIds())).thenReturn(users);
+        when(notificationUserService.getUsersById(eventToEdit.getNotificationUser())).thenReturn(users);
         when(eventMapper.mapEvent(eventToEdit, users)).thenReturn(expected);
         when(eventService.addEvent(expected)).thenReturn(expected);
         Event actual = userEventService.editEvent(eventToEditId, eventToEdit);
         //THEN
         assertThat(actual, is(expected));
-        verify(notificationUserService).getUsersById(eventToEdit.getNotificationUserIds());
+        verify(notificationUserService).getUsersById(eventToEdit.getNotificationUser());
         verify(eventMapper).mapEvent(eventToEdit, users);
         verify(eventService).addEvent(expected);
     }

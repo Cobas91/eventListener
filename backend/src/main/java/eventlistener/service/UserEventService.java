@@ -8,8 +8,8 @@ import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.service.event.EventMapper;
 import eventlistener.service.event.EventService;
-import eventlistener.service.notificaionuser.NotificationUserMapper;
-import eventlistener.service.notificaionuser.NotificationUserService;
+import eventlistener.service.notificationuser.NotificationUserMapper;
+import eventlistener.service.notificationuser.NotificationUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -83,7 +83,7 @@ public class UserEventService {
 
     public Event editEvent(Long eventId, EventToModifyDTO event) {
         if(eventId != event.getId()) throw new IllegalArgumentException("The Event you want to Edit and the given content is not processable");
-        List<NotificationUser> users = notificationUserService.getUsersById(event.getNotificationUserIds());
+        List<NotificationUser> users = notificationUserService.getUsersById(event.getNotificationUser());
         Event eventToAdd = eventMapper.mapEvent(event, users);
         return eventService.addEvent(eventToAdd);
     }

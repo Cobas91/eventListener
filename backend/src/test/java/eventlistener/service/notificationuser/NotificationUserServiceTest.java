@@ -1,14 +1,8 @@
-package eventlistener.service.notificaionuser;
+package eventlistener.service.notificationuser;
 
-import eventlistener.exception.EventNotFoundException;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
-import eventlistener.model.notificationuser.NotificationUserEditDTO;
-import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
-import eventlistener.service.event.EventService;
-import eventlistener.service.notificaionuser.NotificationUserMapper;
-import eventlistener.service.notificaionuser.NotificationUserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

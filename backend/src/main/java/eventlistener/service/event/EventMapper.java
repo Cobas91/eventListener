@@ -32,7 +32,7 @@ public class EventMapper {
                 .id(event.getId())
                 .actions(event.getActions())
                 .description(event.getDescription())
-                .notificationUserIds(userList.stream().map(NotificationUser::getId).collect(Collectors.toList()))
+                .notificationUser(userList.stream().map(NotificationUser::getId).collect(Collectors.toList()))
                 .build();
     }
 

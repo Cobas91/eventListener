@@ -18,5 +18,5 @@ public class EventToModifyDTO {
     private String name;
     private List<Action> actions;
     private String description;
-    private List<Long> notificationUserIds;
+    private List<Long> notificationUser;
 }
