@@ -1,33 +1,37 @@
 package eventlistener.service.notificaionuser;
 
 import eventlistener.exception.EventNotFoundException;
-import eventlistener.model.notificationUser.NotificationUser;
-import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.model.event.Event;
+import eventlistener.model.notificationuser.NotificationUser;
+import eventlistener.model.notificationuser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
+import eventlistener.service.UserEventService;
 import eventlistener.service.event.EventService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class NotificationUserService {
 
     NotificationUserRepo notificationUserRepo;
 
-    EventRepo eventRepo;
 
     NotificationUserMapper notificationUserMapper;
 
-    EventService eventService;
 
-    public NotificationUserService(NotificationUserRepo notificationUserRepo,EventRepo eventRepo, NotificationUserMapper notificationUserMapper, EventService eventService) {
+
+    public NotificationUserService(NotificationUserRepo notificationUserRepo, NotificationUserMapper notificationUserMapper) {
         this.notificationUserRepo = notificationUserRepo;
-        this.eventRepo = eventRepo;
         this.notificationUserMapper = notificationUserMapper;
-        this.eventService = eventService;
+
     }
 
     public List<NotificationUser> getAllUser() {
@@ -35,22 +39,33 @@ public class NotificationUserService {
     }
 
     public NotificationUser addUser(NotificationUserDTO userDTO) {
-        if(eventService.eventsExist(userDTO.getListenEvents())){
-            NotificationUser newUser = notificationUserMapper.mapDTO(userDTO);
-            NotificationUser userWithID = notificationUserRepo.save(newUser);
-            eventService.addUserToEvents(userDTO.getListenEvents(), userWithID);
-            return userWithID;
-        }else{
-            throw new EventNotFoundException("Can not add User: "+userDTO.getName()+" events are not existing.");
-        }
+        NotificationUser newUser = notificationUserMapper.mapDTO(userDTO);
+        return notificationUserRepo.save(newUser);
     }
 
-
-    public NotificationUser getSingleUser(String id) {
+    public NotificationUser getSingleUser(Long id) {
         Optional<NotificationUser> optionalUser = notificationUserRepo.findById(id);
         if(optionalUser.isPresent()){
             return optionalUser.get();
         }
         throw new NoSuchElementException("Cant find User with id " +id);
     }
+
+    public NotificationUser editUser(NotificationUserEditDTO userToEdit) {
+        Optional<NotificationUser> optionalUser = notificationUserRepo.findById(userToEdit.getId());
+        if(optionalUser.isPresent()){
+            return notificationUserRepo.save(notificationUserMapper.mapToUser(userToEdit));
+        }
+        throw new NoSuchElementException("Can´t edit User with ID "+userToEdit.getId());
+    }
+
+    public List<NotificationUser> getUsersById(List<Long> userIds){
+        List<NotificationUser> userList = new ArrayList<>();
+        for (Long userId : userIds) {
+            Optional<NotificationUser> optUser = notificationUserRepo.findById(userId);
+            optUser.ifPresent(userList::add);
+        }
+        return userList;
+    }
+
 }

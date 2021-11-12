@@ -1,8 +1,10 @@
 package eventlistener.controller;
 
-import eventlistener.model.notificationUser.NotificationUser;
-import eventlistener.model.notificationUser.NotificationUserDTO;
+import eventlistener.model.notificationuser.NotificationUser;
+import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.event.Event;
+import eventlistener.model.notificationuser.NotificationUserEditDTO;
+import eventlistener.service.UserEventService;
 import eventlistener.service.event.EventService;
 import eventlistener.service.notificaionuser.NotificationUserService;
 import org.springframework.web.bind.annotation.*;
@@ -13,33 +15,37 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class NotificationUserController {
 
-    private final NotificationUserService notificationUserService;
 
-    private final EventService eventService;
 
-    public NotificationUserController(NotificationUserService notificationUserService, EventService eventService) {
-        this.notificationUserService = notificationUserService;
-        this.eventService = eventService;
+    private final UserEventService userEventService;
+
+    public NotificationUserController(UserEventService userEventService) {
+        this.userEventService = userEventService;
     }
 
     @GetMapping
     public List<NotificationUser> getAllUser(){
-        return notificationUserService.getAllUser();
+        return userEventService.getAllUser();
     }
 
     @PostMapping
     public NotificationUser addUser(@RequestBody NotificationUserDTO userToAdd){
-        return notificationUserService.addUser(userToAdd);
+        return userEventService.addUser(userToAdd);
     }
 
     @GetMapping("/{id}")
-    public NotificationUser getSingleUser(@PathVariable String id){
-        return notificationUserService.getSingleUser(id);
+    public NotificationUserEditDTO getSingleUser(@PathVariable Long id){
+        return userEventService.getSingleUser(id);
+    }
+
+    @PutMapping("/{id}")
+    public NotificationUser editUser(@PathVariable Long id, @RequestBody NotificationUserEditDTO userToEdit){
+        return userEventService.editUser(id,userToEdit);
     }
 
     @GetMapping("/event/{userId}")
-    public List<Event> getAllEventsFromUser(@PathVariable String userId){
-        return eventService.getAllEventsFromUser(userId);
+    public List<Event> getAllEventsFromUser(@PathVariable Long userId){
+        return userEventService.getAllEventsFromUser(userId);
     }
 
 }

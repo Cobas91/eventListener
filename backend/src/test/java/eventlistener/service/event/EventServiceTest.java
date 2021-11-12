@@ -2,71 +2,54 @@ package eventlistener.service.event;
 
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
-import eventlistener.model.event.ResponseEvent;
+import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.repo.EventRepo;
-import org.hamcrest.Matchers;
+import eventlistener.service.UserEventService;
+import eventlistener.service.notificaionuser.NotificationUserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class EventServiceTest {
 
     EventRepo eventRepo = mock(EventRepo.class);
 
-    EventResponseMapper eventResponseMapper = mock(EventResponseMapper.class);
+    EventMapper eventMapper = mock(EventMapper.class);
 
-    EventService eventService = new EventService(eventRepo, eventResponseMapper);
+    EventService eventService = new EventService(eventRepo, eventMapper);
 
 
     @Test
     @DisplayName("Return all available events in a list")
     void testGetAllEvents() {
         //GIVEN
-        List<Event> events = List.of(
+        List<Event> expected = List.of(
                 Event.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId123", "UserId456"))
+                        .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .description("Test Event 1")
                         .build(),
                 Event.builder()
-                        .id("2")
-                        .name("TestEvent2")
-                        .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId123", "UserId456"))
-                        .description("Test Event 2")
-                        .build()
-        );
-        List<ResponseEvent> expected = List.of(
-                ResponseEvent.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
-                        .description("Test Event 1")
-                        .build(),
-                ResponseEvent.builder()
-                        .id("2")
-                        .name("TestEvent")
-                        .actions(List.of(Action.MAIL))
+                        .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .description("Test Event 2")
                         .build()
         );
         //WHEN
-        when(eventRepo.findAll()).thenReturn(events);
-        when(eventResponseMapper.mapResponseEvents(events)).thenReturn(expected);
-        List<ResponseEvent> actual = eventService.getAllEvents();
+        when(eventRepo.findAll()).thenReturn(expected);
+        List<Event> actual = eventService.getAllEvents();
         //THEN
         assertThat(actual, is(expected));
         verify(eventRepo).findAll();
-        verify(eventResponseMapper).mapResponseEvents(events);
 
     }
 
@@ -77,14 +60,14 @@ class EventServiceTest {
         Event eventToAdd = Event.builder()
                 .name("TestEvent")
                 .description("UnitTest")
-                .notificationUser(List.of("ID1", "ID2"))
+                .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                 .actions(List.of(Action.MAIL))
                 .build();
         Event expected = Event.builder()
-                .id("IdFromDatabase")
+                .id(1)
                 .name("TestEvent")
                 .description("UnitTest")
-                .notificationUser(List.of("ID1", "ID2"))
+                .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                 .actions(List.of(Action.MAIL))
                 .build();
         //WHEN
@@ -99,51 +82,53 @@ class EventServiceTest {
     @DisplayName("Return a List of Events where the given User is part of notification users")
     void testGetAllEventsFromUser() {
         //GIVEN
-        String idToFound = "UserId123";
+        long idToFind = 123;
+        NotificationUser userToFind = NotificationUser.builder().id(idToFind).build();
         List<Event> events = List.of(
                 Event.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId123", "UserId456"))
+                        .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .description("Test Event 1")
                         .build(),
                 Event.builder()
-                        .id("2")
+                        .id(2)
                         .name("TestEvent2")
                         .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId456"))
+                        .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .description("Test Event 2")
                         .build(),
                 Event.builder()
-                        .id("3")
+                        .id(3)
                         .name("TestEvent3")
                         .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId123", "UserId456"))
+                        .notificationUser(List.of(NotificationUser.builder().build(), NotificationUser.builder().build()))
                         .description("Test Event 2")
                         .build()
         );
         List<Event> expected = List.of(
                 Event.builder()
-                        .id("1")
+                        .id(1)
                         .name("TestEvent")
                         .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId123", "UserId456"))
+                        .notificationUser(List.of(userToFind, NotificationUser.builder().build()))
                         .description("Test Event 1")
                         .build(),
                 Event.builder()
-                        .id("3")
+                        .id(3)
                         .name("TestEvent3")
                         .actions(List.of(Action.MAIL))
-                        .notificationUser(List.of("UserId123", "UserId456"))
+                        .notificationUser(List.of(userToFind, NotificationUser.builder().build()))
                         .description("Test Event 2")
                         .build()
         );
         //WHEN
-        when(eventRepo.findAllByNotificationUserContains(idToFound)).thenReturn(expected);
+        when(eventRepo.findAllByNotificationUserContains(userToFind)).thenReturn(expected);
         //THEN
-        List<Event> actual = eventService.getAllEventsFromUser(idToFound);
+        List<Event> actual = eventService.getAllEventsFromUser(userToFind);
         assertThat(actual, is(expected));
-        verify(eventRepo).findAllByNotificationUserContains(idToFound);
+        verify(eventRepo).findAllByNotificationUserContains(userToFind);
     }
+
 }

@@ -1,9 +1,11 @@
 package eventlistener.security.controller;
 
+import eventlistener.TestHelper;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +15,33 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 class LoginControllerTest {
+    @DynamicPropertySource
+    static void postgresqlProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", container::getJdbcUrl);
+        registry.add("spring.datasource.password", container::getPassword);
+        registry.add("spring.datasource.username", container::getUsername);
+    }
+
+    @Container
+    public static PostgreSQLContainer container = new PostgreSQLContainer()
+            .withDatabaseName("eventListener_test")
+            .withUsername("eventListener")
+            .withPassword("eventListener");
+
+
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -32,6 +54,11 @@ class LoginControllerTest {
 
     @Value("${jwt.secret}")
     private String JWT_SECRET;
+
+    @BeforeEach
+    void clearDB(){
+        appUserRepo.deleteAll();
+    }
 
     @Test
     void loginWithValidCredentials() {

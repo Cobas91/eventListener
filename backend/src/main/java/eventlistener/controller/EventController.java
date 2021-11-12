@@ -1,7 +1,8 @@
 package eventlistener.controller;
 
 import eventlistener.model.event.Event;
-import eventlistener.model.event.ResponseEvent;
+import eventlistener.model.event.EventToModifyDTO;
+import eventlistener.service.UserEventService;
 import eventlistener.service.event.EventService;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,19 +12,29 @@ import java.util.List;
 @RequestMapping("/api/event")
 public class EventController {
 
-    private final EventService eventService;
+    private final UserEventService userEventService;
 
-    public EventController(EventService eventService) {
-        this.eventService = eventService;
+    public EventController(UserEventService userEventService) {
+        this.userEventService = userEventService;
     }
 
     @GetMapping
-    public List<ResponseEvent> getAllEvents(){
-        return eventService.getAllEvents();
+    public List<Event> getAllEvents(){
+        return userEventService.getAllEvents();
+    }
+
+    @GetMapping("/not/{excludedUserId}")
+    public List<Event> getAllEventsExcludeUser(@PathVariable Long excludedUserId){
+        return userEventService.getAllEventsExcludeUser(excludedUserId);
+    }
+
+    @GetMapping("/{eventId}")
+    public Event getSingleEvent(@PathVariable Long eventId){
+        return userEventService.getSingleEvent(eventId);
     }
 
     @PostMapping
     public Event addEvent(@RequestBody Event eventToAdd){
-        return eventService.addEvent(eventToAdd);
+        return userEventService.addEvent(eventToAdd);
     }
 }

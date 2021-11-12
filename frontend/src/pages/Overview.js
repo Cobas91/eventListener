@@ -5,8 +5,10 @@ import { Button, Typography } from '@mui/material'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import useEvents from '../components/hooks/useEvents'
 export default function Overview() {
-  const { notificationUser, events } = useNotificationUsers()
+  const { notificationUser } = useNotificationUsers()
+  const { events } = useEvents()
   const userTableColumns = [
     {
       field: 'id',
@@ -43,6 +45,7 @@ export default function Overview() {
   const handleClickEvent = () => {
     history.push('/edit-event/?id=' + selectedEvent)
   }
+
   return (
     <AdministrationContainer>
       <TableContainer>
@@ -71,7 +74,7 @@ export default function Overview() {
       </TableContainer>
 
       <TableContainer>
-        <Typography variant="h5">Notification User</Typography>
+        <Typography variant="h5">Verfügbare Events</Typography>
         <StyledButton
           variant="contained"
           disabled={!selectedEvent}

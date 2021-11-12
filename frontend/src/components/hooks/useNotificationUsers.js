@@ -6,10 +6,10 @@ import {
   API_getSingleUserInformation,
 } from '../../service/notificationUserService'
 import { API_getAllEvents } from '../../service/eventService'
+import { showSuccess } from '../../utils/notificationHandler'
 
 export default function useNotificationUsers() {
   const [notificationUser, setNotificationUser] = useState([])
-  const [events, setEvents] = useState([])
 
   useEffect(() => {
     getAllNotificationUser()
@@ -20,24 +20,29 @@ export default function useNotificationUsers() {
     API_getAllNotificationUser().then(res => {
       if (res) {
         setNotificationUser(res)
+        return res
       }
     })
   }
 
   const getAllEvents = () => {
-    API_getAllEvents().then(res => {
-      if (res) {
-        setEvents(res)
-      }
-    })
+    return API_getAllEvents()
   }
 
   const addNotificationUser = userToAdd => {
-    API_addNotificationUser(userToAdd).then(getAllNotificationUser)
+    API_addNotificationUser(userToAdd).then(user => {
+      getAllNotificationUser()
+      showSuccess('User erstellt: ' + user.name)
+    })
   }
 
   const editNotificationUser = userToEdit => {
-    API_editNotificationUser(userToEdit).then(getAllNotificationUser)
+    console.log(userToEdit)
+    API_editNotificationUser(userToEdit).then(user => {
+      getAllNotificationUser()
+      //TODO Fehler rendern wenn user res exists
+      //showSuccess('User editiert: ' + user.name)
+    })
   }
 
   const getSingleUserInformation = userId => {
@@ -49,6 +54,6 @@ export default function useNotificationUsers() {
     addNotificationUser,
     editNotificationUser,
     getSingleUserInformation,
-    events,
+    getAllEvents,
   }
 }
