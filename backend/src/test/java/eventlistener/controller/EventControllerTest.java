@@ -127,8 +127,8 @@ class EventControllerTest {
         //GIVEN
         NotificationUser user1 = notificationUserRepo.save(NotificationUser.builder().name("TestUser1").email("test@test.de").build());
         NotificationUser user2 = notificationUserRepo.save(NotificationUser.builder().name("TestUser2").email("test@test.de").build());
-        List<NotificationUser> users = List.of(user1, user2);
-        Event eventToAdd = Event.builder()
+        List<Long> users = List.of(user1.getId(), user2.getId());
+        EventToModifyDTO eventToAdd = EventToModifyDTO.builder()
                 .name("TestEvent")
                 .description("Integrationstest")
                 .actions(List.of(Action.MAIL))
@@ -140,7 +140,7 @@ class EventControllerTest {
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(actual.isPresent(), is(true));
-        assertThat(Objects.requireNonNull(responseEntity.getBody()).getNotificationUser(), is(users));
+        assertThat(Objects.requireNonNull(responseEntity.getBody()).getNotificationUser(), is(List.of(user1, user2)));
     }
 
     @Test
