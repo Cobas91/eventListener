@@ -2,11 +2,13 @@ package eventlistener.service;
 
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
+import eventlistener.model.event.EventToModifyDTO;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
+import eventlistener.service.event.EventMapper;
 import eventlistener.service.event.EventService;
 import eventlistener.service.notificaionuser.NotificationUserMapper;
 import eventlistener.service.notificaionuser.NotificationUserService;
@@ -25,12 +27,13 @@ class UserEventServiceTest {
 
     EventService eventService = mock(EventService.class);
     EventRepo eventRepo = mock(EventRepo.class);
+    EventMapper eventMapper = mock(EventMapper.class);
 
     NotificationUserService notificationUserService = mock(NotificationUserService.class);
     NotificationUserRepo notificationUserRepo = mock(NotificationUserRepo.class);
-
     NotificationUserMapper notificationUserMapper = new NotificationUserMapper();
-    UserEventService userEventService = new UserEventService(eventService, notificationUserService, notificationUserMapper);
+
+    UserEventService userEventService = new UserEventService(eventService, notificationUserService, notificationUserMapper, eventMapper);
 
     @Test
     @DisplayName("Return a List of Notification User")
@@ -191,6 +194,49 @@ class UserEventServiceTest {
         assertThat(actual, is(expected));
         verify(notificationUserService).getSingleUser(userId);
         verify(eventService).getAllEventsFromUser(user);
+    }
+
+
+    @Test
+    void testEditEvent(){
+        //GIVEN
+        long eventToEditId = 1L;
+        EventToModifyDTO eventToEdit = EventToModifyDTO.builder()
+                .id(1L)
+                .name("Test Event")
+                .description("Unit Test Event")
+                .actions(List.of(Action.MAIL))
+                .notificationUserIds(List.of(1L, 2L))
+                .build();
+        List<NotificationUser> users = List.of(
+                NotificationUser.builder()
+                        .id(1L)
+                        .name("Test User 1")
+                        .email("test@test.de")
+                        .build(),
+                NotificationUser.builder()
+                        .id(2L)
+                        .name("Test User 2")
+                        .email("test@test.de")
+                        .build()
+        );
+        Event expected = Event.builder()
+                .id(1L)
+                .name("Test Event")
+                .description("Unit Test Event")
+                .actions(List.of(Action.MAIL))
+                .notificationUser(users)
+                .build();
+        //WHEN
+        when(notificationUserService.getUsersById(eventToEdit.getNotificationUserIds())).thenReturn(users);
+        when(eventMapper.mapEvent(eventToEdit, users)).thenReturn(expected);
+        when(eventService.addEvent(expected)).thenReturn(expected);
+        Event actual = userEventService.editEvent(eventToEditId, eventToEdit);
+        //THEN
+        assertThat(actual, is(expected));
+        verify(notificationUserService).getUsersById(eventToEdit.getNotificationUserIds());
+        verify(eventMapper).mapEvent(eventToEdit, users);
+        verify(eventService).addEvent(expected);
     }
 
 }

@@ -3,6 +3,7 @@ package eventlistener.controller;
 import eventlistener.TestHelper;
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
+import eventlistener.model.event.EventToModifyDTO;
 import eventlistener.model.event.ResponseEventDTO;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.repo.EventRepo;
@@ -192,5 +193,56 @@ class EventControllerTest {
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), arrayContaining(exclude));
+    }
+
+    @Test
+    @DisplayName("Should Edit a given Event and return the new Event")
+    void testEditEvent(){
+        //GIVEN
+        NotificationUser user1 = NotificationUser.builder()
+                .name("Test User 1")
+                .email("test@test.de")
+                .build();
+        NotificationUser user2 = NotificationUser.builder()
+                .name("Test User 2")
+                .email("test@test.de")
+                .build();
+        NotificationUser newUser = NotificationUser.builder()
+                .name("Test User 2")
+                .email("test@test.de")
+                .build();
+        NotificationUser user1WithId = notificationUserRepo.save(user1);
+        NotificationUser user2WithId = notificationUserRepo.save(user2);
+        NotificationUser newUserWithId = notificationUserRepo.save(newUser);
+
+        Event dbEvent = Event.builder()
+                .name("Integrationstest Event")
+                .description("Integrationstest sind toll")
+                .actions(List.of(Action.MAIL))
+                .notificationUser(List.of(user1WithId, user2WithId))
+                .build();
+        Event eventWithId = eventRepo.save(dbEvent);
+
+        long eventIdToEdit = eventWithId.getId();
+        EventToModifyDTO eventToEdit = EventToModifyDTO.builder()
+                .id(eventIdToEdit)
+                .name("Integrationstest Event geändert")
+                .description("Integrationstest sind toll und funktionieren")
+                .actions(List.of(Action.MAIL))
+                .notificationUserIds(List.of(user1WithId.getId(), user2WithId.getId(), newUserWithId.getId()))
+                .build();
+        Event expected = Event.builder()
+                .id(eventIdToEdit)
+                .name("Integrationstest Event geändert")
+                .description("Integrationstest sind toll und funktionieren")
+                .actions(List.of(Action.MAIL))
+                .notificationUser(List.of(user1WithId, user2WithId, newUserWithId))
+                .build();
+        //WHEN
+        ResponseEntity<Event> responseEntity = restTemplate.exchange("/api/event/"+eventIdToEdit, HttpMethod.PUT , new HttpEntity<>(eventToEdit,getLoginHeader()), Event.class);
+
+        assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(responseEntity.getBody(), is(expected));
+
     }
 }

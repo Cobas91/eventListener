@@ -4,7 +4,6 @@ import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
-import eventlistener.service.event.EventService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +12,14 @@ import java.util.List;
 @Service
 public class NotificationUserMapper {
 
-    public NotificationUser mapDTO(NotificationUserDTO dtoToMap){
+    public NotificationUser mapNotificationUser(NotificationUserDTO dtoToMap){
         return NotificationUser.builder()
                 .name(dtoToMap.getName())
                 .email(dtoToMap.getEmail())
                 .build();
     }
 
-    public NotificationUserEditDTO mapUserToEditUser(NotificationUser userToMap, List<Event> events){
+    public NotificationUserEditDTO MapNotificationUser(NotificationUser userToMap, List<Event> events){
         return NotificationUserEditDTO.builder()
                 .name(userToMap.getName())
                 .id(userToMap.getId())
@@ -29,7 +28,7 @@ public class NotificationUserMapper {
                 .build();
     }
 
-    public NotificationUser mapToUser(NotificationUserEditDTO userToMap){
+    public NotificationUser mapNotificationUser(NotificationUserEditDTO userToMap){
         return NotificationUser.builder()
                 .id(userToMap.getId())
                 .email(userToMap.getEmail())

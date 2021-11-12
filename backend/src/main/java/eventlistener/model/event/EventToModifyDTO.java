@@ -1,7 +1,6 @@
 package eventlistener.model.event;
 
 import eventlistener.model.Action;
-import eventlistener.model.notificationuser.NotificationUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +18,5 @@ public class EventToModifyDTO {
     private String name;
     private List<Action> actions;
     private String description;
-    private List<NotificationUser> notificationUser;
+    private List<Long> notificationUserIds;
 }

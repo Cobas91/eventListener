@@ -5,14 +5,12 @@ import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 class NotificationUserMapperTest {
 
@@ -31,7 +29,7 @@ class NotificationUserMapperTest {
                 .name("Test1")
                 .build();
         //WHEN
-        NotificationUser actual = mapper.mapDTO(userDTO);
+        NotificationUser actual = mapper.mapNotificationUser(userDTO);
         //THEN
         assertThat(actual, is(expected));
     }
@@ -78,7 +76,7 @@ class NotificationUserMapperTest {
                 .email("test@test.de")
                 .build();
         //WHEN
-        NotificationUserEditDTO actual = mapper.mapUserToEditUser(user, events);
+        NotificationUserEditDTO actual = mapper.MapNotificationUser(user, events);
         //THEN
         assertThat(actual, is(expected));
     }
@@ -125,7 +123,7 @@ class NotificationUserMapperTest {
                 .email("test@test.de")
                 .build();
         //WHEN
-        NotificationUser actual = mapper.mapToUser(user);
+        NotificationUser actual = mapper.mapNotificationUser(user);
         //THEN
         assertThat(actual, is(expected));
     }

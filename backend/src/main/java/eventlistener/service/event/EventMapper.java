@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EventMapper {
 
-    public List<ResponseEventDTO> mapDtoToEvent(List<Event> events){
+    public List<ResponseEventDTO> mapEvent(List<Event> events){
         List<ResponseEventDTO> mappedEvents = new ArrayList<>();
         for (Event event : events) {
             mappedEvents.add(
@@ -26,12 +27,22 @@ public class EventMapper {
         return mappedEvents;
     }
 
-    public EventToModifyDTO mapToModify(Event event, List<NotificationUser> userList) {
+    public EventToModifyDTO mapEvent(Event event, List<NotificationUser> userList) {
         return EventToModifyDTO.builder()
                 .id(event.getId())
                 .actions(event.getActions())
                 .description(event.getDescription())
-                .notificationUser(userList)
+                .notificationUserIds(userList.stream().map(NotificationUser::getId).collect(Collectors.toList()))
+                .build();
+    }
+
+    public Event mapEvent(EventToModifyDTO event, List<NotificationUser> users){
+        return Event.builder()
+                .id(event.getId())
+                .name(event.getName())
+                .description(event.getDescription())
+                .actions(event.getActions())
+                .notificationUser(users)
                 .build();
     }
 

@@ -1,14 +1,9 @@
 package eventlistener.service.notificaionuser;
 
-import eventlistener.exception.EventNotFoundException;
-import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
-import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
-import eventlistener.service.UserEventService;
-import eventlistener.service.event.EventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +34,7 @@ public class NotificationUserService {
     }
 
     public NotificationUser addUser(NotificationUserDTO userDTO) {
-        NotificationUser newUser = notificationUserMapper.mapDTO(userDTO);
+        NotificationUser newUser = notificationUserMapper.mapNotificationUser(userDTO);
         return notificationUserRepo.save(newUser);
     }
 
@@ -54,7 +49,7 @@ public class NotificationUserService {
     public NotificationUser editUser(NotificationUserEditDTO userToEdit) {
         Optional<NotificationUser> optionalUser = notificationUserRepo.findById(userToEdit.getId());
         if(optionalUser.isPresent()){
-            return notificationUserRepo.save(notificationUserMapper.mapToUser(userToEdit));
+            return notificationUserRepo.save(notificationUserMapper.mapNotificationUser(userToEdit));
         }
         throw new NoSuchElementException("Can´t edit User with ID "+userToEdit.getId());
     }

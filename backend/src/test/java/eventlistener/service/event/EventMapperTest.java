@@ -52,8 +52,9 @@ class EventMapperTest {
                         .build()
         );
         //WHEN
-        List<ResponseEventDTO> actual = eventMapper.mapDtoToEvent(events);
+        List<ResponseEventDTO> actual = eventMapper.mapEvent(events);
         //THEN
         assertThat(actual, is(responseEventDTOS));
     }
+
 }
