@@ -7,6 +7,8 @@ import { useContext } from 'react'
 import { AuthContext } from '../security/AuthProvider'
 import icon from '../components/assets/icon.png'
 
+import { FiHome, FiFilePlus, FiMonitor } from 'react-icons/fi'
+
 export default function Navigation() {
   const { logout } = useContext(AuthContext)
   const handleLogout = () => {
@@ -17,10 +19,22 @@ export default function Navigation() {
       <StyledImg src={icon} alt="logo" />
 
       <Toolbar>
-        <StyledLink to="/">Home</StyledLink>
-        <StyledLink to="/administration">Übersicht</StyledLink>
-        <StyledLink to="/add-user">User hinzufügen</StyledLink>
-        <StyledLink to="/add-event">Event hinzufügen</StyledLink>
+        <StyledLink to="/">
+          <FiHome />
+          Home
+        </StyledLink>
+        <StyledLink to="/administration">
+          <FiMonitor />
+          Übersicht
+        </StyledLink>
+        <StyledLink to="/add-user">
+          <FiFilePlus />
+          User hinzufügen
+        </StyledLink>
+        <StyledLink to="/add-event">
+          <FiFilePlus />
+          Event hinzufügen
+        </StyledLink>
       </Toolbar>
       <StyledLink to="/login" onClick={handleLogout}>
         Logout
