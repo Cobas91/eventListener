@@ -4,8 +4,8 @@ import {
   API_addNotificationUser,
   API_editNotificationUser,
   API_getSingleUserInformation,
+  API_deleteUser,
 } from '../../service/notificationUserService'
-import { API_getAllEvents } from '../../service/eventService'
 import { showSuccess } from '../../utils/notificationHandler'
 
 export default function useNotificationUsers() {
@@ -13,7 +13,6 @@ export default function useNotificationUsers() {
 
   useEffect(() => {
     getAllNotificationUser()
-    getAllEvents()
   }, [])
 
   const getAllNotificationUser = () => {
@@ -23,10 +22,6 @@ export default function useNotificationUsers() {
         return res
       }
     })
-  }
-
-  const getAllEvents = () => {
-    return API_getAllEvents()
   }
 
   const addNotificationUser = userToAdd => {
@@ -39,7 +34,6 @@ export default function useNotificationUsers() {
   const editNotificationUser = userToEdit => {
     API_editNotificationUser(userToEdit).then(user => {
       getAllNotificationUser()
-      //TODO Fehler rendern wenn user res exists
       showSuccess('User editiert: ' + user.name)
     })
   }
@@ -48,11 +42,18 @@ export default function useNotificationUsers() {
     return API_getSingleUserInformation(userId)
   }
 
+  const deleteUser = user => {
+    return API_deleteUser(user?.id).then(response => {
+      getAllNotificationUser()
+      showSuccess('User wurde entfernt.', response)
+    })
+  }
+
   return {
     notificationUser,
     addNotificationUser,
     editNotificationUser,
     getSingleUserInformation,
-    getAllEvents,
+    deleteUser,
   }
 }

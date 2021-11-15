@@ -39,9 +39,22 @@ const API_getSingleUserInformation = userId => {
     )
 }
 
+const API_deleteUser = userId => {
+  return axios
+    .delete('/api/user/' + userId, createHeader(localStorage.getItem('JWT')))
+    .then(response => response.data)
+    .catch(err =>
+      showError(
+        err.message,
+        `Can´t delete single User Information for User ${userId} .`
+      )
+    )
+}
+
 export {
   API_getAllNotificationUser,
   API_addNotificationUser,
   API_editNotificationUser,
   API_getSingleUserInformation,
+  API_deleteUser,
 }

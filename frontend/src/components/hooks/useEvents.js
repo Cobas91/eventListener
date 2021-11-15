@@ -4,6 +4,7 @@ import {
   API_getEventById,
   API_editEvent,
   API_addEvent,
+  API_deleteEvent,
 } from '../../service/eventService'
 import { useEffect, useState } from 'react'
 import { showSuccess } from '../../utils/notificationHandler'
@@ -39,6 +40,14 @@ export default function useEvents() {
     })
   }
 
+  const deleteEvent = event => {
+    return API_deleteEvent(event.id).then(() => {
+      getAllEvents().then(() => {
+        showSuccess(event.name + ' wurde gelöscht.')
+      })
+    })
+  }
+
   return {
     events,
     setEvents,
@@ -46,5 +55,7 @@ export default function useEvents() {
     getEventById,
     editEvent,
     addEvent,
+    deleteEvent,
+    getAllEvents,
   }
 }

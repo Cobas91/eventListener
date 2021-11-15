@@ -9,8 +9,8 @@ import useEvents from '../components/hooks/useEvents'
 import TableToolbar from '../components/TableToolbar'
 import { showQuestion } from '../utils/notificationHandler'
 export default function Overview() {
-  const { notificationUser } = useNotificationUsers()
-  const { events } = useEvents()
+  const { notificationUser, deleteUser } = useNotificationUsers()
+  const { events, deleteEvent } = useEvents()
   const userTableColumns = [
     {
       field: 'id',
@@ -49,12 +49,25 @@ export default function Overview() {
   const handleClickUser = () => {
     history.push('/edit-user/?id=' + selectedUser)
   }
+
   const handleDelUser = () => {
     // eslint-disable-next-line array-callback-return
-    const user = notificationUser.filter(user => {
-      if (selectedUser.includes(user.id)) return user
+    const user = notificationUser.filter(
+      filterUser => filterUser.id === selectedUser[0]
+    )
+    console.log(notificationUser)
+    showQuestion('User ' + user[0]?.name + ' löschen?', () => {
+      deleteUser(user[0])
     })
-    showQuestion('User ' + user[0]?.name + ' löschen?')
+  }
+  const handleDelEvent = () => {
+    // eslint-disable-next-line array-callback-return
+    const event = events.filter(
+      filterEvent => filterEvent.id === selectedEvent[0]
+    )
+    showQuestion('Event ' + event[0].name + ' löschen?', () => {
+      deleteEvent(event[0])
+    })
   }
   const handleClickEvent = () => {
     history.push('/edit-event/?id=' + selectedEvent)
@@ -98,13 +111,22 @@ export default function Overview() {
 
       <TableContainer>
         <Typography variant="h5">Verfügbare Events</Typography>
-        <StyledButton
-          variant="contained"
-          disabled={!selectedEvent}
-          onClick={handleClickEvent}
-        >
-          Edit
-        </StyledButton>
+        <ButtonSection>
+          <StyledButton
+            variant="contained"
+            disabled={!selectedEvent}
+            onClick={handleClickEvent}
+          >
+            Edit
+          </StyledButton>
+          <StyledDelButton
+            variant="contained"
+            disabled={!selectedEvent}
+            onClick={handleDelEvent}
+          >
+            Delete
+          </StyledDelButton>
+        </ButtonSection>
         <DataGrid
           autoHeight={true}
           rows={events}

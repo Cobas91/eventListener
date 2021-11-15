@@ -32,16 +32,14 @@ function showSuccess(message) {
   })
 }
 
-function showQuestion(message) {
-  const content = ({ handleYes, handleNo }) => (
+function showQuestion(message, handleYes) {
+  const content = () => (
     <div>
       <QuestionContainer>{message}</QuestionContainer>
-      <StyledButton variant="contained" onClick={handleYes}>
+      <StyledButton variant="contained" onClick={() => handleYes()}>
         Yes
       </StyledButton>
-      <StyledDelButton variant="contained" onClick={handleNo}>
-        No
-      </StyledDelButton>
+      <StyledDelButton variant="contained">No</StyledDelButton>
     </div>
   )
   toast.warn(content, {
