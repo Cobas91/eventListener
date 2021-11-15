@@ -12,6 +12,7 @@ import EditEvent from './pages/event/EditEvent'
 import NewEvent from './pages/event/NewEvent'
 import Footer from './components/Footer'
 import Impressum from './pages/Impressum'
+import Datenschutz from './pages/Datenschutz'
 
 function App() {
   return (
@@ -23,6 +24,11 @@ function App() {
         </Route>
         <Route exact path="/impressum">
           <Impressum />
+          <Footer />
+        </Route>
+        <Route exact path="/datenschutz">
+          <Datenschutz />
+          <Footer />
         </Route>
         <PrivateRoute exact path="/">
           <Navigation />

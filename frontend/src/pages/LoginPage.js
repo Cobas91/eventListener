@@ -76,7 +76,9 @@ const LogoBackground = styled.div`
   border: 0;
 `
 
-const LoginContainer = styled.section``
+const LoginContainer = styled.section`
+  min-height: calc(100vh - 50px);
+`
 
 const StyledButton = styled(Button)`
   margin: 5px;

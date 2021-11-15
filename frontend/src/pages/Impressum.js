@@ -86,7 +86,9 @@ const TextContent = styled.section`
   flex-direction: column;
   align-items: center;
 `
-const ImpressumContainer = styled.section``
+const ImpressumContainer = styled.section`
+  min-height: calc(100vh - 50px);
+`
 
 const LogoBackground = styled.div`
   position: relative;
@@ -97,7 +99,7 @@ const LogoBackground = styled.div`
   height: 20vw;
   background-color: black;
   border: black solid;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
   border: 0;
 `
 
