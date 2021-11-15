@@ -2,12 +2,14 @@ package eventlistener.service;
 
 import eventlistener.exception.EventNotFoundException;
 import eventlistener.model.event.Event;
+import eventlistener.model.event.EventToModifyDTO;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
+import eventlistener.service.event.EventMapper;
 import eventlistener.service.event.EventService;
-import eventlistener.service.notificaionuser.NotificationUserMapper;
-import eventlistener.service.notificaionuser.NotificationUserService;
+import eventlistener.service.notificationuser.NotificationUserMapper;
+import eventlistener.service.notificationuser.NotificationUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +22,13 @@ public class UserEventService {
 
     private final NotificationUserMapper notificationUserMapper;
 
-    public UserEventService(EventService eventService, NotificationUserService notificationUserService, NotificationUserMapper notificationUserMapper) {
+    private final EventMapper eventMapper;
+
+    public UserEventService(EventService eventService, NotificationUserService notificationUserService, NotificationUserMapper notificationUserMapper, EventMapper eventMapper) {
         this.eventService = eventService;
         this.notificationUserService = notificationUserService;
         this.notificationUserMapper = notificationUserMapper;
+        this.eventMapper = eventMapper;
     }
 
     public List<NotificationUser> getAllUsers() {
@@ -44,7 +49,7 @@ public class UserEventService {
     public NotificationUserEditDTO getSingleUser(Long id) {
         NotificationUser userToMap = notificationUserService.getSingleUser(id);
         List<Event> eventsToMap = eventService.getAllEventsFromUser(userToMap);
-        return notificationUserMapper.mapUserToEditUser(userToMap, eventsToMap);
+        return notificationUserMapper.MapNotificationUser(userToMap, eventsToMap);
 
     }
 
@@ -74,5 +79,12 @@ public class UserEventService {
 
     public List<Event> getAllEvents() {
         return eventService.getAllEvents();
+    }
+
+    public Event editEvent(Long eventId, EventToModifyDTO event) {
+        if(eventId != event.getId()) throw new IllegalArgumentException("The Event you want to Edit and the given content is not processable");
+        List<NotificationUser> users = notificationUserService.getUsersById(event.getNotificationUser());
+        Event eventToAdd = eventMapper.mapEvent(event, users);
+        return eventService.addEvent(eventToAdd);
     }
 }

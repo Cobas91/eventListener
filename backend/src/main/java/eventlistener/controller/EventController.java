@@ -2,6 +2,7 @@ package eventlistener.controller;
 
 import eventlistener.model.event.Event;
 import eventlistener.model.event.EventContentDTO;
+import eventlistener.model.event.EventToModifyDTO;
 import eventlistener.service.EventMailService;
 import eventlistener.service.UserEventService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,5 +47,10 @@ public class EventController {
     @PostMapping("/trigger/{eventId}")
     public void triggerEventAction(@PathVariable Long eventId, @RequestBody EventContentDTO eventDetails){
         eventMailService.triggerEvent(eventId, eventDetails);
+    }
+
+    @PutMapping("/{eventId}")
+    public Event editEvent(@PathVariable Long eventId, @RequestBody EventToModifyDTO event){
+        return userEventService.editEvent(eventId, event);
     }
 }

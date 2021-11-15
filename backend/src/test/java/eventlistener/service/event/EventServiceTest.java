@@ -4,8 +4,6 @@ import eventlistener.model.Action;
 import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUser;
 import eventlistener.repo.EventRepo;
-import eventlistener.service.UserEventService;
-import eventlistener.service.notificaionuser.NotificationUserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
