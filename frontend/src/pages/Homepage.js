@@ -29,6 +29,7 @@ const StyledCard = styled.section`
   align-items: center;
   padding: 25px;
   margin: 60px;
+  width: 80%;
 `
 
 const Title = styled(Typography)`

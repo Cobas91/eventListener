@@ -3,41 +3,43 @@ import { Route, Switch } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import Homepage from './pages/Homepage'
 import Overview from './pages/Overview'
-import NewUser from './pages/NewUser'
+import NewUser from './pages/user/NewUser'
 import PrivateRoute from './components/PrivateRoute'
-import { useContext } from 'react'
-import { AuthContext } from './security/AuthProvider'
-import EditUser from './pages/EditUser'
+import EditUser from './pages/user/EditUser'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import EditEvent from './pages/EditEvent'
+import EditEvent from './pages/event/EditEvent'
+import NewEvent from './pages/event/NewEvent'
 
 function App() {
-  const { setJWT, logout } = useContext(AuthContext)
   return (
     <>
       <Switch>
         <Route exact path="/login">
-          <LoginPage login={setJWT} />
+          <LoginPage />
         </Route>
         <PrivateRoute exact path="/">
-          <Navigation logout={logout} />
+          <Navigation />
           <Homepage />
         </PrivateRoute>
         <PrivateRoute path="/administration">
-          <Navigation logout={logout} />
+          <Navigation />
           <Overview />
         </PrivateRoute>
         <PrivateRoute path="/add-user">
-          <Navigation logout={logout} />
+          <Navigation />
           <NewUser />
         </PrivateRoute>
         <PrivateRoute path="/edit-user">
-          <Navigation logout={logout} />
+          <Navigation />
           <EditUser />
         </PrivateRoute>
+        <PrivateRoute path="/add-event">
+          <Navigation />
+          <NewEvent />
+        </PrivateRoute>
         <PrivateRoute path="/edit-event">
-          <Navigation logout={logout} />
+          <Navigation />
           <EditEvent />
         </PrivateRoute>
       </Switch>

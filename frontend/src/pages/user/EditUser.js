@@ -3,10 +3,10 @@ import { useLocation } from 'react-router-dom'
 import { Button, TextField } from '@mui/material'
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
-import useNotificationUsers from '../components/hooks/useNotificationUsers'
+import useNotificationUsers from '../../components/hooks/useNotificationUsers'
 
-import TransferList from '../components/TransferList'
-import useEvents from '../components/hooks/useEvents'
+import TransferList from '../../components/TransferList'
+import useEvents from '../../components/hooks/useEvents'
 
 export default function EditUser() {
   const urlQuery = useLocation().search
@@ -44,36 +44,45 @@ export default function EditUser() {
   }
   return (
     <EditUserContainer>
-      <StyledTextField
-        id="name"
-        label="Name"
-        variant="outlined"
-        value={userToEdit.name}
-        onChange={handleOnChange}
-      />
-      <StyledTextField
-        id="email"
-        label="E-Mail"
-        variant="outlined"
-        value={userToEdit.email}
-        onChange={handleOnChange}
-      />
-      <TransferList
-        left={allAvailableEvents}
-        right={listenEvents}
-        setLeft={setAllAvailableEvents}
-        setRight={setListenEvents}
-      />
+      <StyledForm>
+        <StyledTextField
+          id="name"
+          label="Name"
+          variant="outlined"
+          value={userToEdit.name}
+          onChange={handleOnChange}
+        />
+        <StyledTextField
+          id="email"
+          label="E-Mail"
+          variant="outlined"
+          value={userToEdit.email}
+          onChange={handleOnChange}
+        />
+        <TransferList
+          left={allAvailableEvents}
+          right={listenEvents}
+          setLeft={setAllAvailableEvents}
+          setRight={setListenEvents}
+        />
 
-      <StyledButton variant="contained" onClick={handleClick}>
-        Save
-      </StyledButton>
+        <StyledButton variant="contained" onClick={handleClick}>
+          Save
+        </StyledButton>
+      </StyledForm>
     </EditUserContainer>
   )
 }
 
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+`
 const EditUserContainer = styled.section`
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
 `
 

@@ -4,20 +4,23 @@ import { Button, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components/macro'
 
-import useEvents from '../components/hooks/useEvents'
-import { DataGrid, GridToolbar } from '@mui/x-data-grid'
+import useEvents from '../../components/hooks/useEvents'
+import { DataGrid } from '@mui/x-data-grid'
+import useNotificationUsers from '../../components/hooks/useNotificationUsers'
+import TableToolbar from '../../components/TableToolbar'
 
 export default function EditEvent() {
   const urlQuery = useLocation().search
   const eventId = new URLSearchParams(urlQuery).get('id')
-  const { getEventById } = useEvents()
+  const { getEventById, editEvent } = useEvents()
+  const { notificationUser } = useNotificationUsers()
   const [eventToEdit, setEventToEdit] = useState({
     name: '',
     description: '',
     notificationUser: [],
     actions: [],
   })
-  const [selectedUser, setSelectedUser] = useState(eventToEdit.notificationUser)
+  const [selectedUser, setSelectedUser] = useState([])
   const userTableColumns = [
     {
       field: 'id',
@@ -28,18 +31,36 @@ export default function EditEvent() {
     { field: 'name', headerName: 'Name', flex: 0.3 },
     { field: 'email', headerName: 'E-Mail', flex: 1 },
   ]
+  const usedFilters = {
+    columnFilter: true,
+    filter: true,
+    csvExport: true,
+  }
   useEffect(() => {
     getEventById(eventId).then(event => {
       if (event) setEventToEdit(event)
     })
     // eslint-disable-next-line
   }, [eventId])
+
+  useEffect(() => {
+    setSelectedUser(
+      eventToEdit.notificationUser.map(user => {
+        return user.id
+      })
+    )
+  }, [eventToEdit])
   const handleChange = e => {
     const field = e.target.name
     const value = e.target.value
     setEventToEdit({ ...eventToEdit, [field]: value })
   }
-  const handleClick = () => {}
+  const handleClick = () => {
+    const eventToSave = eventToEdit
+    eventToEdit.notificationUser = selectedUser
+    console.log('Save: ', eventToSave)
+    editEvent(eventToSave)
+  }
   return (
     <EventContainer>
       <Typography variant="h5">Event editieren</Typography>
@@ -47,6 +68,7 @@ export default function EditEvent() {
         <StyledSection>
           <StyledTextField
             id="name"
+            name="name"
             label="Name"
             variant="outlined"
             value={eventToEdit.name}
@@ -66,7 +88,7 @@ export default function EditEvent() {
           <Typography variant="h6">Aktionen</Typography>
           <ul>
             {eventToEdit.actions.map(action => (
-              <li>{action}</li>
+              <li key={action}>{action}</li>
             ))}
           </ul>
         </StyledSection>
@@ -76,12 +98,12 @@ export default function EditEvent() {
             checkboxSelection
             disableSelectionOnClick
             autoHeight={true}
-            rows={eventToEdit.notificationUser}
+            rows={notificationUser}
             columns={userTableColumns}
             pageSize={5}
             rowsPerPageOptions={[5]}
             components={{
-              Toolbar: GridToolbar,
+              Toolbar: () => TableToolbar(usedFilters),
             }}
             onSelectionModelChange={user => {
               setSelectedUser(user)

@@ -37,11 +37,10 @@ export default function useNotificationUsers() {
   }
 
   const editNotificationUser = userToEdit => {
-    console.log(userToEdit)
     API_editNotificationUser(userToEdit).then(user => {
       getAllNotificationUser()
       //TODO Fehler rendern wenn user res exists
-      //showSuccess('User editiert: ' + user.name)
+      showSuccess('User editiert: ' + user.name)
     })
   }
 
