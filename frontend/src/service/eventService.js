@@ -39,9 +39,17 @@ const API_editEvent = eventToEdit => {
     .catch(err => showError(err.message, 'Can´t edit Event.'))
 }
 
+const API_addEvent = eventToAdd => {
+  return axios
+    .post('/api/event/', eventToAdd, createHeader(localStorage.getItem('JWT')))
+    .then(response => response.data)
+    .catch(err => showError(err.message, 'Can´t edit Event.'))
+}
+
 export {
   API_getAllEvents,
   API_getEventsExcludeUser,
   API_getEventById,
   API_editEvent,
+  API_addEvent,
 }

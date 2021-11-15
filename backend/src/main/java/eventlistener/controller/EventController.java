@@ -40,7 +40,7 @@ public class EventController {
     }
 
     @PostMapping
-    public Event addEvent(@RequestBody Event eventToAdd){
+    public Event addEvent(@RequestBody EventToModifyDTO eventToAdd){
         return userEventService.addEvent(eventToAdd);
     }
 

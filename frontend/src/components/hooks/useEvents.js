@@ -3,6 +3,7 @@ import {
   API_getEventsExcludeUser,
   API_getEventById,
   API_editEvent,
+  API_addEvent,
 } from '../../service/eventService'
 import { useEffect, useState } from 'react'
 import { showSuccess } from '../../utils/notificationHandler'
@@ -28,9 +29,22 @@ export default function useEvents() {
 
   const editEvent = eventToEdit => {
     API_editEvent(eventToEdit).then(event => {
-      showSuccess('Event editiert: ' + event.name)
+      if (event) showSuccess('Event editiert: ' + event.name)
     })
   }
 
-  return { events, setEvents, getEventsExcludedUser, getEventById, editEvent }
+  const addEvent = eventToAdd => {
+    return API_addEvent(eventToAdd).then(event => {
+      if (event) showSuccess('Event erstellt: ' + event.name)
+    })
+  }
+
+  return {
+    events,
+    setEvents,
+    getEventsExcludedUser,
+    getEventById,
+    editEvent,
+    addEvent,
+  }
 }
