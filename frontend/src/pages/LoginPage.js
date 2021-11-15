@@ -28,7 +28,9 @@ export default function LoginPage() {
   return (
     <LoginContainer>
       <LogoBackground>
-        <StyledImg src={logo} alt="logo" />
+        <a href="/">
+          <StyledImg src={logo} alt="logo" />
+        </a>
       </LogoBackground>
       <StyledForm onSubmit={handleSubmit}>
         <StyledTextField
@@ -62,6 +64,7 @@ const StyledImg = styled.img`
 `
 
 const LogoBackground = styled.div`
+  position: relative;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -70,6 +73,7 @@ const LogoBackground = styled.div`
   background-color: black;
   border: black solid;
   margin-bottom: 100px;
+  border: 0;
 `
 
 const LoginContainer = styled.section``
