@@ -13,6 +13,7 @@ import NewEvent from './pages/event/NewEvent'
 import Footer from './components/Footer'
 import Impressum from './pages/Impressum'
 import Datenschutz from './pages/Datenschutz'
+import NewAppUser from './pages/NewAppUser'
 
 function App() {
   return (
@@ -53,6 +54,10 @@ function App() {
         <PrivateRoute path="/edit-event">
           <Navigation />
           <EditEvent />
+        </PrivateRoute>
+        <PrivateRoute path="/add-appuser">
+          <Navigation />
+          <NewAppUser />
         </PrivateRoute>
       </Switch>
       <ToastContainer

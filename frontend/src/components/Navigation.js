@@ -34,6 +34,10 @@ export default function Navigation() {
           <FiFilePlus />
           Event hinzufügen
         </StyledLink>
+        <StyledLink to="/add-appuser">
+          <FiFilePlus />
+          App User hinzufügen
+        </StyledLink>
       </Toolbar>
       <StyledLink to="/login" onClick={handleLogout}>
         <FiLogOut />

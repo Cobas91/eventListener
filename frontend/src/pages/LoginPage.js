@@ -71,9 +71,7 @@ const LogoBackground = styled.div`
   width: 100vw;
   height: 20vw;
   background-color: black;
-  border: black solid;
   margin-bottom: 100px;
-  border: 0;
 `
 
 const LoginContainer = styled.section`
