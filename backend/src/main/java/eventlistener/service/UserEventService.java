@@ -88,4 +88,12 @@ public class UserEventService {
         Event eventToAdd = eventMapper.mapEvent(event, users);
         return eventService.addEvent(eventToAdd);
     }
+
+    public String deleteEvent(Long eventId) {
+        return eventService.deleteEvent(eventId);
+    }
+
+    public String deleteUser(Long userId) {
+        return notificationUserService.deleteUser(userId);
+    }
 }
