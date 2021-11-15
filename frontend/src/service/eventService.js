@@ -46,10 +46,18 @@ const API_addEvent = eventToAdd => {
     .catch(err => showError(err.message, 'Can´t edit Event.'))
 }
 
+const API_deleteEvent = eventId => {
+  console.log(eventId)
+  return axios
+    .delete('/api/event/' + eventId, createHeader(localStorage.getItem('JWT')))
+    .then(response => response.data)
+    .catch(err => showError(err.message, 'Can´t delete Event.'))
+}
 export {
   API_getAllEvents,
   API_getEventsExcludeUser,
   API_getEventById,
   API_editEvent,
   API_addEvent,
+  API_deleteEvent,
 }

@@ -5,9 +5,11 @@ import styled from 'styled-components/macro'
 import useNotificationUsers from '../../components/hooks/useNotificationUsers'
 import { DataGrid } from '@mui/x-data-grid'
 import TableToolbar from '../../components/TableToolbar'
+import useEvents from '../../components/hooks/useEvents'
 
 export default function NewUser() {
-  const { addNotificationUser, getAllEvents } = useNotificationUsers()
+  const { getAllEvents } = useEvents()
+  const { addNotificationUser } = useNotificationUsers()
   const [newUser, setNewUser] = useState({})
   const [selectedEvents, setSelectedEvents] = useState([])
   const [allAvailableEvents, setAllAvailableEvents] = useState([])

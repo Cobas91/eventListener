@@ -1,4 +1,6 @@
 import { toast } from 'react-toastify'
+import { Button } from '@mui/material'
+import styled from 'styled-components'
 function showError(message, causedBy) {
   const notificationBody = `An Error occurred, ${causedBy} Details: ${message}`
   toast.error(notificationBody, {
@@ -30,4 +32,42 @@ function showSuccess(message) {
   })
 }
 
-export { showError, showWarning, showSuccess }
+function showQuestion(message, handleYes) {
+  const content = () => (
+    <div>
+      <QuestionContainer>{message}</QuestionContainer>
+      <StyledButton variant="contained" onClick={() => handleYes()}>
+        Yes
+      </StyledButton>
+      <StyledDelButton variant="contained">No</StyledDelButton>
+    </div>
+  )
+  toast.warn(content, {
+    position: 'top-center',
+    closeOnClick: true,
+    pauseOnHover: true,
+    progress: undefined,
+    autoClose: false,
+  })
+}
+const QuestionContainer = styled.section`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`
+
+const StyledDelButton = styled(Button)`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  background-color: #95190c;
+`
+
+const StyledButton = styled(Button)`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+`
+
+export { showError, showWarning, showSuccess, showQuestion }
