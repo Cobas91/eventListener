@@ -8,15 +8,36 @@ export default function Homepage() {
       <Title variant="h4">Zapliance EventListener</Title>
       <StyledCard>
         <Typography>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-          sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-          rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-          ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-          sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-          dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-          et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-          takimata sanctus est Lorem ipsum dolor sit amet.
+          <ul>
+            <li>
+              Im Event Listener können verschiedenste Events erstellt werden und
+              mit Notification Usern und Aktionen verknüpft werden. Diese Events
+              können anschließend über ein GET Request getriggert werden.
+            </li>
+            <li>
+              Die Definierten Aktionen werden daraufhin automatisch gestartet
+              und alle Notification User die zu diesem Event zugewiesen sind
+              werden berücksichtigt.
+            </li>
+            <li>
+              Unter dem MenüpunktApp User hinzufügen kann ein weiterer Login zur
+              Applikation erstellt werden
+            </li>
+            <li>
+              <Typography>Nützliche Links:</Typography>
+              <ul>
+                <li>
+                  <a
+                    href={
+                      window.location.origin.toString() + '/swagger-ui.html#/'
+                    }
+                  >
+                    REST Doku
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
         </Typography>
       </StyledCard>
     </HomepageContainer>
