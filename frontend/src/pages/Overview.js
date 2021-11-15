@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import useEvents from '../components/hooks/useEvents'
 import TableToolbar from '../components/TableToolbar'
+import { showQuestion } from '../utils/notificationHandler'
 export default function Overview() {
   const { notificationUser } = useNotificationUsers()
   const { events } = useEvents()
@@ -48,6 +49,13 @@ export default function Overview() {
   const handleClickUser = () => {
     history.push('/edit-user/?id=' + selectedUser)
   }
+  const handleDelUser = () => {
+    // eslint-disable-next-line array-callback-return
+    const user = notificationUser.filter(user => {
+      if (selectedUser.includes(user.id)) return user
+    })
+    showQuestion('User ' + user[0]?.name + ' löschen?')
+  }
   const handleClickEvent = () => {
     history.push('/edit-event/?id=' + selectedEvent)
   }
@@ -56,13 +64,22 @@ export default function Overview() {
     <AdministrationContainer>
       <TableContainer>
         <Typography variant="h5">Notification User</Typography>
-        <StyledButton
-          variant="contained"
-          disabled={!selectedUser}
-          onClick={handleClickUser}
-        >
-          Edit
-        </StyledButton>
+        <ButtonSection>
+          <StyledButton
+            variant="contained"
+            disabled={!selectedUser}
+            onClick={handleClickUser}
+          >
+            Edit
+          </StyledButton>
+          <StyledDelButton
+            variant="contained"
+            disabled={!selectedUser}
+            onClick={handleDelUser}
+          >
+            Delete
+          </StyledDelButton>
+        </ButtonSection>
         <DataGrid
           autoHeight={true}
           rows={notificationUser}
@@ -106,6 +123,11 @@ export default function Overview() {
     </AdministrationContainer>
   )
 }
+const ButtonSection = styled.section`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`
+
 const AdministrationContainer = styled.section`
   display: flex;
   flex-direction: column;
@@ -114,6 +136,14 @@ const AdministrationContainer = styled.section`
 const StyledButton = styled(Button)`
   margin-top: 10px;
   margin-bottom: 10px;
+  margin-right: 10px;
+`
+
+const StyledDelButton = styled(Button)`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  background-color: #95190c;
 `
 
 const TableContainer = styled.section`
