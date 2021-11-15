@@ -55,7 +55,6 @@ export default function Overview() {
     const user = notificationUser.filter(
       filterUser => filterUser.id === selectedUser[0]
     )
-    console.log(notificationUser)
     showQuestion('User ' + user[0]?.name + ' löschen?', () => {
       deleteUser(user[0])
     })

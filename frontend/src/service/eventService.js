@@ -47,7 +47,6 @@ const API_addEvent = eventToAdd => {
 }
 
 const API_deleteEvent = eventId => {
-  console.log(eventId)
   return axios
     .delete('/api/event/' + eventId, createHeader(localStorage.getItem('JWT')))
     .then(response => response.data)
