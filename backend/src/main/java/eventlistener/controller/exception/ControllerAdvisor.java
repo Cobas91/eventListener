@@ -61,7 +61,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(MailException.class)
-    public ResponseEntity<ApiError> handleMappingException(MailException ex){
+    public ResponseEntity<ApiError> handleMailException(MailException ex){
         log.error("Could not send Mail",ex);
         ApiError apiError = new ApiError("Could not send Mail", ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.UNPROCESSABLE_ENTITY);
