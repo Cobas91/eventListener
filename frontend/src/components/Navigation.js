@@ -17,7 +17,6 @@ export default function Navigation() {
   return (
     <StyledAppBar position="static">
       <StyledImg src={icon} alt="logo" />
-
       <Toolbar>
         <StyledLink to="/">
           <FiHome />
@@ -36,7 +35,6 @@ export default function Navigation() {
           Event hinzufügen
         </StyledLink>
       </Toolbar>
-
       <StyledLink to="/login" onClick={handleLogout}>
         <FiLogOut />
         Logout
