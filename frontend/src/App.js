@@ -14,8 +14,11 @@ import Footer from './components/Footer'
 import Impressum from './pages/Impressum'
 import Datenschutz from './pages/Datenschutz'
 import NewAppUser from './pages/NewAppUser'
+import useResponsive from './components/hooks/useResponsive'
+import MobileNavigation from './components/MobileNavigation'
 
 function App() {
+  const { isMobile } = useResponsive()
   return (
     <>
       <Switch>
@@ -32,31 +35,31 @@ function App() {
           <Footer />
         </Route>
         <PrivateRoute exact path="/">
-          <Navigation />
+          {isMobile ? <MobileNavigation /> : <Navigation />}
           <Homepage />
         </PrivateRoute>
         <PrivateRoute path="/administration">
-          <Navigation />
+          {isMobile ? <MobileNavigation /> : <Navigation />}
           <Overview />
         </PrivateRoute>
         <PrivateRoute path="/add-user">
-          <Navigation />
+          {isMobile ? <MobileNavigation /> : <Navigation />}
           <NewUser />
         </PrivateRoute>
         <PrivateRoute path="/edit-user">
-          <Navigation />
+          {isMobile ? <MobileNavigation /> : <Navigation />}
           <EditUser />
         </PrivateRoute>
         <PrivateRoute path="/add-event">
-          <Navigation />
+          {isMobile ? <MobileNavigation /> : <Navigation />}
           <NewEvent />
         </PrivateRoute>
         <PrivateRoute path="/edit-event">
-          <Navigation />
+          {isMobile ? <MobileNavigation /> : <Navigation />}
           <EditEvent />
         </PrivateRoute>
         <PrivateRoute path="/add-appuser">
-          <Navigation />
+          {isMobile ? <MobileNavigation /> : <Navigation />}
           <NewAppUser />
         </PrivateRoute>
       </Switch>
