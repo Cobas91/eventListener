@@ -1,13 +1,20 @@
 import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import styled from 'styled-components'
-import { Button, Typography } from '@mui/material'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+} from '@mui/material'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import useEvents from '../components/hooks/useEvents'
 import TableToolbar from '../components/TableToolbar'
-import { showQuestion } from '../utils/notificationHandler'
 export default function Overview() {
   const { notificationUser, deleteUser } = useNotificationUsers()
   const { events, deleteEvent } = useEvents()
@@ -45,6 +52,8 @@ export default function Overview() {
   ]
   const [selectedUser, setSelectedUser] = useState()
   const [selectedEvent, setSelectedEvent] = useState()
+  const [dialogUser, setDialogUser] = React.useState(false)
+  const [dialogEvent, setDialogEvent] = React.useState(false)
   const history = useHistory()
   const handleClickUser = () => {
     history.push('/edit-user/?id=' + selectedUser)
@@ -55,8 +64,8 @@ export default function Overview() {
     const user = notificationUser.filter(
       filterUser => filterUser.id === selectedUser[0]
     )
-    showQuestion('User ' + user[0]?.name + ' löschen?', () => {
-      deleteUser(user[0])
+    deleteUser(user[0]).then(() => {
+      setDialogUser(false)
     })
   }
   const handleDelEvent = () => {
@@ -64,8 +73,8 @@ export default function Overview() {
     const event = events.filter(
       filterEvent => filterEvent.id === selectedEvent[0]
     )
-    showQuestion('Event ' + event[0].name + ' löschen?', () => {
-      deleteEvent(event[0])
+    deleteEvent(event[0]).then(() => {
+      setDialogEvent(false)
     })
   }
   const handleClickEvent = () => {
@@ -87,7 +96,9 @@ export default function Overview() {
           <StyledDelButton
             variant="contained"
             disabled={!selectedUser}
-            onClick={handleDelUser}
+            onClick={() => {
+              setDialogUser(true)
+            }}
           >
             Delete
           </StyledDelButton>
@@ -121,7 +132,9 @@ export default function Overview() {
           <StyledDelButton
             variant="contained"
             disabled={!selectedEvent}
-            onClick={handleDelEvent}
+            onClick={() => {
+              setDialogEvent(true)
+            }}
           >
             Delete
           </StyledDelButton>
@@ -141,6 +154,58 @@ export default function Overview() {
           selectionModel={selectedEvent}
         />
       </TableContainer>
+      <Dialog
+        open={dialogUser}
+        onClose={() => {
+          setDialogUser(false)
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{'User entfernen?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Der User wird aus der Datenbank gelöscht und alle verlinkungen zu
+            Events werden entfernt.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setDialogUser(false)
+            }}
+          >
+            Nein
+          </Button>
+          <Button onClick={handleDelUser}>Ja</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={dialogEvent}
+        onClose={() => {
+          setDialogEvent(false)
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{'Event entfernen?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Das Event wird aus der Datenbank gelöscht, alle verlinkungen zu
+            Usern werden entfernt.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setDialogEvent(false)
+            }}
+          >
+            Nein
+          </Button>
+          <Button onClick={handleDelEvent}>Ja</Button>
+        </DialogActions>
+      </Dialog>
     </AdministrationContainer>
   )
 }
