@@ -141,7 +141,7 @@ class EventControllerTest {
                 .build();
         //WHEN
         ResponseEntity<Event> responseEntity = restTemplate.exchange("/api/event", HttpMethod.POST , new HttpEntity<>(eventToAdd, getLoginHeader()), Event.class);
-        Optional<Event> actual = eventRepo.findById(responseEntity.getBody().getId());
+        Optional<Event> actual = eventRepo.findById(Objects.requireNonNull(responseEntity.getBody()).getId());
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(actual.isPresent(), is(true));
@@ -182,9 +182,9 @@ class EventControllerTest {
         NotificationUser user2WithId = notificationUserRepo.save(user2);
         List<NotificationUser> includeUsers = List.of(user1WithId,user2WithId);
         List<NotificationUser> excludeUsers = List.of(user2WithId);
-        Event include = Event.builder().id(1).name("TestEvent").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest").notificationUser(includeUsers).build();
-        Event include2 = Event.builder().id(2).name("TestEvent2").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 2").notificationUser(includeUsers).build();
-        Event expected = Event.builder().id(3).name("TestEvent3").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 3").notificationUser(excludeUsers).build();
+        Event include = Event.builder().name("TestEvent").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest").notificationUser(includeUsers).build();
+        Event include2 = Event.builder().name("TestEvent2").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 2").notificationUser(includeUsers).build();
+        Event expected = Event.builder().name("TestEvent3").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 3").notificationUser(excludeUsers).build();
 
 
 
