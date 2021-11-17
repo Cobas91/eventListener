@@ -63,8 +63,11 @@ const StyledAppBar = styled(AppBar)`
 `
 
 const StyledLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 10px;
-  margin-left: 5px;
+  margin-left: 20px;
   text-decoration: none;
   :visited {
     color: white;
