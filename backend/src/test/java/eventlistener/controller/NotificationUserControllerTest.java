@@ -44,19 +44,6 @@ class NotificationUserControllerTest {
     @Container
     public static PostgreSQLContainer<TestPostgresqlContainer> postgreSQLContainer = TestPostgresqlContainer.getInstance();
 
-/*    @DynamicPropertySource
-    static void postgresqlProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", container::getJdbcUrl);
-        registry.add("spring.datasource.password", container::getPassword);
-        registry.add("spring.datasource.username", container::getUsername);
-    }
-
-    @Container
-    public static PostgreSQLContainer container = new PostgreSQLContainer()
-            .withDatabaseName("eventListener_test")
-            .withUsername("eventListener")
-            .withPassword("eventListener");*/
-
     @Autowired
     TestHelper testHelper;
 
