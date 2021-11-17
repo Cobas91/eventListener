@@ -166,7 +166,37 @@ class EventControllerTest {
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 
+    @Test
+    @DisplayName("Get all Events where the given UserId is not included")
+    void testGetAllEventsExcludeUser(){
+        //GIVEN
+        NotificationUser user1 = NotificationUser.builder()
+                .name("Hans")
+                .email("test@test.de")
+                .build();
+        NotificationUser user2 = NotificationUser.builder()
+                .name("Peter")
+                .email("test@test.de")
+                .build();
+        NotificationUser user1WithId = notificationUserRepo.save(user1);
+        NotificationUser user2WithId = notificationUserRepo.save(user2);
+        List<NotificationUser> includeUsers = List.of(user1WithId,user2WithId);
+        List<NotificationUser> excludeUsers = List.of(user2WithId);
+        Event include = Event.builder().id(1).name("TestEvent").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest").notificationUser(includeUsers).build();
+        Event include2 = Event.builder().id(2).name("TestEvent2").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 2").notificationUser(includeUsers).build();
+        Event expected = Event.builder().id(3).name("TestEvent3").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 3").notificationUser(excludeUsers).build();
 
+
+
+        eventRepo.save(include);
+        eventRepo.save(include2);
+        eventRepo.save(expected);
+        //WHEN
+        ResponseEntity<Event[]> responseEntity = restTemplate.exchange("/api/event/not/"+user1WithId.getId(), HttpMethod.GET , new HttpEntity<>(getLoginHeader()), Event[].class);
+        //THEN
+        assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
+        assertThat(responseEntity.getBody(), arrayContaining(expected));
+    }
 
     @Test
     @DisplayName("Should Edit a given Event and return the new Event")
