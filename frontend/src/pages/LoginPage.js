@@ -25,6 +25,10 @@ export default function LoginPage() {
       })
   }
 
+  const redirectToOfficeLogin = () => {
+    history.push('/oauth/office')
+  }
+
   return (
     <LoginContainer>
       <LogoBackground>
@@ -53,6 +57,9 @@ export default function LoginPage() {
         />
         <StyledButton type="submit" variant="contained">
           Login
+        </StyledButton>
+        <StyledButton variant="contained" onClick={redirectToOfficeLogin}>
+          Login with Office
         </StyledButton>
       </StyledForm>
     </LoginContainer>

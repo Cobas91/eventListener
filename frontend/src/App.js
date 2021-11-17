@@ -16,6 +16,7 @@ import Datenschutz from './pages/Datenschutz'
 import NewAppUser from './pages/NewAppUser'
 import useResponsive from './components/hooks/useResponsive'
 import MobileNavigation from './components/MobileNavigation'
+import OfficeRedirectOAuth from './pages/oauth/OfficeRedirectOAuth'
 
 function App() {
   const { isMobile } = useResponsive()
@@ -24,6 +25,10 @@ function App() {
       <Switch>
         <Route exact path="/login">
           <LoginPage />
+          <Footer />
+        </Route>
+        <Route exact path="/oauth/office">
+          <OfficeRedirectOAuth />
           <Footer />
         </Route>
         <Route exact path="/impressum">
