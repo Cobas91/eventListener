@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { showError } from '../../utils/notificationHandler'
+import { showError } from '../utils/notificationHandler'
 const API_loginWithOfficeCode = code => {
   return axios
     .get('/oauth/office/' + code)

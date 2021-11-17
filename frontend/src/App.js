@@ -17,11 +17,12 @@ import NewAppUser from './pages/NewAppUser'
 import useResponsive from './components/hooks/useResponsive'
 import MobileNavigation from './components/MobileNavigation'
 import OfficeRedirectOAuth from './pages/oauth/OfficeRedirectOAuth'
+import styled from 'styled-components'
 
 function App() {
   const { isMobile } = useResponsive()
   return (
-    <>
+    <Theme>
       <Switch>
         <Route exact path="/login">
           <LoginPage />
@@ -77,8 +78,14 @@ function App() {
         draggable
         pauseOnHover
       />
-    </>
+    </Theme>
   )
 }
+
+const Theme = styled.section`
+  color: var(--primary-font);
+  background-color: var(--background-primary);
+  height: 100vh;
+`
 
 export default App

@@ -1,6 +1,5 @@
 body html {
     box-sizing: border-box;
-
 }
 
 *{
@@ -8,8 +7,9 @@ body html {
     margin: 0;
     --primary-blue: #0075a4;
     --primary-green: #7ab030;
+    --primary-error: #c51f1f;
     --primary-font: #000000;
-    --secondary-font: rgba(0,0,0,0.7);
+    --secondary-font: rgb(234, 234, 234);
     --disabled-font: rgba(72,71,71,0.5);
     --hint-font: rgba(57,57,57,0.5);
     --background-primary: #F4F6F8;

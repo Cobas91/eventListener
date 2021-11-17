@@ -3,7 +3,7 @@ import { Button, TextField, Typography } from '@mui/material'
 import styled from 'styled-components/macro'
 import { useState } from 'react'
 import useNotificationUsers from '../../components/hooks/useNotificationUsers'
-import TableToolbar from '../../components/TableToolbar'
+import TableToolbar from '../../utils/table/TableToolbar'
 import { DataGrid } from '@mui/x-data-grid'
 import useEvents from '../../components/hooks/useEvents'
 

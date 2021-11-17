@@ -7,7 +7,7 @@ import styled from 'styled-components/macro'
 import useEvents from '../../components/hooks/useEvents'
 import { DataGrid } from '@mui/x-data-grid'
 import useNotificationUsers from '../../components/hooks/useNotificationUsers'
-import TableToolbar from '../../components/TableToolbar'
+import TableToolbar from '../../utils/table/TableToolbar'
 
 export default function EditEvent() {
   const urlQuery = useLocation().search

@@ -14,7 +14,6 @@ export default function Navigation() {
   const handleLogout = () => {
     logout()
   }
-  console.log(username)
   return (
     <StyledAppBar position="static">
       <a href="/">
@@ -60,6 +59,7 @@ const StyledAppBar = styled(AppBar)`
   display: grid;
   grid-template-columns: min-content 1fr max-content min-content;
   align-items: center;
+  background-color: var(--primary-blue);
 `
 
 const StyledLink = styled(Link)`
@@ -70,7 +70,7 @@ const StyledLink = styled(Link)`
   margin-left: 20px;
   text-decoration: none;
   :visited {
-    color: white;
+    color: var(--secondary-font);
   }
-  color: white;
+  color: var(--secondary-font);
 `

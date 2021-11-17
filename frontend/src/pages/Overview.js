@@ -1,55 +1,21 @@
 import * as React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import styled from 'styled-components'
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Typography,
-} from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import useNotificationUsers from '../components/hooks/useNotificationUsers'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import useEvents from '../components/hooks/useEvents'
-import TableToolbar from '../components/TableToolbar'
+import TableToolbar from '../utils/table/TableToolbar'
+import {
+  getEventHeaders,
+  getFilters,
+  getUserHeaders,
+} from '../utils/table/tableHelper'
+import Question from '../components/Question'
 export default function Overview() {
   const { notificationUser, deleteUser } = useNotificationUsers()
   const { events, deleteEvent } = useEvents()
-  const userTableColumns = [
-    {
-      field: 'id',
-      headerName: 'ID',
-      flex: 0.2,
-      hide: true,
-    },
-    { field: 'name', headerName: 'Name', flex: 0.3 },
-    { field: 'email', headerName: 'E-Mail', flex: 1 },
-  ]
-  const usedFilters = {
-    columnFilter: true,
-    filter: true,
-    csvExport: true,
-  }
-  const eventTableColumns = [
-    {
-      field: 'id',
-      headerName: 'ID',
-      flex: 0.1,
-      description: 'Entspricht der Indikatoren Nummer',
-    },
-    {
-      field: 'actions',
-      headerName: 'Aktionen',
-      flex: 0.3,
-      description:
-        'Verfügbare Aktionen die ausgeführt werden können für das spezifische Event',
-    },
-    { field: 'name', headerName: 'Event Name', flex: 0.3 },
-    { field: 'description', headerName: 'Beschreibung', flex: 1 },
-  ]
   const [selectedUser, setSelectedUser] = useState()
   const [selectedEvent, setSelectedEvent] = useState()
   const [dialogUser, setDialogUser] = React.useState(false)
@@ -106,11 +72,11 @@ export default function Overview() {
         <DataGrid
           autoHeight={true}
           rows={notificationUser}
-          columns={userTableColumns}
+          columns={getUserHeaders()}
           pageSize={5}
           rowsPerPageOptions={[5]}
           components={{
-            Toolbar: () => TableToolbar(usedFilters),
+            Toolbar: () => TableToolbar(getFilters()),
           }}
           onSelectionModelChange={user => {
             setSelectedUser(user)
@@ -142,11 +108,11 @@ export default function Overview() {
         <DataGrid
           autoHeight={true}
           rows={events}
-          columns={eventTableColumns}
+          columns={getEventHeaders()}
           pageSize={5}
           rowsPerPageOptions={[5]}
           components={{
-            Toolbar: () => TableToolbar(usedFilters),
+            Toolbar: () => TableToolbar(getFilters()),
           }}
           onSelectionModelChange={event => {
             setSelectedEvent(event)
@@ -154,58 +120,29 @@ export default function Overview() {
           selectionModel={selectedEvent}
         />
       </TableContainer>
-      <Dialog
-        open={dialogUser}
-        onClose={() => {
+      <Question
+        title="User entfernen?"
+        message="Der User wird aus der Datenbank gelöscht und alle verlinkungen zu
+            Events werden entfernt."
+        openState={dialogUser}
+        setOpenState={() => {
           setDialogUser(false)
         }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{'User entfernen?'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Der User wird aus der Datenbank gelöscht und alle verlinkungen zu
-            Events werden entfernt.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setDialogUser(false)
-            }}
-          >
-            Nein
-          </Button>
-          <Button onClick={handleDelUser}>Ja</Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={dialogEvent}
-        onClose={() => {
+        handleYes={() => {
+          handleDelUser()
+        }}
+      />
+      <Question
+        title="Event entfernen?"
+        message="Das Event wird gelöscht und alle Verknüpfungen werden entfernt."
+        openState={dialogEvent}
+        setOpenState={() => {
           setDialogEvent(false)
         }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{'Event entfernen?'}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Das Event wird aus der Datenbank gelöscht, alle verlinkungen zu
-            Usern werden entfernt.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setDialogEvent(false)
-            }}
-          >
-            Nein
-          </Button>
-          <Button onClick={handleDelEvent}>Ja</Button>
-        </DialogActions>
-      </Dialog>
+        handleYes={() => {
+          handleDelEvent()
+        }}
+      />
     </AdministrationContainer>
   )
 }
@@ -229,7 +166,7 @@ const StyledDelButton = styled(Button)`
   margin-top: 10px;
   margin-bottom: 10px;
   margin-right: 10px;
-  background-color: #95190c;
+  background-color: var(--primary-error);
 `
 
 const TableContainer = styled.section`

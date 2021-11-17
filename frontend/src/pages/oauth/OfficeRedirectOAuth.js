@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useContext, useEffect } from 'react'
-import { API_loginWithOfficeCode } from './OAuthOfficeService'
+import { API_loginWithOfficeCode } from '../../service/OAuthOfficeService'
 import { AuthContext } from '../../security/AuthProvider'
 import loadingAnimation from '../../components/assets/loading.gif'
 
