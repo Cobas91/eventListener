@@ -1,6 +1,6 @@
 package eventlistener.security.controller;
 
-import eventlistener.TestHelper;
+import eventlistener.TestPostgresqlContainer;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import io.jsonwebtoken.Claims;
@@ -15,8 +15,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -28,7 +26,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 class LoginControllerTest {
-    @DynamicPropertySource
+    @Container
+    public static PostgreSQLContainer<TestPostgresqlContainer> postgreSQLContainer = TestPostgresqlContainer.getInstance();
+
+/*    @DynamicPropertySource
     static void postgresqlProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", container::getJdbcUrl);
         registry.add("spring.datasource.password", container::getPassword);
@@ -39,7 +40,7 @@ class LoginControllerTest {
     public static PostgreSQLContainer container = new PostgreSQLContainer()
             .withDatabaseName("eventListener_test")
             .withUsername("eventListener")
-            .withPassword("eventListener");
+            .withPassword("eventListener");*/
 
 
 
