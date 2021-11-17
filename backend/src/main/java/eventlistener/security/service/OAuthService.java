@@ -17,7 +17,7 @@ public class OAuthService {
         this.jwtUtilService = jwtUtilService;
     }
 
-    public String getOfficeAccessToken(String code){
+    public String getJwtTokenWithOfficeCode(String code){
         OfficeUserDTO user = officeOAuthApi.getOfficeUserInformation(code);
         return jwtUtilService.createToken(new HashMap<>(), user.getDisplayName());
     }

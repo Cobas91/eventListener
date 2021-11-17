@@ -14,6 +14,6 @@ public class OfficeLoginController {
 
     @GetMapping("/oauth/office/{code}")
     public String login(@PathVariable String code){
-        return oAuthService.getOfficeAccessToken(code);
+        return oAuthService.getJwtTokenWithOfficeCode(code);
     }
 }
