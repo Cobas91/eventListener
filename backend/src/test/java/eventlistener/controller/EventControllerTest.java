@@ -190,12 +190,12 @@ class EventControllerTest {
 
         eventRepo.save(include);
         eventRepo.save(include2);
-        eventRepo.save(expected);
+        Event expectedWithId = eventRepo.save(expected);
         //WHEN
         ResponseEntity<Event[]> responseEntity = restTemplate.exchange("/api/event/not/"+user1WithId.getId(), HttpMethod.GET , new HttpEntity<>(getLoginHeader()), Event[].class);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), arrayContaining(expected));
+        assertThat(responseEntity.getBody(), arrayContaining(expectedWithId));
     }
 
     @Test
