@@ -1,6 +1,7 @@
 package eventlistener.controller;
 
 import eventlistener.TestHelper;
+import eventlistener.TestPostgresqlContainer;
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
 import eventlistener.model.notificationuser.NotificationUser;
@@ -40,7 +41,10 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 class NotificationUserControllerTest {
-    @DynamicPropertySource
+    @Container
+    public static PostgreSQLContainer<TestPostgresqlContainer> postgreSQLContainer = TestPostgresqlContainer.getInstance();
+
+/*    @DynamicPropertySource
     static void postgresqlProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", container::getJdbcUrl);
         registry.add("spring.datasource.password", container::getPassword);
@@ -51,7 +55,7 @@ class NotificationUserControllerTest {
     public static PostgreSQLContainer container = new PostgreSQLContainer()
             .withDatabaseName("eventListener_test")
             .withUsername("eventListener")
-            .withPassword("eventListener");
+            .withPassword("eventListener");*/
 
     @Autowired
     TestHelper testHelper;
@@ -79,6 +83,7 @@ class NotificationUserControllerTest {
         testHelper.clearTable("event_notification_user");
         appUserRepo.deleteAll();
         notificationUserRepo.deleteAll();
+        eventRepo.deleteAll();
     }
 
     public HttpHeaders getLoginHeader(){
@@ -158,7 +163,6 @@ class NotificationUserControllerTest {
         //WHEN
         ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userDTO, getLoginHeader()), NotificationUser.class);
         //THEN
-
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
     }
 

@@ -1,6 +1,7 @@
 package eventlistener.controller;
 
 import eventlistener.TestHelper;
+import eventlistener.TestPostgresqlContainer;
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
 import eventlistener.model.event.EventToModifyDTO;
@@ -11,6 +12,7 @@ import eventlistener.repo.NotificationUserRepo;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.ClassRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,8 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -37,8 +37,10 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 class EventControllerTest {
+    @Container
+    public static PostgreSQLContainer<TestPostgresqlContainer> postgreSQLContainer = TestPostgresqlContainer.getInstance();
 
-    @DynamicPropertySource
+/*    @DynamicPropertySource
     static void postgresqlProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", container::getJdbcUrl);
         registry.add("spring.datasource.password", container::getPassword);
@@ -49,7 +51,7 @@ class EventControllerTest {
     public static PostgreSQLContainer container = new PostgreSQLContainer()
             .withDatabaseName("eventListener_test")
             .withUsername("eventListener")
-            .withPassword("eventListener");
+            .withPassword("eventListener");*/
 
     @Autowired
     private TestRestTemplate restTemplate;
