@@ -1,6 +1,5 @@
-package eventlistener.controller;
+package eventlistener.security.controller;
 
-import eventlistener.security.model.api.office.OfficeUserDTO;
 import eventlistener.security.service.OAuthService;
 import org.springframework.web.bind.annotation.*;
 

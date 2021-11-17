@@ -29,7 +29,6 @@ function App() {
         </Route>
         <Route exact path="/oauth/office">
           <OfficeRedirectOAuth />
-          <Footer />
         </Route>
         <Route exact path="/impressum">
           <Impressum />

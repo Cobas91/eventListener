@@ -2,8 +2,8 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Button, TextField } from '@mui/material'
 import logo from '../components/assets/logo_name.svg'
+import officeLoginIcon from '../components/assets/office_login_icon.svg'
 import { useContext, useState } from 'react'
-
 import { API_login } from '../service/loginService'
 import { useHistory } from 'react-router-dom'
 import { AuthContext } from '../security/AuthProvider'
@@ -12,6 +12,14 @@ export default function LoginPage() {
   const { setJWT } = useContext(AuthContext)
   const [credentials, setCredentials] = useState()
   const history = useHistory()
+  const officeUrl =
+    'https://login.microsoftonline.com/a6c2d6ec-3753-4571-b3ad-88b705befd2b/oauth2/v2.0/authorize?' +
+    'client_id=cc1c47e2-3a5c-4d32-945e-88f4691a84a0' +
+    '&response_type=code' +
+    '&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Foauth%2Foffice' +
+    '&response_mode=query' +
+    '&scope=offline_access%20user.read%20mail.read' +
+    '&state=12345'
   const handleOnChange = e => {
     setCredentials({ ...credentials, [e.target.id]: e.target.value })
   }
@@ -23,10 +31,6 @@ export default function LoginPage() {
       .then(() => {
         history.push('/')
       })
-  }
-
-  const redirectToOfficeLogin = () => {
-    history.push('/oauth/office')
   }
 
   return (
@@ -58,14 +62,30 @@ export default function LoginPage() {
         <StyledButton type="submit" variant="contained">
           Login
         </StyledButton>
-        <StyledButton variant="contained" onClick={redirectToOfficeLogin}>
-          Login with Office
-        </StyledButton>
+
+        <OfficeLoginContainer href={officeUrl}>
+          <StyledImgOfficeLoginIcon src={officeLoginIcon} alt="login" />
+        </OfficeLoginContainer>
       </StyledForm>
     </LoginContainer>
   )
 }
 
+const StyledImgOfficeLoginIcon = styled.img`
+  margin: 15px;
+  width: 25vh;
+  border-radius: 10px;
+`
+
+const OfficeLoginContainer = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  :visited {
+    color: black;
+  }
+  color: black;
+`
 const StyledImg = styled.img`
   width: 50vh;
 `
