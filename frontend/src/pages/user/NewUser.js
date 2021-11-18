@@ -7,10 +7,12 @@ import { DataGrid } from '@mui/x-data-grid'
 import TableToolbar from '../../utils/table/TableToolbar'
 import useEvents from '../../components/hooks/useEvents'
 import { getEventHeaders, getFilters } from '../../utils/table/tableHelper'
+import { useHistory } from 'react-router-dom'
 
 export default function NewUser() {
   const { getAllEvents } = useEvents()
   const { addNotificationUser } = useNotificationUsers()
+  const history = useHistory()
   const [newUser, setNewUser] = useState({})
   const [selectedEvents, setSelectedEvents] = useState([])
   const [allAvailableEvents, setAllAvailableEvents] = useState([])
@@ -24,6 +26,7 @@ export default function NewUser() {
     e.preventDefault()
     newUser.listenEvents = selectedEvents
     addNotificationUser(newUser)
+    history.push('/administration')
   }
   const handleOnChange = e => {
     setNewUser({ ...newUser, [e.target.id]: e.target.value })

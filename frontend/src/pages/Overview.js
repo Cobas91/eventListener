@@ -14,26 +14,17 @@ import {
 } from '../utils/table/tableHelper'
 import Question from '../components/Question'
 export default function Overview() {
-  const { notificationUser, deleteUser } = useNotificationUsers()
+  const { notificationUser } = useNotificationUsers()
   const { events, deleteEvent } = useEvents()
   const [selectedUser, setSelectedUser] = useState()
   const [selectedEvent, setSelectedEvent] = useState()
-  const [dialogUser, setDialogUser] = React.useState(false)
+
   const [dialogEvent, setDialogEvent] = React.useState(false)
   const history = useHistory()
   const handleClickUser = () => {
     history.push('/edit-user/?id=' + selectedUser)
   }
 
-  const handleDelUser = () => {
-    // eslint-disable-next-line array-callback-return
-    const user = notificationUser.filter(
-      filterUser => filterUser.id === selectedUser[0]
-    )
-    deleteUser(user[0]).then(() => {
-      setDialogUser(false)
-    })
-  }
   const handleDelEvent = () => {
     // eslint-disable-next-line array-callback-return
     const event = events.filter(
@@ -59,15 +50,6 @@ export default function Overview() {
           >
             Edit
           </StyledButton>
-          <StyledDelButton
-            variant="contained"
-            disabled={!selectedUser}
-            onClick={() => {
-              setDialogUser(true)
-            }}
-          >
-            Delete
-          </StyledDelButton>
         </ButtonSection>
         <DataGrid
           autoHeight={true}
@@ -121,18 +103,6 @@ export default function Overview() {
         />
       </TableContainer>
       <Question
-        title="User entfernen?"
-        message="Der User wird aus der Datenbank gelöscht und alle verlinkungen zu
-            Events werden entfernt."
-        openState={dialogUser}
-        setOpenState={() => {
-          setDialogUser(false)
-        }}
-        handleYes={() => {
-          handleDelUser()
-        }}
-      />
-      <Question
         title="Event entfernen?"
         message="Das Event wird gelöscht und alle Verknüpfungen werden entfernt."
         openState={dialogEvent}
@@ -147,8 +117,7 @@ export default function Overview() {
   )
 }
 const ButtonSection = styled.section`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
 `
 
 const AdministrationContainer = styled.section`

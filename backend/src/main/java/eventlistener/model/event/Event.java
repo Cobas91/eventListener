@@ -21,6 +21,6 @@ public class Event {
     @ElementCollection
     private List<Action> actions;
     private String description;
-    @ManyToMany(mappedBy = "followedEvents")
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<NotificationUser> notificationUser;
 }
