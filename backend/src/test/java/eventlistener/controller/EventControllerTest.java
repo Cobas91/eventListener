@@ -1,6 +1,7 @@
 package eventlistener.controller;
 
 import eventlistener.TestHelper;
+import eventlistener.TestPostgresqlContainer;
 import eventlistener.model.Action;
 import eventlistener.model.event.Event;
 import eventlistener.model.event.EventToModifyDTO;
@@ -11,6 +12,8 @@ import eventlistener.repo.NotificationUserRepo;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,19 +40,8 @@ import static org.hamcrest.Matchers.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 class EventControllerTest {
-
-    @DynamicPropertySource
-    static void postgresqlProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", container::getJdbcUrl);
-        registry.add("spring.datasource.password", container::getPassword);
-        registry.add("spring.datasource.username", container::getUsername);
-    }
-
     @Container
-    public static PostgreSQLContainer container = new PostgreSQLContainer()
-            .withDatabaseName("eventListener_test")
-            .withUsername("eventListener")
-            .withPassword("eventListener");
+    public static PostgreSQLContainer<TestPostgresqlContainer> postgreSQLContainer = TestPostgresqlContainer.getInstance();
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -136,7 +128,7 @@ class EventControllerTest {
                 .build();
         //WHEN
         ResponseEntity<Event> responseEntity = restTemplate.exchange("/api/event", HttpMethod.POST , new HttpEntity<>(eventToAdd, getLoginHeader()), Event.class);
-        Optional<Event> actual = eventRepo.findById(responseEntity.getBody().getId());
+        Optional<Event> actual = eventRepo.findById(Objects.requireNonNull(responseEntity.getBody()).getId());
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(actual.isPresent(), is(true));
@@ -165,34 +157,32 @@ class EventControllerTest {
     @DisplayName("Get all Events where the given UserId is not included")
     void testGetAllEventsExcludeUser(){
         //GIVEN
-        long userId = 1;
         NotificationUser user1 = NotificationUser.builder()
-                .id(userId)
                 .name("Hans")
                 .email("test@test.de")
                 .build();
         NotificationUser user2 = NotificationUser.builder()
-                .id(2)
                 .name("Peter")
                 .email("test@test.de")
                 .build();
-        List<NotificationUser> includeUsers = List.of(user1,user2);
-        List<NotificationUser> excludeUsers = List.of(user2);
-        Event include = Event.builder().id(1).name("TestEvent").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest").notificationUser(includeUsers).build();
-        Event include2 = Event.builder().id(2).name("TestEvent2").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 2").notificationUser(includeUsers).build();
-        Event exclude = Event.builder().id(3).name("TestEvent3").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 3").notificationUser(excludeUsers).build();
+        NotificationUser user1WithId = notificationUserRepo.save(user1);
+        NotificationUser user2WithId = notificationUserRepo.save(user2);
+        List<NotificationUser> includeUsers = List.of(user1WithId,user2WithId);
+        List<NotificationUser> excludeUsers = List.of(user2WithId);
+        Event include = Event.builder().name("TestEvent").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest").notificationUser(includeUsers).build();
+        Event include2 = Event.builder().name("TestEvent2").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 2").notificationUser(includeUsers).build();
+        Event expected = Event.builder().name("TestEvent3").actions(List.of(Action.MAIL)).description("TestEvent Integrationstest 3").notificationUser(excludeUsers).build();
 
-        notificationUserRepo.save(user1);
-        notificationUserRepo.save(user2);
+
 
         eventRepo.save(include);
         eventRepo.save(include2);
-        eventRepo.save(exclude);
+        Event expectedWithId = eventRepo.save(expected);
         //WHEN
-        ResponseEntity<Event[]> responseEntity = restTemplate.exchange("/api/event/not/"+userId, HttpMethod.GET , new HttpEntity<>(getLoginHeader()), Event[].class);
+        ResponseEntity<Event[]> responseEntity = restTemplate.exchange("/api/event/not/"+user1WithId.getId(), HttpMethod.GET , new HttpEntity<>(getLoginHeader()), Event[].class);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
-        assertThat(responseEntity.getBody(), arrayContaining(exclude));
+        assertThat(responseEntity.getBody(), arrayContaining(expectedWithId));
     }
 
     @Test

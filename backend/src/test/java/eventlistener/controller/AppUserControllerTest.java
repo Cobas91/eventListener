@@ -1,23 +1,21 @@
 package eventlistener.controller;
 
+import eventlistener.TestPostgresqlContainer;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import eventlistener.service.AppUserService;
+
 import org.junit.ClassRule;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.*;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -26,7 +24,6 @@ import java.util.Objects;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 
@@ -35,20 +32,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Testcontainers
 class AppUserControllerTest {
 
-    @DynamicPropertySource
-    static void postgresqlProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", container::getJdbcUrl);
-        registry.add("spring.datasource.password", container::getPassword);
-        registry.add("spring.datasource.username", container::getUsername);
-    }
-
     @Container
-    public static PostgreSQLContainer container = new PostgreSQLContainer()
-            .withDatabaseName("eventListener_test")
-            .withUsername("eventListener")
-            .withPassword("eventListener");
-
-
+    public static PostgreSQLContainer<TestPostgresqlContainer> postgreSQLContainer = TestPostgresqlContainer.getInstance();
 
     @Autowired
     private AppUserService appUserService;
@@ -62,7 +47,7 @@ class AppUserControllerTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @AfterEach
+    @BeforeEach
     public void clearDB(){
         appUserRepo.deleteAll();
     }
@@ -76,7 +61,8 @@ class AppUserControllerTest {
         AppUserDTO loginData = new AppUserDTO("test", "some-password");
         ResponseEntity<String> response = restTemplate.postForEntity("/auth/login", loginData, String.class);
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(Objects.requireNonNull(response.getBody()));
+        if(response.getBody() == null) throw new BadCredentialsException("Can´t get LoginHeader, Bad Credentials");
+        headers.setBearerAuth(response.getBody());
         return headers;
     }
 

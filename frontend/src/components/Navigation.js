@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { AppBar, Toolbar } from '@mui/material'
+import { AppBar, Toolbar, Typography } from '@mui/material'
 
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
@@ -10,7 +10,7 @@ import icon from '../components/assets/icon.png'
 import { FiHome, FiFilePlus, FiMonitor, FiLogOut } from 'react-icons/fi'
 
 export default function Navigation() {
-  const { logout } = useContext(AuthContext)
+  const { logout, username } = useContext(AuthContext)
   const handleLogout = () => {
     logout()
   }
@@ -42,6 +42,7 @@ export default function Navigation() {
           App User hinzufügen
         </StyledLink>
       </Toolbar>
+      <Typography>Angemeldet als: {username}</Typography>
       <StyledLink to="/login" onClick={handleLogout}>
         <FiLogOut />
         Logout
@@ -56,16 +57,20 @@ const StyledImg = styled.img`
 `
 const StyledAppBar = styled(AppBar)`
   display: grid;
-  grid-template-columns: min-content 1fr min-content;
+  grid-template-columns: min-content 1fr max-content min-content;
   align-items: center;
+  background-color: var(--primary-blue);
 `
 
 const StyledLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 10px;
-  margin-left: 5px;
+  margin-left: 20px;
   text-decoration: none;
   :visited {
-    color: white;
+    color: var(--secondary-font);
   }
-  color: white;
+  color: var(--secondary-font);
 `

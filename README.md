@@ -22,7 +22,8 @@ Frontend:
 
 Backend:
 - Spring
-- MongoDB
+- Postgres DB
+- Postgres TestContainer
 - Swagger
 - Spring Security
 - Mockito

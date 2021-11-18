@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +19,5 @@ public class NotificationUser {
     private long id;
     private String email;
     private String name;
+
 }

@@ -4,12 +4,15 @@ import { Button, TextField, Typography } from '@mui/material'
 import styled from 'styled-components/macro'
 import useNotificationUsers from '../../components/hooks/useNotificationUsers'
 import { DataGrid } from '@mui/x-data-grid'
-import TableToolbar from '../../components/TableToolbar'
+import TableToolbar from '../../utils/table/TableToolbar'
 import useEvents from '../../components/hooks/useEvents'
+import { getEventHeaders, getFilters } from '../../utils/table/tableHelper'
+import { useHistory } from 'react-router-dom'
 
 export default function NewUser() {
   const { getAllEvents } = useEvents()
   const { addNotificationUser } = useNotificationUsers()
+  const history = useHistory()
   const [newUser, setNewUser] = useState({})
   const [selectedEvents, setSelectedEvents] = useState([])
   const [allAvailableEvents, setAllAvailableEvents] = useState([])
@@ -19,36 +22,15 @@ export default function NewUser() {
     })
     // eslint-disable-next-line
   }, [])
-  const usedFilters = {
-    columnFilter: true,
-    filter: true,
-    csvExport: true,
-  }
   const handleSubmit = e => {
     e.preventDefault()
     newUser.listenEvents = selectedEvents
     addNotificationUser(newUser)
+    history.push('/administration')
   }
   const handleOnChange = e => {
     setNewUser({ ...newUser, [e.target.id]: e.target.value })
   }
-  const eventTableColumns = [
-    {
-      field: 'id',
-      headerName: 'ID',
-      flex: 0.1,
-      description: 'Entspricht der Indikatoren Nummer',
-    },
-    {
-      field: 'actions',
-      headerName: 'Aktionen',
-      flex: 0.2,
-      description:
-        'Verfügbare Aktionen die ausgeführt werden können für das spezifische Event',
-    },
-    { field: 'name', headerName: 'Event Name', flex: 0.3 },
-    { field: 'description', headerName: 'Beschreibung', flex: 1 },
-  ]
   return (
     <NewUserContainer>
       <StyledInfoBox>
@@ -81,7 +63,7 @@ export default function NewUser() {
         <DataGrid
           autoHeight={true}
           rows={allAvailableEvents}
-          columns={eventTableColumns}
+          columns={getEventHeaders()}
           pageSize={5}
           rowsPerPageOptions={[5]}
           density="compact"
@@ -90,7 +72,7 @@ export default function NewUser() {
             setSelectedEvents(event)
           }}
           components={{
-            Toolbar: () => TableToolbar(usedFilters),
+            Toolbar: () => TableToolbar(getFilters()),
           }}
         />
       </TableContainer>

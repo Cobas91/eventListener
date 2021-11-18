@@ -3,19 +3,22 @@ import { Button, TextField, Typography } from '@mui/material'
 import styled from 'styled-components/macro'
 import { useState } from 'react'
 import useNotificationUsers from '../../components/hooks/useNotificationUsers'
-import TableToolbar from '../../components/TableToolbar'
+import TableToolbar from '../../utils/table/TableToolbar'
 import { DataGrid } from '@mui/x-data-grid'
 import useEvents from '../../components/hooks/useEvents'
+import { useHistory } from 'react-router-dom'
 
 export default function NewEvent() {
+  const { notificationUser } = useNotificationUsers()
+  const { addEvent } = useEvents()
+  const history = useHistory()
   const [newEvent, setNewEvent] = useState({
     name: '',
     description: '',
     actions: ['MAIL'],
   })
   const [selectedUser, setSelectedUser] = useState([])
-  const { notificationUser } = useNotificationUsers()
-  const { addEvent } = useEvents()
+
   const handleOnChange = e => {
     setNewEvent({ ...newEvent, [e.target.id]: e.target.value })
   }
@@ -37,8 +40,8 @@ export default function NewEvent() {
   const handleClick = () => {
     const eventToAdd = newEvent
     eventToAdd.notificationUser = selectedUser
-    console.log(eventToAdd)
     addEvent(eventToAdd)
+    history.push('/administration')
   }
   return (
     <NewEventContainer>

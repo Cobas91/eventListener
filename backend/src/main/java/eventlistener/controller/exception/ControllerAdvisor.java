@@ -1,5 +1,7 @@
 package eventlistener.controller.exception;
 
+import eventlistener.exception.OfficeAccessTokenException;
+import eventlistener.exception.OfficeOAuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mapping.MappingException;
 import org.springframework.http.HttpStatus;
@@ -64,6 +66,20 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiError> handleMailException(MailException ex){
         log.error("Could not send Mail",ex);
         ApiError apiError = new ApiError("Could not send Mail", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(OfficeOAuthException.class)
+    public ResponseEntity<ApiError> handleOfficeOAuthException(OfficeOAuthException ex){
+        log.error("No valid Office User Informations",ex);
+        ApiError apiError = new ApiError("No valid Office User Informations", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OfficeAccessTokenException.class)
+    public ResponseEntity<ApiError> handleOfficeAccessTokenException(OfficeAccessTokenException ex){
+        log.error("Office OAuth Code is not unprocessable",ex);
+        ApiError apiError = new ApiError("Office OAuth Code is not unprocessable", ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
