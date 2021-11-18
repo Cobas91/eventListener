@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Button, TextField } from '@mui/material'
+import { Button, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 import { API_addAppUser } from '../service/appUserService'
 import { showSuccess } from '../utils/notificationHandler'
@@ -18,8 +18,15 @@ export default function NewAppUser() {
   }
   return (
     <NewAppUserContainer>
+      <StyledInfoBox>
+        <Typography variant="h5">Neuen App User anlegen</Typography>
+        <Typography>
+          Ein Lokaler Zugang zur Applikation. Mit diesem User kann sich an der
+          Applikation angemeldet werden.
+        </Typography>
+      </StyledInfoBox>
       <StyledForm onSubmit={handleSubmit}>
-        <StyledTextField
+        <TextField
           required
           id="username"
           label="Username"
@@ -27,7 +34,7 @@ export default function NewAppUser() {
           type="username"
           onChange={handleOnChange}
         />
-        <StyledTextField
+        <TextField
           required
           id="password"
           label="Password"
@@ -42,19 +49,27 @@ export default function NewAppUser() {
     </NewAppUserContainer>
   )
 }
+
+const StyledInfoBox = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: 20px;
+`
 const StyledButton = styled(Button)`
   margin: 5px;
 `
-
-const StyledTextField = styled(TextField)``
-
 const NewAppUserContainer = styled.section`
-  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `
-
 const StyledForm = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 80%;
 `

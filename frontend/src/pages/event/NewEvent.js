@@ -45,6 +45,13 @@ export default function NewEvent() {
   }
   return (
     <NewEventContainer>
+      <StyledInfoBox>
+        <Typography variant="h5">Neues Event anlegen</Typography>
+        <Typography>
+          Hier kann ein neues Event angelegt werden. Mehrere User können diesem
+          Event zugewiesen werden.
+        </Typography>
+      </StyledInfoBox>
       <StyledForm>
         <Typography>Name</Typography>
         <StyledTextField
@@ -92,6 +99,14 @@ export default function NewEvent() {
     </NewEventContainer>
   )
 }
+
+const StyledInfoBox = styled.section`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+  margin: 20px;
+`
 const StyledButton = styled(Button)`
   margin-bottom: 10px;
   margin-top: 10px;

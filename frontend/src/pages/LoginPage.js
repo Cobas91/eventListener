@@ -12,11 +12,14 @@ export default function LoginPage() {
   const { setJWT } = useContext(AuthContext)
   const [credentials, setCredentials] = useState()
   const history = useHistory()
+
+  const sideUrl = window.location.href.replace('/login', '')
   const officeUrl =
     'https://login.microsoftonline.com/a6c2d6ec-3753-4571-b3ad-88b705befd2b/oauth2/v2.0/authorize?' +
     'client_id=cc1c47e2-3a5c-4d32-945e-88f4691a84a0' +
     '&response_type=code' +
-    '&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Foauth%2Foffice' +
+    '&redirect_uri=' +
+    encodeURIComponent(sideUrl + '/oauth/office') +
     '&response_mode=query' +
     '&scope=offline_access%20user.read%20mail.read' +
     '&state=12345'
