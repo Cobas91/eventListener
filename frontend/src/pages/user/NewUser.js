@@ -35,10 +35,10 @@ export default function NewUser() {
     <NewUserContainer>
       <StyledInfoBox>
         <Typography variant="h5">Neuen User anlegen</Typography>
-        <StyledTypography>
+        <Typography>
           Hier kann ein neuer User zur Benachrichtigung angelegt werden. Ein
           User kann bei mehreren Events benachrichtigt werden.
-        </StyledTypography>
+        </Typography>
       </StyledInfoBox>
       <StyledForm onSubmit={handleSubmit}>
         <StyledTextField
@@ -82,8 +82,6 @@ export default function NewUser() {
     </NewUserContainer>
   )
 }
-
-const StyledTypography = styled(Typography)``
 
 const TableContainer = styled.section`
   margin-top: 20px;
