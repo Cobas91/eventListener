@@ -1,9 +1,10 @@
 package eventlistener.controller;
 
+
 import eventlistener.model.event.Event;
 import eventlistener.model.event.EventContentDTO;
 import eventlistener.model.event.EventToModifyDTO;
-import eventlistener.service.EventMailService;
+import eventlistener.service.EventTriggerService;
 import eventlistener.service.UserEventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +18,11 @@ public class EventController {
 
     private final UserEventService userEventService;
 
-    private final EventMailService eventMailService;
+    private final EventTriggerService eventTriggerService;
 
-    public EventController(UserEventService userEventService, EventMailService eventMailService) {
+    public EventController(UserEventService userEventService, EventTriggerService eventTriggerService) {
         this.userEventService = userEventService;
-        this.eventMailService = eventMailService;
+        this.eventTriggerService = eventTriggerService;
     }
 
     @GetMapping
@@ -44,9 +45,9 @@ public class EventController {
         return userEventService.addEvent(eventToAdd);
     }
 
-    @PostMapping("/trigger/{eventId}")
-    public void triggerEventAction(@PathVariable Long eventId, @RequestBody EventContentDTO eventDetails){
-        eventMailService.triggerEvent(eventId, eventDetails);
+    @PostMapping("/trigger/{eventId}/{actionString}")
+    public void triggerEventAction(@PathVariable Long eventId, @PathVariable String actionString, @RequestBody EventContentDTO eventDetails){
+        eventTriggerService.triggerEvent(eventId,actionString,eventDetails);
     }
 
     @PutMapping("/{eventId}")
