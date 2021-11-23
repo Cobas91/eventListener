@@ -16,9 +16,9 @@ import Question from '../components/Question'
 export default function Overview() {
   const { notificationUser } = useNotificationUsers()
   const { events, deleteEvent } = useEvents()
+
   const [selectedUser, setSelectedUser] = useState()
   const [selectedEvent, setSelectedEvent] = useState()
-
   const [dialogEvent, setDialogEvent] = React.useState(false)
   const history = useHistory()
   const handleClickUser = () => {

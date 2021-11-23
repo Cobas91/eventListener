@@ -1,7 +1,11 @@
 package eventlistener.repo;
 
-import eventlistener.model.Statistik;
+import eventlistener.model.Action;
+import eventlistener.model.statistic.Statistic;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface StatistikRepo extends MongoRepository<Statistik, Long> {
+import java.util.List;
+
+public interface StatistikRepo extends MongoRepository<Statistic, Long> {
+    List<Statistic> getStatisticByAction(Action action);
 }

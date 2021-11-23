@@ -9,7 +9,6 @@ import eventlistener.model.notificationuser.NotificationUserDTO;
 import eventlistener.model.notificationuser.NotificationUserEditDTO;
 import eventlistener.repo.EventRepo;
 import eventlistener.repo.NotificationUserRepo;
-import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import eventlistener.service.notificationuser.NotificationUserService;
 
@@ -22,10 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
 import org.springframework.http.*;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -67,23 +63,7 @@ class NotificationUserControllerTest {
 
     @BeforeEach
     public void clearDB(){
-        testHelper.clearTable("event_notification_user");
-        appUserRepo.deleteAll();
-        notificationUserRepo.deleteAll();
-        eventRepo.deleteAll();
-    }
-
-    public HttpHeaders getLoginHeader(){
-        appUserRepo.save(AppUserDTO.builder()
-                .username("test")
-                .password(passwordEncoder.encode("some-password"))
-                .build());
-        AppUserDTO loginData = new AppUserDTO("test", "some-password");
-        ResponseEntity<String> response = restTemplate.postForEntity("/auth/login", loginData, String.class);
-        HttpHeaders headers = new HttpHeaders();
-        if(response.getBody() == null) throw new BadCredentialsException("Can´t get LoginHeader, Bad Credentials");
-        headers.setBearerAuth(response.getBody());
-        return headers;
+        testHelper.clearDatabase();
     }
 
     @Test
@@ -97,7 +77,7 @@ class NotificationUserControllerTest {
                         .build();
         NotificationUser expected = notificationUserRepo.save(user);
         //WHEN
-        ResponseEntity<NotificationUser[]> responseEntity = restTemplate.exchange("/api/user", HttpMethod.GET , new HttpEntity<>(getLoginHeader()), NotificationUser[].class);
+        ResponseEntity<NotificationUser[]> responseEntity = restTemplate.exchange("/api/user", HttpMethod.GET , new HttpEntity<>(testHelper.getLoginHeader()), NotificationUser[].class);
 
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
@@ -119,7 +99,7 @@ class NotificationUserControllerTest {
                 .listenEvents(List.of(eventWithId.getId()))
                 .build();
         //WHEN
-        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userDTO, getLoginHeader()), NotificationUser.class);
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userDTO, testHelper.getLoginHeader()), NotificationUser.class);
         //THEN
         NotificationUser newAddedUser = responseEntity.getBody();
         assert newAddedUser != null;
@@ -148,9 +128,9 @@ class NotificationUserControllerTest {
                 .build();
         eventRepo.save(eventToAdd);
         //WHEN
-        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userDTO, getLoginHeader()), NotificationUser.class);
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user", HttpMethod.POST , new HttpEntity<>(userDTO, testHelper.getLoginHeader()), NotificationUser.class);
         //THEN
-        assertThat(responseEntity.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+        assertThat(responseEntity.getStatusCode(), is(HttpStatus.UNPROCESSABLE_ENTITY));
     }
 
     @Test
@@ -162,7 +142,7 @@ class NotificationUserControllerTest {
                 .build();
         NotificationUser expected = notificationUserRepo.save(userToAdd);
         //WHEN
-        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+expected.getId(), HttpMethod.GET , new HttpEntity<>(getLoginHeader()), NotificationUser.class);
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+expected.getId(), HttpMethod.GET , new HttpEntity<>(testHelper.getLoginHeader()), NotificationUser.class);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), is(expected));
@@ -190,7 +170,7 @@ class NotificationUserControllerTest {
                 .email("newMail@test.de")
                 .build();
         //WHEN
-        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+userWithId.getId(), HttpMethod.PUT , new HttpEntity<>(newUser,getLoginHeader()), NotificationUser.class);
+        ResponseEntity<NotificationUser> responseEntity = restTemplate.exchange("/api/user/"+userWithId.getId(), HttpMethod.PUT , new HttpEntity<>(newUser,testHelper.getLoginHeader()), NotificationUser.class);
         //THEN
         assertThat(responseEntity.getStatusCode(), is(HttpStatus.OK));
         assertThat(responseEntity.getBody(), is(expected));

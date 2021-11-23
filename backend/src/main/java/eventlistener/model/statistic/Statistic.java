@@ -1,5 +1,6 @@
-package eventlistener.model;
+package eventlistener.model.statistic;
 
+import eventlistener.model.Action;
 import eventlistener.model.event.Event;
 import eventlistener.model.event.EventContentDTO;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Statistik {
+public class Statistic {
     private Event triggeredEvent;
     private Action action;
     private EventContentDTO content;
