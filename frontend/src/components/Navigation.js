@@ -22,34 +22,49 @@ export default function Navigation() {
 
       <Toolbar>
         <StyledLink to="/">
-          <FiHome />
+          <Gap>
+            <FiHome />
+          </Gap>
           Home
         </StyledLink>
         <StyledLink to="/administration">
-          <FiMonitor />
+          <Gap>
+            <FiMonitor />
+          </Gap>
           Übersicht
         </StyledLink>
         <StyledLink to="/add-user">
-          <FiFilePlus />
+          <Gap>
+            <FiFilePlus />
+          </Gap>
           User hinzufügen
         </StyledLink>
         <StyledLink to="/add-event">
-          <FiFilePlus />
+          <Gap>
+            <FiFilePlus />
+          </Gap>
           Event hinzufügen
         </StyledLink>
         <StyledLink to="/add-appuser">
-          <FiFilePlus />
+          <Gap>
+            <FiFilePlus />
+          </Gap>
           App User hinzufügen
         </StyledLink>
       </Toolbar>
       <Typography>Angemeldet als: {username}</Typography>
       <StyledLink to="/login" onClick={handleLogout}>
-        <FiLogOut />
+        <Gap>
+          <FiLogOut />
+        </Gap>
         Logout
       </StyledLink>
     </StyledAppBar>
   )
 }
+const Gap = styled.div`
+  margin-right: 10px;
+`
 const StyledImg = styled.img`
   margin-top: -12px;
   margin-bottom: -12px;
