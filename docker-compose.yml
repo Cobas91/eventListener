@@ -8,3 +8,11 @@ services:
       - POSTGRES_PASSWORD=eventListener
       - POSTGRES_USER=eventListener
       - POSTGRES_DB=eventListener
+  mongodb:
+    image: mongo
+    container_name: statistik_db
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=eventListener
+

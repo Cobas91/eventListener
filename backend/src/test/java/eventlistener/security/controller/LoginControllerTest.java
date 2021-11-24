@@ -1,5 +1,6 @@
 package eventlistener.security.controller;
 
+import eventlistener.TestHelper;
 import eventlistener.TestPostgresqlContainer;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
@@ -38,12 +39,15 @@ class LoginControllerTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TestHelper testHelper;
+
     @Value("${jwt.secret}")
     private String JWT_SECRET;
 
     @BeforeEach
     void clearDB(){
-        appUserRepo.deleteAll();
+        testHelper.clearDatabase();
     }
 
     @Test

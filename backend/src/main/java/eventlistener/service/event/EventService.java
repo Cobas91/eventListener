@@ -101,4 +101,9 @@ public class EventService {
         eventRepo.deleteById(eventId);
         return "Deleted Event with id:"+eventId;
     }
+
+    public boolean eventExist(Long eventId) {
+        Optional<Event> optEvent = eventRepo.findById(eventId);
+        return optEvent.isPresent();
+    }
 }

@@ -1,5 +1,7 @@
 package eventlistener.controller.exception;
 
+import eventlistener.exception.ActionNotConfiguredException;
+import eventlistener.exception.EventNotFoundException;
 import eventlistener.exception.OfficeAccessTokenException;
 import eventlistener.exception.OfficeOAuthException;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +82,20 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiError> handleOfficeAccessTokenException(OfficeAccessTokenException ex){
         log.error("Office OAuth Code is not unprocessable",ex);
         ApiError apiError = new ApiError("Office OAuth Code is not unprocessable", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(ActionNotConfiguredException.class)
+    public ResponseEntity<ApiError> handleActionNotConfiguredException(ActionNotConfiguredException ex){
+        log.error("Action is not Configured yet.",ex);
+        ApiError apiError = new ApiError("Action is not Configured yet.", ex.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+    @ExceptionHandler(EventNotFoundException.class)
+    public ResponseEntity<ApiError> handleEventNotFoundException(EventNotFoundException ex){
+        log.error("Event does not exists",ex);
+        ApiError apiError = new ApiError("Event does not exists", ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 

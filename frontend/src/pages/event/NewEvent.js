@@ -64,7 +64,7 @@ export default function NewEvent() {
           onChange={handleOnChange}
         />
         <Typography>Beschreibung</Typography>
-        <StyledTextArea
+        <StyledTextField
           id="description"
           name="description"
           value={newEvent.description}
@@ -116,11 +116,6 @@ const NewEventContainer = styled.section`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-`
-const StyledTextArea = styled.textarea`
-  resize: none;
-  overflow: hidden;
-  width: 100%;
 `
 const StyledTextField = styled(TextField)`
   margin-top: 10px;

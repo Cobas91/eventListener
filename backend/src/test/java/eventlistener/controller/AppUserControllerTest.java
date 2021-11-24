@@ -1,11 +1,11 @@
 package eventlistener.controller;
 
+import eventlistener.TestHelper;
 import eventlistener.TestPostgresqlContainer;
 import eventlistener.security.model.AppUserDTO;
 import eventlistener.security.repo.AppUserRepo;
 import eventlistener.service.AppUserService;
 
-import org.junit.ClassRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,24 +47,14 @@ class AppUserControllerTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TestHelper testHelper;
+
     @BeforeEach
     public void clearDB(){
-        appUserRepo.deleteAll();
+        testHelper.clearDatabase();
     }
 
-
-    public HttpHeaders getLoginHeader(){
-        appUserRepo.save(AppUserDTO.builder()
-                .username("test")
-                .password(passwordEncoder.encode("some-password"))
-                .build());
-        AppUserDTO loginData = new AppUserDTO("test", "some-password");
-        ResponseEntity<String> response = restTemplate.postForEntity("/auth/login", loginData, String.class);
-        HttpHeaders headers = new HttpHeaders();
-        if(response.getBody() == null) throw new BadCredentialsException("Can´t get LoginHeader, Bad Credentials");
-        headers.setBearerAuth(response.getBody());
-        return headers;
-    }
 
     @Test
     @DisplayName("Should Return generated User with hashed Password")
@@ -73,7 +63,7 @@ class AppUserControllerTest {
         AppUserDTO userToAdd = AppUserDTO.builder().username("NewAddedUser").password("Unhashed Password").build();
         //WHEN
 
-        ResponseEntity<AppUserDTO> addUserResponse = restTemplate.exchange("/api/appuser", HttpMethod.POST, new HttpEntity<>(userToAdd, getLoginHeader()), AppUserDTO.class);
+        ResponseEntity<AppUserDTO> addUserResponse = restTemplate.exchange("/api/appuser", HttpMethod.POST, new HttpEntity<>(userToAdd, testHelper.getLoginHeader()), AppUserDTO.class);
         //THEN
         assertThat(addUserResponse.getStatusCode(), is(HttpStatus.OK));
         userToAdd.setId(Objects.requireNonNull(addUserResponse.getBody()).getId());
