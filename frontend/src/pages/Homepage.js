@@ -1,20 +1,22 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { Typography } from '@mui/material'
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from 'recharts'
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from '@mui/material'
 import useStatistik from '../components/hooks/useStatistik'
+import Chart from '../components/charts/Chart'
+import { useState } from 'react'
 
 export default function Homepage() {
   const { barChartData } = useStatistik()
-
+  const [chartVariant, setChartVariant] = useState('SimpleBarChart')
+  const handleChartChange = e => {
+    setChartVariant(e.target.value)
+  }
   return (
     <HomepageContainer>
       <Title variant="h4">Zapliance EventListener</Title>
@@ -50,35 +52,24 @@ export default function Homepage() {
           </li>
         </ul>
       </StyledCard>
-      <Typography variant="h6">Ausgelöste Events</Typography>
-      <StatistikContainer>
-        <BarChart
-          width={1000}
-          height={300}
-          data={barChartData}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Variante</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={chartVariant}
+          label="Variante"
+          onChange={handleChartChange}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="amount" fill="var(--primary-blue)" />
-        </BarChart>
-      </StatistikContainer>
+          <MenuItem value="SimpleBarChart">BarChart</MenuItem>
+          <MenuItem value="PieChart">PieChart</MenuItem>
+        </Select>
+      </FormControl>
+      <Typography variant="h6">Ausgelöste Events</Typography>
+      <Chart data={barChartData} variant={chartVariant} />
     </HomepageContainer>
   )
 }
-const StatistikContainer = styled.section`
-  display: flex;
-  justify-content: center;
-  width: 50%;
-`
 
 const StyledCard = styled.section`
   display: flex;
