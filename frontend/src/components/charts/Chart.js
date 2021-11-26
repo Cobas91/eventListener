@@ -6,9 +6,9 @@ import SimplePieChart from './SimplePieChart'
 
 export default function Chart({ variant, data }) {
   return (
-    <StatistikContainer>
+    <StatisticContainer>
       <ChooseChart variant={variant} data={data} />
-    </StatistikContainer>
+    </StatisticContainer>
   )
 }
 function ChooseChart({ variant, data }) {
@@ -16,12 +16,12 @@ function ChooseChart({ variant, data }) {
     return <SimpleBarChart barChartData={data} />
   }
   if (variant === 'PieChart') {
-    return <SimplePieChart data={data} />
+    return <SimplePieChart simpleBarChartData={data} />
   } else {
     return 'No valid Chart'
   }
 }
-const StatistikContainer = styled.section`
+const StatisticContainer = styled.section`
   display: flex;
   justify-content: center;
   width: 80%;

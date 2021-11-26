@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from 'recharts'
 
-export default function SimplePieChart({ data }) {
+export default function SimplePieChart({ simpleBarChartData }) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart width="100%" height="100%">
         <Pie
           dataKey="amount"
           isAnimationActive={false}
-          data={data}
+          data={simpleBarChartData}
           cx="50%"
           cy="50%"
           outerRadius={100}
