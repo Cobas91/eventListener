@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react'
 export default function useStatistik() {
   const [statistic, setStatistic] = useState()
   const [statisticByAction, setStatisticByAction] = useState()
-  const [barChartData, setBarChartData] = useState()
+  const [barChartData, setBarChartData] = useState([])
 
   useEffect(() => {
     getAllStatistics()
